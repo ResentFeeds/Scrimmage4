@@ -34,7 +34,7 @@ public class Match {
 		MessageUtils.broadcastFinishedMessage();
 	}
 
-	// TODO add a team paremeter to tell check if the team has a winner!
+	// add a team parameter to check if the match has a current 
 	public void endMatch() {
 		this.setState(MatchState.Finished);
 		MessageUtils.broadcastFinishedMessage();
