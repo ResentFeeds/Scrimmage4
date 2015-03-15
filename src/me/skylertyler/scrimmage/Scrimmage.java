@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import me.skylertyler.scrimmage.commands.TestCommand;
 import me.skylertyler.scrimmage.exception.MapInfoLoadException;
 import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.map.MapLoader;
@@ -19,6 +20,7 @@ import me.skylertyler.scrimmage.utils.ConsoleUtils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
@@ -36,7 +38,7 @@ public class Scrimmage extends JavaPlugin {
 
 	protected static Scrimmage scrim;
 	protected static File rotationFile = new File("rotation");
-	protected File ROTATION_YML = new File(getDataFolder(), "rotation.yml");
+	// protected File ROTATION_YML = new File(getDataFolder(), "rotation.yml");
 
 	protected List<Map> rotation = new ArrayList<Map>();
 	protected MapLoader loader;
@@ -44,27 +46,17 @@ public class Scrimmage extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		scrim = this;
-		if (getScrimmageInstance().hasSportBukkit()) {
-			sportBukkit = true;
-		} else {
-			sportBukkit = false;
-		}
-
+		loadSportBukkit();
 		// try to load the data folder
 		if (!getDataFolder().exists()) {
 			File file = this.getDataFolder();
 			file.mkdir();
 		}
-
-		isSportBukkitEnabled(getSportBukkit());
-
-		scrim.registerListeners();
-		try {
-			loadRotationMaps(ROTATION_YML);
-		} catch (IOException e2) {
-			e2.printStackTrace();
-		}
-		loadRotation();
+		scrim.registerListeners();/*
+								 * try { loadRotationMaps(ROTATION_YML); } catch
+								 * (IOException e2) { e2.printStackTrace(); }
+								 * loadRotation();
+								 */
 		this.loader = new MapLoader();
 		try {
 			this.loader.loadMaps();
@@ -74,8 +66,9 @@ public class Scrimmage extends JavaPlugin {
 		}
 
 		// switch this current map with the first map in the current rotation!
-		scrim.match = new Match(getScrimmageInstance(), 1, this.loader.getLoadedMaps().get(0));
-
+		setMatch(new Match(getScrimmageInstance(), 1, getLoader()
+				.getLoadedMaps().get(0)));
+		loadCommands();
 		scrim.moduleFactory = new ModuleFactory();
 		scrim.registerModules();
 		try {
@@ -83,6 +76,25 @@ public class Scrimmage extends JavaPlugin {
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void loadSportBukkit() {
+		if (getScrimmageInstance().hasSportBukkit()) {
+			sportBukkit = true;
+		} else {
+			sportBukkit = false;
+		}
+
+		isSportBukkitEnabled(getSportBukkit());
+
+	}
+
+	public void registerCommand(CommandExecutor clazz, String label) {
+		getCommand(label).setExecutor(clazz);
+	}
+
+	public void loadCommands() {
+		registerCommand(new TestCommand(getMatch()), "test");
 	}
 
 	public void registerListeners() {
@@ -101,14 +113,14 @@ public class Scrimmage extends JavaPlugin {
 				+ "------------------------------------";
 		String m = null;
 		if (value) {
-			m = ChatColor.GREEN + "SportBukkit " + ChatColor.DARK_GREEN + "Is"
-					+ ChatColor.GREEN + " Enabled on this server";
+			m = ChatColor.GREEN + "SportBukkit is " + ChatColor.DARK_GREEN
+					+ "Enabled " + ChatColor.GREEN + "on this server";
 			message.add(format);
 			message.add(m);
 			message.add(format);
 		} else {
-			m = ChatColor.RED + "SportBukkit is " + ChatColor.DARK_RED + "Not"
-					+ ChatColor.RED + " Enabled on this server";
+			m = ChatColor.RED + "SportBukkit is " + ChatColor.DARK_RED
+					+ "Disabled " + ChatColor.RED + "on this server";
 			message.add(format);
 			message.add(m);
 			message.add(format);
@@ -195,7 +207,7 @@ public class Scrimmage extends JavaPlugin {
 
 	public void registerModules() {
 		ModuleFactory factory = this.getModuleFactory();
-		factory.registerModule(AnotherTestModule.class);  
+		factory.registerModule(AnotherTestModule.class);
 		factory.registerModule(InfoModule.class);
 		factory.registerModule(TestModule.class);
 	}
@@ -206,5 +218,9 @@ public class Scrimmage extends JavaPlugin {
 
 	public ModuleFactory getModuleFactory() {
 		return this.moduleFactory;
+	}
+
+	public void setMatch(Match match) {
+		this.match = match;
 	}
 }

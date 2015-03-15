@@ -2,6 +2,7 @@ package me.skylertyler.scrimmage.map;
 
 import java.util.ArrayList;
 import java.util.List;
+ 
 
 public class MapRules {
 
@@ -13,5 +14,9 @@ public class MapRules {
 
 	public List<String> getRules() {
 		return this.rules;
+	}
+
+	public void addRule(String rule) {
+		this.rules.add(rule);
 	}
 }

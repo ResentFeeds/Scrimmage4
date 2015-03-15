@@ -6,7 +6,6 @@ public class Map {
 
 	protected File xml;
 	protected MapInfo info;
-
 	public Map(File xml, MapInfo info) {
 		this.xml = xml;
 		this.info = info;
@@ -18,5 +17,5 @@ public class Map {
 
 	public MapInfo getInfo() {
 		return this.info;
-	}
+	} 
 }

@@ -3,13 +3,13 @@ package me.skylertyler.scrimmage.map;
 public class MapInfo {
 
 	protected String name;
-	protected MapProto proto;
 	protected MapVersion version;
 	protected MapAuthor authors;
 	protected MapContributor contributors;
 	protected MapRules rules;
 	protected String objective;
-	protected MapProto currentMapProto = new MapProto(1, 3, 6);
+	// this will get updated every time they update to a newer proto version!
+	protected MapVersion proto = new MapVersion(1, 3, 6);
 
 	public MapInfo(String name, MapVersion version, MapAuthor authors,
 			MapContributor contributors, String objective, MapRules rules) {
@@ -43,5 +43,9 @@ public class MapInfo {
 
 	public String getObjective() {
 		return objective;
+	}
+
+	public MapVersion getProto() {
+		return this.proto;
 	}
 }

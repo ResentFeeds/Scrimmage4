@@ -24,7 +24,9 @@ import org.xml.sax.SAXException;
 public class MapLoader {
 
 	protected List<Map> loadedMaps = null;
+
 	protected Document doc;
+
 	protected Element root;
 
 	public MapLoader() {
@@ -51,7 +53,7 @@ public class MapLoader {
 
 	private MapInfo loadMapInfo(Element root) throws MapInfoLoadException {
 		if (root.getNodeType() == Node.ELEMENT_NODE) {
-			if (root != null) {
+			if (root != null && root.getAttribute("proto") != null) {
 				String name = root.getElementsByTagName("name").item(0)
 						.getTextContent();
 				String objective = root.getElementsByTagName("objective")
@@ -61,12 +63,14 @@ public class MapLoader {
 				if (!(name.isEmpty() && objective.isEmpty() && version
 						.isEmpty())) {
 					return new MapInfo(name, MapVersion.parseVersion(version),
-							null, loadContributors(root), objective,
-							loadRules(root));
+							loadAuthors(root), loadContributors(root),
+							objective, loadRules(root));
 
 				} else {
-					Log.logInfo("there is no name for the map.xml ");
+					Log.logWarning("there is no name for the map.xml ");
 				}
+			}else{
+				Log.logWarning("there is no map proto");
 			}
 		}
 		return null;
@@ -111,6 +115,14 @@ public class MapLoader {
 		return null;
 	}
 
+	/**
+	 * loads the rules
+	 * 
+	 * @param root
+	 *            the root element
+	 * @return returns the MapRules
+	 */
+
 	private MapRules loadRules(Element root) {
 		MapRules mapRule = new MapRules();
 		Node rules = root.getElementsByTagName("rules").item(0);
@@ -124,7 +136,7 @@ public class MapLoader {
 							&& nc.getNodeName().equals("rule")) {
 						Element e = (Element) nc;
 						String rule = BukkitUtils.colorize(e.getTextContent());
-						mapRule.rules.add(rule);
+						mapRule.addRule(rule);
 						return mapRule;
 					}
 				}
@@ -132,6 +144,8 @@ public class MapLoader {
 		}
 		return null;
 	}
+
+	// checks if its loadable!
 
 	public boolean isLoadable(File file, File xml) {
 		if (new File(file, "region").exists() && xml.isFile() && xml.exists()
@@ -141,10 +155,18 @@ public class MapLoader {
 		return false;
 	}
 
+	// gets all the loaded maps (this will get every map even if they are in the
+	// rotation)
 	public List<Map> getLoadedMaps() {
 		return this.loadedMaps;
 	}
 
+	/**
+	 * 
+	 * @param name
+	 *            a Map Name
+	 * @return returns a map
+	 */
 	public Map getMap(String name) {
 		Map map = null;
 		for (Map maps : this.getLoadedMaps()) {
@@ -155,10 +177,18 @@ public class MapLoader {
 		return map;
 	}
 
+	/**
+	 * 
+	 * @return returns a document
+	 */
 	public Document getXMLDocument() {
 		return this.doc;
 	}
 
+	/**
+	 * 
+	 * @return the root element is "map"
+	 */
 	public Element getRootElement() {
 		return this.root;
 	}

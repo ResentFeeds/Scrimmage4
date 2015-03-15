@@ -3,6 +3,7 @@ package me.skylertyler.scrimmage.match;
 import org.bukkit.plugin.PluginManager;
 
 import me.skylertyler.scrimmage.Scrimmage;
+import me.skylertyler.scrimmage.event.MatchLoadEvent;
 import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.timers.GameStartTimer;
 import me.skylertyler.scrimmage.utils.MessageUtils;
@@ -20,9 +21,16 @@ public class Match {
 		this.id = id;
 		this.map = map;
 		this.pm = scrim.getServer().getPluginManager();
+
 		this.setState(MatchState.Idle);
-		GameStartTimer timer = new GameStartTimer(3, false, this);
-		timer.run();
+		MatchLoadEvent event = new MatchLoadEvent(this);
+		this.pm.callEvent(event);
+		runStartGameTimer();
+	}
+
+	public void runStartGameTimer() {
+		GameStartTimer start = new GameStartTimer(30, false, this);
+		start.run();
 	}
 
 	public void setState(MatchState state) {
@@ -31,10 +39,11 @@ public class Match {
 
 	public void startMatch() {
 		this.setState(MatchState.Running);
-		MessageUtils.broadcastFinishedMessage();
+		MessageUtils.broadcastStartMessage();
 	}
 
-	// add a team parameter to check if the match has a current 
+	// add a team parameter to check if the match has a current match has a
+	// winner
 	public void endMatch() {
 		this.setState(MatchState.Finished);
 		MessageUtils.broadcastFinishedMessage();

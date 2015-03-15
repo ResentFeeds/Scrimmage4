@@ -9,5 +9,5 @@ public abstract class Module implements Listener {
 
 	public abstract void unload();
 
-	public abstract void load(Document doc);  
+	public abstract void load(Document doc); 
 }

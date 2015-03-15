@@ -1,8 +1,5 @@
 package me.skylertyler.scrimmage.modules;
 
-import me.skylertyler.scrimmage.player.ScrimmagePlayer;
-import me.skylertyler.scrimmage.utils.ConsoleUtils;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
