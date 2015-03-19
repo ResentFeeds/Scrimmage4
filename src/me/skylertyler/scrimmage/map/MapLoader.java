@@ -52,14 +52,6 @@ public class MapLoader {
 		}
 	}
 
-	/**
-	 * loads the rules
-	 * 
-	 * @param root
-	 *            the root element
-	 * @return returns the MapRules
-	 */
-
 	// checks if its loadable!
 
 	public boolean isLoadable(File file, File xml) {
@@ -107,12 +99,3 @@ public class MapLoader {
 	public Element getRootElement() {
 		return this.root;
 	} 
-
-	public Scrimmage getScrimmage() {
-		return this.scrim;
-	}
-
-	public ModuleContainer getModuleContainer() {
-		return this.container;
-	}
-}
