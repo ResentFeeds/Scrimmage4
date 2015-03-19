@@ -1,14 +1,14 @@
 package me.skylertyler.scrimmage.event;
 
-import org.bukkit.event.HandlerList;
-
 import me.skylertyler.scrimmage.match.Match;
 
-public class MatchLoadEvent extends MatchEvent {
+import org.bukkit.event.HandlerList;
 
-	public static final HandlerList handlers = new HandlerList();
+public class MatchStartEvent extends MatchEvent {
 
-	public MatchLoadEvent(Match match) {
+	private static final HandlerList handlers = new HandlerList();
+
+	public MatchStartEvent(Match match) {
 		super(match);
 	}
 

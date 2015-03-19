@@ -1,6 +1,12 @@
 name: Scrimmage4
 main: me.skylertyler.scrimmage.Scrimmage
 version: 0.1
-commands:
+commands: 
+  rules:
+    description: rule testing!
+  authors:
+    description: authors
+  contrib:
+    description: command for contributors
   test:
     description: a test command

@@ -3,8 +3,10 @@ package me.skylertyler.scrimmage.match;
 import org.bukkit.plugin.PluginManager;
 
 import me.skylertyler.scrimmage.Scrimmage;
+import me.skylertyler.scrimmage.event.MatchEndEvent;
 import me.skylertyler.scrimmage.event.MatchLoadEvent;
-import me.skylertyler.scrimmage.map.Map;
+import me.skylertyler.scrimmage.event.MatchStartEvent;
+import me.skylertyler.scrimmage.map.Map; 
 import me.skylertyler.scrimmage.timers.GameStartTimer;
 import me.skylertyler.scrimmage.utils.MessageUtils;
 
@@ -18,7 +20,7 @@ public class Match {
 
 	public Match(Scrimmage scrim, int id, Map map) {
 		this.scrim = scrim;
-		this.id = id;
+		this.id = id; 
 		this.map = map;
 		this.pm = scrim.getServer().getPluginManager();
 
@@ -33,6 +35,10 @@ public class Match {
 		start.run();
 	}
 
+	public boolean isRunning() {
+		return this.state == MatchState.Running;
+	}
+
 	public void setState(MatchState state) {
 		this.state = state;
 	}
@@ -40,6 +46,8 @@ public class Match {
 	public void startMatch() {
 		this.setState(MatchState.Running);
 		MessageUtils.broadcastStartMessage();
+		MatchStartEvent event = new MatchStartEvent(this);
+		this.pm.callEvent(event);
 	}
 
 	// add a team parameter to check if the match has a current match has a
@@ -47,6 +55,8 @@ public class Match {
 	public void endMatch() {
 		this.setState(MatchState.Finished);
 		MessageUtils.broadcastFinishedMessage();
+		MatchEndEvent event = new MatchEndEvent(this);
+		this.pm.callEvent(event);
 	}
 
 	public MatchState getState() {
@@ -59,5 +69,13 @@ public class Match {
 
 	public PluginManager getPluginManager() {
 		return this.pm;
+	}
+
+	public Scrimmage getScrimmage() {
+		return this.scrim;
+	}
+
+	public int getID() {
+		 return this.id;
 	}
 }

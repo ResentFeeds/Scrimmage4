@@ -20,7 +20,7 @@ public class ScrimmagePlayer {
 
 	public static ScrimmagePlayer getPlayer(Player player) {
 		for (ScrimmagePlayer players : getPlayers()) {
-			if (players.getPlayer() == player) {
+			if (players.getPlayer().equals(player)) {
 				return players;
 			}
 		}
