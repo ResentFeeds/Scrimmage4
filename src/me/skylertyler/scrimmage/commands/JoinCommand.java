@@ -25,6 +25,7 @@ public class JoinCommand implements CommandExecutor {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			if (cmd.getName().equalsIgnoreCase("join")) {
+				Match match = this.getMatch();
 				if (match != null) {
 					if (args.length < 1) {
 						player.sendMessage(ChatColor.RED + "/join <team>");
@@ -46,7 +47,7 @@ public class JoinCommand implements CommandExecutor {
 							return false;
 						}
 
-						TeamHandler handler = getMatch().getTeamHandler();
+						TeamHandler handler = match.getTeamHandler();
 						handler.addParticpatingMember(team, player);
 
 					}

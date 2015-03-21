@@ -21,7 +21,7 @@ public class NextCommand implements CommandExecutor {
 			String[] args) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			if (label.equalsIgnoreCase("next")) {
+			if (cmd.getName().equalsIgnoreCase("next")) {
 				MapLoader loader = this.getLoader();
 				if (loader.hasNext()) {
 					player.sendMessage(ChatColor.GRAY + "The next map is "

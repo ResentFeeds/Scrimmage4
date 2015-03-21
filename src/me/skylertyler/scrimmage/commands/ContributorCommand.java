@@ -28,7 +28,7 @@ public class ContributorCommand implements CommandExecutor {
 			Match match = this.getMatch();
 			Map map = match.getMap();
 			MapInfo info = map.getInfo();
-			if (label.equalsIgnoreCase("contributors")) {
+			if (cmd.getName().equalsIgnoreCase("contributors")) {
 				if (match != null) {
 					if (info.getContributors() != null) {
 						for (Contributor contribs : info.getContributors()) {

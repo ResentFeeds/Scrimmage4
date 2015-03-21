@@ -5,6 +5,7 @@ import me.skylertyler.scrimmage.map.MapInfo;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.rules.Rule;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -19,20 +20,24 @@ public class RuleCommand implements CommandExecutor {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command,
-			String label, String[] args) {
+	public boolean onCommand(CommandSender sender, Command cmd, String label,
+			String[] args) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			Match match = this.getMatch();
 			Map map = match.getMap();
 			MapInfo info = map.getInfo();
-			if (label.equalsIgnoreCase("rules")) {
+			if (cmd.getName().equalsIgnoreCase("rules")) {
 				if (match != null) {
 					int i = 1;
 					for (Rule rule : info.getRules()) {
-						String format = +i + ") " + rule.getRule();
-						player.sendMessage(format);
-						i++;
+						if (rule != null) {
+							String format = i + ") " + rule.getRule();
+							player.sendMessage(format);
+							i++;
+						} else {
+							player.sendMessage(ChatColor.RED +"There are no rules for this map!");
+						}
 					}
 				}
 			}
