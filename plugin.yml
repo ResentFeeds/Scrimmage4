@@ -1,12 +1,35 @@
 name: Scrimmage4
 main: me.skylertyler.scrimmage.Scrimmage
-version: 0.1
+version: 0.5
 commands: 
+  myteam:
+    description: tells what team you on!
+    aliases:
+    - 'mt'
+  next: 
+    description: tells you what the next map is!
+    aliases:  
+    - 'nm'
+    - 'mn'
+    - 'nextmap'
+  join:
+    description: join a team!
+    aliases:
+    - 'j'
+    - 'jt'
+    - 'jointeam' 
+    - 'tj'
+  setnext: 
+    description: set the next map!
+    aliases: 
+    - 'sn'
+    - 'setnextmap' 
   rules:
-    description: rule testing!
-  authors:
-    description: authors
-  contrib:
-    description: command for contributors
-  test:
-    description: a test command
+    description: rules for the current map!
+    aliases:
+    - 'maprules'
+    - 'mr'
+  contributors: 
+    description: contributors for the current map!
+    aliases:
+    - 'contribs'

@@ -20,7 +20,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-//TODO fix this and change the mapLoader! stuff!
 @ModuleInfo(name = "info", desc = "basic information about the current map!", module = InfoModule.class)
 public class InfoModule extends Module {
 
@@ -44,8 +43,14 @@ public class InfoModule extends Module {
 		MapInfo info = parseInfo(doc);
 		return new InfoModule(info);
 	}
+	 
 
 	private MapInfo parseInfo(Document doc) {
+		Element root = doc.getDocumentElement();
+		if (!root.hasAttribute("proto")) {
+			Log.logWarning("there needs to be a 'proto' attribute!");
+		} 
+ 
 		// map name
 		Node nameNode = doc.getElementsByTagName("name").item(0);
 		if (nameNode == null) {
@@ -56,7 +61,7 @@ public class InfoModule extends Module {
 
 		// objective
 
-		Node objectiveNode = doc.getElementsByTagName("objective").item(0);
+		Node objectiveNode = doc.getElementsByTagName("objective").item(0); 
 		if (objectiveNode == null) {
 			Log.logWarning("a map needs a objective!");
 		}
@@ -64,24 +69,29 @@ public class InfoModule extends Module {
 		String objective = objectiveNode.getTextContent();
 
 		// version
-		Version version = parseVersion(doc.getElementsByTagName("version")
-				.item(0));
+
+		Node versionNode = doc.getElementsByTagName("version").item(0);
+		if (versionNode == null) {
+			Log.logWarning("there must be a version!");
+		}
+
+		String text = versionNode.getTextContent();
+		Version version = Version.parse(text);
 
 		String versionFormat = version.toString();
 		Log.logInfo(versionFormat);
 
 		// contributors
-		List<Contributor> contributors = contributorList(
-				doc.getDocumentElement(), "contributors", "contributor");
+		List<Contributor> contributors = contributorList(root, "contributors",
+				"contributor");
 
 		// authors
-		List<Author> authors = authorList(doc.getDocumentElement(), "authors",
-				"author");
+		List<Author> authors = authorList(root, "authors", "author");
 
 		// rules
 
-		List<Rule> rules = ruleList(doc.getDocumentElement(), "rules", "rule");
-		return new MapInfo(name, version, authors, contributors, rules,
+		List<Rule> rules = ruleList(root, "rules", "rule");
+		return new MapInfo(null, name, version, authors, contributors, rules,
 				objective);
 	}
 
@@ -130,7 +140,7 @@ public class InfoModule extends Module {
 						Element authorElement = (Element) author;
 						String name = authorElement.getTextContent();
 						String uuid = authorElement.getAttribute("uuid");
-						if (authorElement.getAttribute("contribution") != null) {
+						if (authorElement.hasAttribute("contribution")) {
 							String contribution = authorElement
 									.getAttribute("contribution");
 							authors.add(new Author(name, contribution, uuid));
@@ -166,21 +176,18 @@ public class InfoModule extends Module {
 		}
 		return rules;
 	}
-
+	
+	 
 	// need to fix this!
 	// some reason its this is giving me a error -_-
 	public static Version parseVersion(Node node) {
-		if (node.getNodeType() == Node.ELEMENT_NODE) {
-			Element element = (Element) node;
-			String[] parts = element.getTextContent().split(".");
-			if (parts.length <= 3) {
-				int major = Integer.parseInt(parts[0]);
-				int minor = Integer.parseInt(parts[1]);
-				int patch = Integer.parseInt(parts[2]);
-				return new Version(major, minor, patch);
-			}
-		}
-		return null;
+		 switch(node.getNodeType()){
+		 case Node.ELEMENT_NODE:
+			  break;
+		 case Node.ATTRIBUTE_NODE:
+			 break;
+		 }
+		 return null;
 	}
 
 	@EventHandler

@@ -20,21 +20,19 @@ public class Version {
 		}
 		return false;
 	}
+	
+	 public static  Version parse(String text) throws IllegalArgumentException {
+	        String[] parts = text.split("\\.", 3);
+	        if(parts.length >= 3) {
+	            int major = Integer.parseInt(parts[0]);
+	            int minor = Integer.parseInt(parts[1]);
+	            int patch = Integer.parseInt(parts[2]);
+	            return new Version(major, minor, patch);
+	        } else {
+	            throw new IllegalArgumentException("a version must be three parts seperated by periods");
+	        }
+	    }
 
-	public String splitVersion() {
-		return this.major + "." + this.minor + "." + this.patch;
-	}
-
-	public static Version parseVersion(String node) {
-		String[] parts = node.split(".");
-		if (parts.length >= 3) {
-			int major = Integer.parseInt(parts[0]);
-			int minor = Integer.parseInt(parts[1]);
-			int patch = Integer.parseInt(parts[2]);
-			new Version(major, minor, patch);
-		}
-		return null;
-	}
 
 	@Override
 	public String toString() {

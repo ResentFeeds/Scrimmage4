@@ -13,13 +13,15 @@ public class MapInfo {
 	protected Version version;
 	protected List<Author> authors;
 	protected List<Contributor> contributors;
+	
 	protected String objective;
 	// this will get updated every time they update to a newer proto version!
 	protected Version proto = new Version(1, 3, 6);
 	protected List<Rule> rules;
 
-	public MapInfo(String name, Version version, List<Author> authors,
+	public MapInfo(Version proto, String name, Version version, List<Author> authors,
 			List<Contributor> contributors, List<Rule> rules, String objective) {
+		this.proto = proto;
 		this.name = name;
 		this.version = version;
 		this.authors = authors;

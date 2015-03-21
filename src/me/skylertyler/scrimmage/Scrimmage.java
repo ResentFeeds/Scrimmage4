@@ -3,35 +3,39 @@ package me.skylertyler.scrimmage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import me.skylertyler.scrimmage.author.Author;
-import me.skylertyler.scrimmage.commands.TestCommand;
-import me.skylertyler.scrimmage.contributor.Contributor;
+import javax.xml.parsers.ParserConfigurationException;
+
+import me.skylertyler.scrimmage.commands.ContributorCommand;
+import me.skylertyler.scrimmage.commands.JoinCommand;
+import me.skylertyler.scrimmage.commands.MyTeamCommand;
+import me.skylertyler.scrimmage.commands.NextCommand;
+import me.skylertyler.scrimmage.commands.RuleCommand;
+import me.skylertyler.scrimmage.commands.SetNextCommand; 
 import me.skylertyler.scrimmage.exception.InvalidModuleException;
 import me.skylertyler.scrimmage.listeners.ConnectionListener;
 import me.skylertyler.scrimmage.map.Map;
-import me.skylertyler.scrimmage.map.MapInfo;
 import me.skylertyler.scrimmage.map.MapLoader;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.modules.InfoModule;
 import me.skylertyler.scrimmage.modules.ModuleRegistry;
-import me.skylertyler.scrimmage.rules.Rule;
+import me.skylertyler.scrimmage.modules.TeamModule;
 import me.skylertyler.scrimmage.utils.ConsoleUtils;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.xml.sax.SAXException;
 
 public class Scrimmage extends JavaPlugin {
 
+	// NEED TO implement SpawnModule, and RegionModule to Finish off the teams
+	// make overhead color show ! 
 	protected boolean sportBukkit;
 	protected Match match;
 
@@ -40,11 +44,13 @@ public class Scrimmage extends JavaPlugin {
 	// protected File ROTATION_YML = new File(getDataFolder(), "rotation.yml");
 
 	protected List<Map> rotation;
-	protected MapLoader loader; 
+	protected MapLoader loader;
 
 	@Override
 	public void onEnable() {
 		scrim = this;
+		// make the rotation be a new list of maps every time you reload or
+		// /restart the server
 		this.rotation = new ArrayList<Map>();
 		checkSportBukkitEnabled();
 		// try to load the data folder
@@ -65,7 +71,7 @@ public class Scrimmage extends JavaPlugin {
 		this.loader = new MapLoader(getScrimmageInstance());
 		try {
 			this.loader.loadMaps();
-		} catch (Throwable e) {
+		} catch (SAXException | IOException | ParserConfigurationException e) {
 			e.printStackTrace();
 		}
 		// switch the default map with the first map in the current rotation!
@@ -85,63 +91,28 @@ public class Scrimmage extends JavaPlugin {
 		isSportBukkitEnabled(getSportBukkit());
 	}
 
-	public void registerCommand(CommandExecutor clazz, String label) {
+	public void registerCommand(CommandExecutor clazz, String label,
+			List<String> aliases) {
+		aliases = new ArrayList<>();
 		getCommand(label).setExecutor(clazz);
-	}
 
-	public void loadCommands() {
-		registerCommand(new TestCommand(getMatch()), "test");
-	}
-
-	@Override
-	public boolean onCommand(CommandSender sender, Command command,
-			String label, String[] args) {
-		if (sender instanceof Player) {
-			Player player = (Player) sender;
-			Match match = this.getMatch();
-			Map map = match.getMap();
-			MapInfo info = map.getInfo();
-			if (label.equalsIgnoreCase("contrib")) {
-				if (match != null) {
-					if (info.getContributors() != null) {
-						for (Contributor contribs : info.getContributors()) {
-							String format = null;
-							if (contribs.hasContribution()) {
-								format = contribs.getContribution() + " "
-										+ contribs.getContributor();
-							} else {
-								format = contribs.getContributor();
-							}
-							player.sendMessage(ChatColor.GRAY + "* "
-									+ ChatColor.RESET + format);
-						}
-					}
-				}
-			} else if (label.equalsIgnoreCase("authors")) {
-				if (match != null) {
-					for (Author author : info.getAuthors()) {
-						String format = null;
-						if (author.hasContribution()) {
-							format = author.getContribution()
-									+ author.getName();
-						} else {
-							format = author.getName();
-						}
-						player.sendMessage(format);
-					}
-				}
-			} else if (label.equalsIgnoreCase("rules")) {
-				if (match != null) {
-					int i = 1;
-					for (Rule rule : info.getRules()) {
-						String format = i + ") " + rule.getRule();
-						player.sendMessage(format);
-						i++;
-					}
-				}
-			}
+		for (String aliase : aliases) {
+			getCommand(label).getAliases().add(aliase);
 		}
-		return false;
+	}
+
+	// TODO fix the some commands that have working aliases!
+	public void loadCommands() { 
+		registerCommand(new ContributorCommand(getMatch()), "contributors", Arrays.asList("contribs"));
+		registerCommand(new SetNextCommand(getMatch()), "setnext",
+				Arrays.asList("sn", "setnextmap"));
+		registerCommand(new NextCommand(getLoader()), "next",
+				Arrays.asList("nm", "mn", "nextmap", "mapnext"));
+		registerCommand(new MyTeamCommand(getMatch()), "myteam",
+				Arrays.asList("mt"));
+		registerCommand(new JoinCommand(getMatch()), "join",
+				Arrays.asList("j", "jt", "jointeam", "tj"));
+		registerCommand(new RuleCommand(getMatch()), "rules", Arrays.asList("maprules","mr"));
 	}
 
 	public void loadListeners() {
@@ -252,8 +223,9 @@ public class Scrimmage extends JavaPlugin {
 	}
 
 	// modules
-	public void loadModules() throws InvalidModuleException {  
+	public void loadModules() throws InvalidModuleException {
 		ModuleRegistry.register(InfoModule.class);
+		ModuleRegistry.register(TeamModule.class);
 	}
 
 	public MapLoader getLoader() {
@@ -262,5 +234,5 @@ public class Scrimmage extends JavaPlugin {
 
 	public void setMatch(Match match) {
 		this.match = match;
-	} 
+	}
 }

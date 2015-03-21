@@ -5,9 +5,6 @@ import com.google.common.collect.Maps;
 import java.util.HashMap;
 import java.util.Map;
 import me.skylertyler.scrimmage.exception.InvalidModuleException;
-import me.skylertyler.scrimmage.utils.ConsoleUtils;
-
-import org.bukkit.ChatColor;
 import org.w3c.dom.Document;
 
 public class ModuleContainer {
@@ -28,26 +25,8 @@ public class ModuleContainer {
 				e.printStackTrace();
 			} catch (InstantiationException e) {
 				e.printStackTrace();
-			}
-
-		sendModuleMessage(ModuleRegistry.getModules().size());
-	}
-
-	public void sendModuleMessage(int size) {
-		String format = null;
-		if (size != 0) {
-			if (size > 1) {
-				format = ChatColor.GREEN + "Modules";
-			} else {
-				format = ChatColor.YELLOW + "Module";
-			}
-		} else {
-			format = ChatColor.RED + "Modules";
-		}
-		String message = ChatColor.GRAY + "You got " + size + " " + format
-				+ " loaded";
-		ConsoleUtils.sendConsoleMessage(message);
-	}
+			} 
+	} 
 
 	public Module getModule(Class<? extends Module> clazz) {
 		for (Module module : modules.keySet())

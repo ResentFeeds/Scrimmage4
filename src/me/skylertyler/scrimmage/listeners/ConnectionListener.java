@@ -2,9 +2,8 @@ package me.skylertyler.scrimmage.listeners;
 
 import me.skylertyler.scrimmage.event.MatchStartEvent;
 import me.skylertyler.scrimmage.match.Match;
-import me.skylertyler.scrimmage.match.MatchState;
-import me.skylertyler.scrimmage.utils.Log;
-
+import me.skylertyler.scrimmage.match.MatchState; 
+import me.skylertyler.scrimmage.utils.Log; 
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,8 +15,8 @@ public class ConnectionListener implements Listener {
 
 	public ConnectionListener(Match match) {
 		this.match = match;
-	} 
-	
+	}
+
 	@EventHandler
 	public void onServerList(ServerListPingEvent event) {
 		Match match = this.getMatch();
@@ -50,9 +49,9 @@ public class ConnectionListener implements Listener {
 
 	@EventHandler
 	public void onMatchStart(MatchStartEvent event) {
-		Match match = event.getMatch();
+		Match match = event.getMatch(); 
 		if (match != null) {
-			Log.logInfo(match.getID() + "");
+			Log.logWarning(match.getID() + " ");
 		}
 	}
 }

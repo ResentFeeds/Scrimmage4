@@ -1,17 +1,20 @@
 package me.skylertyler.scrimmage.map;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.modules.InfoModule;
 import me.skylertyler.scrimmage.modules.ModuleContainer;
-import me.skylertyler.scrimmage.modules.ModuleLoadException;
 import me.skylertyler.scrimmage.utils.MapDocument;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 public class MapLoader {
 
@@ -19,17 +22,20 @@ public class MapLoader {
 
 	protected Document doc;
 
-	protected Element root; 
+	protected Element root;
 	protected Scrimmage scrim;
 
 	protected ModuleContainer container;
+
+	protected Map nextMap = null;
 
 	public MapLoader(Scrimmage scrim) {
 		this.scrim = scrim;
 		this.loadedMaps = new ArrayList<Map>();
 	}
 
-	public void loadMaps() throws ModuleLoadException, Throwable {
+	public void loadMaps() throws SAXException, IOException,
+			ParserConfigurationException {
 		boolean hasRotation = Scrimmage.getScrimmageInstance()
 				.hasRotationFile();
 		if (hasRotation) {
@@ -77,7 +83,7 @@ public class MapLoader {
 	public Map getMap(String name) {
 		Map map = null;
 		for (Map maps : this.getLoadedMaps()) {
-			if (maps.getInfo().getName().equals(name)) {
+			if (maps.getInfo().getName().equalsIgnoreCase((name))){
 				map = maps;
 			}
 		}
@@ -98,4 +104,21 @@ public class MapLoader {
 	 */
 	public Element getRootElement() {
 		return this.root;
-	} 
+	}
+
+	public ModuleContainer getModuleContainer() {
+		return this.container;
+	}
+
+	public boolean hasNext() {
+		return this.nextMap != null;
+	}
+
+	public void setNext(Map next) {
+		this.nextMap = next;
+	}
+
+	public Map getNext() {
+		return this.nextMap;
+	}
+}
