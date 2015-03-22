@@ -1,5 +1,4 @@
 [?] match loading, ending, cyling someone done stll getting there!
-[?] modules  modules (working on some bugs) <----
 [?] map, contributors, rules etc....
 [?] teams (TeamType, (Observing, or Participating)
 [?] objectives
@@ -17,5 +16,5 @@
 [?] Database 
 [Maybe] stats 
 [?] TODO add generating a new map.xml file to make maps with!
-[?] todo ALL!
-TODO fix rules only doing the first rule and not the rest -_-
+[?] implement commands to edit the current map or the map you wanthe in game!
+[?] wtm and ctw
