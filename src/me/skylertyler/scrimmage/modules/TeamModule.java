@@ -117,5 +117,5 @@ public class TeamModule extends Module {
 
 	public List<Team> getTeams() {
 		return this.teams;
-	}
+	} 
 }

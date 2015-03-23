@@ -1,7 +1,19 @@
 name: Scrimmage4
 main: me.skylertyler.scrimmage.Scrimmage
 version: 0.5
-commands: 
+commands:
+  cycle:
+    description: cycle to the next map!
+  myworld:
+    description: check what world your are currently on!
+    aliases:
+    - 'mw'
+  region:
+    description: checking!
+  regions:
+    description: tells you all the regions in the </region> tag!
+  location:
+    description: tells your location!
   myteam:
     description: tells what team you on!
     aliases:

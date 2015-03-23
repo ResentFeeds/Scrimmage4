@@ -52,7 +52,7 @@ public class SetNextCommand implements CommandExecutor {
 						player.sendMessage(ChatColor.GRAY + "The map "
 								+ ChatColor.GOLD + map.getInfo().getName()
 								+ ChatColor.GRAY + " has been set to be next!");
-						match.getScrimmage().getLoader().setNext(map);
+						match.setNext(map);
 					}
 				} else {
 					player.sendMessage(ChatColor.RED

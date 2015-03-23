@@ -26,6 +26,7 @@ public class TeamHandler {
 
 		team.getMembers().add(player.getName());
 		player.setPlayerListName(team.getColor() + player.getName());
+		//TODO make their overhead name be the teams color 
 		player.sendMessage(ChatColor.GRAY + "You joined the " + team.getColor()
 				+ team.getName());
 	}

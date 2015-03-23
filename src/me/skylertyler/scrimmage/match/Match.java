@@ -1,8 +1,5 @@
 package me.skylertyler.scrimmage.match;
 
-import org.bukkit.World;
-import org.bukkit.plugin.PluginManager;
-
 import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.event.MatchEndEvent;
 import me.skylertyler.scrimmage.event.MatchLoadEvent;
@@ -12,6 +9,9 @@ import me.skylertyler.scrimmage.map.MapHandler;
 import me.skylertyler.scrimmage.team.TeamHandler;
 import me.skylertyler.scrimmage.timers.GameStartTimer;
 import me.skylertyler.scrimmage.utils.MessageUtils;
+
+import org.bukkit.World;
+import org.bukkit.plugin.PluginManager;
 
 public class Match {
 
@@ -23,6 +23,7 @@ public class Match {
 	protected World world;
 	protected MapHandler handler;
 	protected TeamHandler thandler;
+	private Map next = null;
 
 	public Match(Scrimmage scrim, int id, Map map) {
 		this.scrim = scrim;
@@ -31,9 +32,11 @@ public class Match {
 		this.pm = scrim.getServer().getPluginManager();
 		this.handler = new MapHandler(this);
 		this.thandler = new TeamHandler();
+		// calling match start event
 		this.setState(MatchState.Idle);
 		MatchLoadEvent event = new MatchLoadEvent(this);
 		this.pm.callEvent(event);
+		// run the start game timer
 		runStartGameTimer();
 	}
 
@@ -58,7 +61,7 @@ public class Match {
 		this.setState(MatchState.Running);
 		MessageUtils.broadcastStartMessage();
 		MatchStartEvent event = new MatchStartEvent(this);
-		this.pm.callEvent(event); 
+		this.pm.callEvent(event);
 	}
 
 	// add a team parameter to check if the match has a current match has a
@@ -94,7 +97,27 @@ public class Match {
 		this.world = world;
 	}
 
+	public World getWorld() {
+		return this.world;
+	}
+
 	public TeamHandler getTeamHandler() {
 		return this.thandler;
+	}
+
+	public MapHandler getMapHandler() {
+		return this.handler;
+	}
+
+	public boolean hasNext() {
+		return this.next != null;
+	}
+
+	public void setNext(Map map) {
+		this.next = map;
+	}
+	
+	public Map getNext(){
+		return this.next;
 	}
 }

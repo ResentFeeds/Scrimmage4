@@ -9,6 +9,9 @@ import me.skylertyler.scrimmage.team.Team;
 import me.skylertyler.scrimmage.team.TeamType;
 
 public class TeamUtils {
+
+	public static List<Team> particpating = new ArrayList<>();
+
 	// get the teamtype from and ID example: below
 	// TeamType type = getTypeByID(0);
 	// it would turn out to be Observers!
@@ -48,7 +51,8 @@ public class TeamUtils {
 	}
 
 	// just getting a team by their teamtype parameter (note this will get only
-	// one team) because the method returns a team not a Collection or a List of teams !
+	// one team) because the method returns a team not a Collection or a List of
+	// teams !
 	public static Team getTeamByType(TeamType type) {
 		Team result = null;
 		for (Team team : ((TeamModule) Scrimmage.getScrimmageInstance()
@@ -63,15 +67,14 @@ public class TeamUtils {
 
 	// gets all the particpating teams
 	public static List<Team> getParticpatingTeams() {
-		List<Team> teams = new ArrayList<Team>();
 		for (Team team : ((TeamModule) Scrimmage.getScrimmageInstance()
 				.getLoader().getModuleContainer().getModule(TeamModule.class))
 				.getTeams()) {
 			if (team.getType().equals(TeamType.Participating)) {
-				teams.add(team);
+				particpating.add(team);
 			}
 		}
-		return teams;
+		return particpating;
 	}
 
 	// gets the observers!
@@ -87,4 +90,13 @@ public class TeamUtils {
 		return result;
 	}
 
+	public static Team getParticipatingTeamByID(String id) {
+		Team result = null;
+		for (Team team : getParticpatingTeams()) {
+			if (team.getId().equals(id)) {
+				result = team;
+			}
+		}
+		return result;
+	}
 }

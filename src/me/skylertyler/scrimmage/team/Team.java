@@ -3,10 +3,6 @@ package me.skylertyler.scrimmage.team;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.skylertyler.scrimmage.Scrimmage;
-import me.skylertyler.scrimmage.modules.TeamModule;
-import me.skylertyler.scrimmage.utils.TeamUtils;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -31,7 +27,7 @@ public class Team {
 	// members
 
 	protected List<String> members = new ArrayList<String>();
-
+	// TEAMTYPE Observing or participating
 	protected TeamType type;
 
 	public Team(String name, String id, ChatColor color, int max, int overfill,
@@ -50,7 +46,7 @@ public class Team {
 		this.id = id;
 		this.color = color;
 		this.max = max;
-		this.overfill = 0;
+		this.overfill = max + 20;
 		this.type = participating;
 	}
 

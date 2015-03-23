@@ -9,8 +9,10 @@ import org.w3c.dom.Document;
  * just used them in this
  * 
  */
-public abstract class Module implements Listener {
+public abstract class Module implements Listener { 
+	
 	public abstract Module parse(Document doc);
 
-	public abstract void unload();
+	public abstract void unload(); 
+	 
 }

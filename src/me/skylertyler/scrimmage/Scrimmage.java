@@ -5,29 +5,41 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import me.skylertyler.scrimmage.commands.ContributorCommand;
+import me.skylertyler.scrimmage.commands.CycleCommand;
 import me.skylertyler.scrimmage.commands.JoinCommand;
+import me.skylertyler.scrimmage.commands.LocationCommand;
 import me.skylertyler.scrimmage.commands.MyTeamCommand;
 import me.skylertyler.scrimmage.commands.NextCommand;
 import me.skylertyler.scrimmage.commands.RuleCommand;
-import me.skylertyler.scrimmage.commands.SetNextCommand; 
+import me.skylertyler.scrimmage.commands.SetNextCommand;
+import me.skylertyler.scrimmage.commands.WorldCommand;
 import me.skylertyler.scrimmage.exception.InvalidModuleException;
 import me.skylertyler.scrimmage.listeners.ConnectionListener;
 import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.map.MapLoader;
 import me.skylertyler.scrimmage.match.Match;
+import me.skylertyler.scrimmage.match.MatchHandler;
 import me.skylertyler.scrimmage.modules.InfoModule;
 import me.skylertyler.scrimmage.modules.ModuleRegistry;
+import me.skylertyler.scrimmage.modules.RegionModule;
 import me.skylertyler.scrimmage.modules.TeamModule;
+import me.skylertyler.scrimmage.regions.Region;
+import me.skylertyler.scrimmage.regions.RegionUtils;
 import me.skylertyler.scrimmage.utils.ConsoleUtils;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.xml.sax.SAXException;
@@ -35,7 +47,7 @@ import org.xml.sax.SAXException;
 public class Scrimmage extends JavaPlugin {
 
 	// NEED TO implement SpawnModule, and RegionModule to Finish off the teams
-	// make overhead color show ! 
+	// make overhead color show !
 	protected boolean sportBukkit;
 	protected Match match;
 
@@ -45,6 +57,8 @@ public class Scrimmage extends JavaPlugin {
 
 	protected List<Map> rotation;
 	protected MapLoader loader;
+
+	protected MatchHandler mhandler;
 
 	@Override
 	public void onEnable() {
@@ -58,7 +72,8 @@ public class Scrimmage extends JavaPlugin {
 			File file = this.getDataFolder();
 			file.mkdir();
 		}
-		/*
+		/*                                                 |
+		/* put this after the loader loads the maps below  V
 		 * try { loadRotationMaps(ROTATION_YML); } catch (IOException e2) {
 		 * e2.printStackTrace(); } loadRotation();
 		 */
@@ -77,6 +92,7 @@ public class Scrimmage extends JavaPlugin {
 		// switch the default map with the first map in the current rotation!
 		setMatch(new Match(getScrimmageInstance(), 1, getLoader()
 				.getLoadedMaps().get(0)));
+		setMatchHandler(new MatchHandler(getMatch()));
 		loadListeners();
 		loadCommands();
 	}
@@ -100,19 +116,27 @@ public class Scrimmage extends JavaPlugin {
 			getCommand(label).getAliases().add(aliase);
 		}
 	}
-
-	// TODO fix the some commands that have working aliases!
-	public void loadCommands() { 
-		registerCommand(new ContributorCommand(getMatch()), "contributors", Arrays.asList("contribs"));
+ 
+	public void loadCommands() {
+		registerCommand(new ContributorCommand(getMatch()), "contributors",
+				Arrays.asList("contribs"));
 		registerCommand(new SetNextCommand(getMatch()), "setnext",
 				Arrays.asList("sn", "setnextmap"));
-		registerCommand(new NextCommand(getLoader()), "next",
+		registerCommand(new NextCommand(getMatch()), "next",
 				Arrays.asList("nm", "mn", "nextmap", "mapnext"));
 		registerCommand(new MyTeamCommand(getMatch()), "myteam",
 				Arrays.asList("mt"));
 		registerCommand(new JoinCommand(getMatch()), "join",
 				Arrays.asList("j", "jt", "jointeam", "tj"));
-		registerCommand(new RuleCommand(getMatch()), "rules", Arrays.asList("maprules","mr"));
+		registerCommand(new RuleCommand(getMatch()), "rules",
+				Arrays.asList("maprules", "mr"));
+		registerCommand(new LocationCommand(), "location", null);
+		registerCommand(new WorldCommand(), "myworld", Arrays.asList("mw"));
+		registerCommand(new CycleCommand(this), "cycle", null);
+	}
+
+	public void registerListener(Listener listener) {
+		getServer().getPluginManager().registerEvents(listener, this);
 	}
 
 	public void loadListeners() {
@@ -120,8 +144,51 @@ public class Scrimmage extends JavaPlugin {
 		registerListener(new InfoModule(getMatch().getMap().getInfo()));
 	}
 
-	public void registerListener(Listener listener) {
-		getServer().getPluginManager().registerEvents(listener, this);
+	@Override
+	public boolean onCommand(CommandSender sender, Command cmd, String label,
+			String[] args) {
+		if (sender instanceof Player) {
+			Player player = (Player) sender;
+			if (cmd.getName().equalsIgnoreCase("regions")) {
+				String format = null;
+				for (Entry<String, Region> regions : RegionUtils.getRegions()
+						.entrySet()) {
+					if (regions.getValue().hasName()) {
+						format = regions.getKey()
+								+ " " + regions.getValue().getType().toString();
+					} else {
+						format = regions.getValue().getType().toString();
+					}
+
+					player.sendMessage(format);
+				}
+			} else if (cmd.getName().equalsIgnoreCase("region")) {
+				if (args.length == 0 || args.length < 1) {
+					player.sendMessage(ChatColor.RED + "Not enough arguments!");
+					return false;
+				}
+
+				if (args.length > 1) {
+					player.sendMessage(ChatColor.RED + "Too many arguments!");
+					return false;
+				}
+
+				if (args.length == 1) {
+					Region region = RegionUtils.getRegionFromString(args[0]);
+
+					if (region == null) {
+						player.sendMessage(ChatColor.RED
+								+ "There is no region by the name of "
+								+ ChatColor.DARK_RED + args[0]);
+						return false;
+					}
+
+					player.sendMessage(ChatColor.GRAY + "The region is a "
+							+ ChatColor.GOLD + region.getType().toString());
+				}
+			}
+		}
+		return true;
 	}
 
 	// tells you if sport bukkit is enabled or not!
@@ -154,6 +221,8 @@ public class Scrimmage extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		getMatch().getMapHandler().clearMapsDirectory(
+				Bukkit.getWorldContainer());
 		// unloading the modules when the server is disabled or shut down! by
 		// using /stop or it crashes due to some error!
 		getLoader().getModuleContainer().unloadModules();
@@ -226,6 +295,7 @@ public class Scrimmage extends JavaPlugin {
 	public void loadModules() throws InvalidModuleException {
 		ModuleRegistry.register(InfoModule.class);
 		ModuleRegistry.register(TeamModule.class);
+		ModuleRegistry.register(RegionModule.class);
 	}
 
 	public MapLoader getLoader() {
@@ -234,5 +304,13 @@ public class Scrimmage extends JavaPlugin {
 
 	public void setMatch(Match match) {
 		this.match = match;
+	}
+
+	public MatchHandler getMatchHandler() {
+		return mhandler;
+	}
+
+	public void setMatchHandler(MatchHandler mhandler) {
+		this.mhandler = mhandler;
 	}
 }

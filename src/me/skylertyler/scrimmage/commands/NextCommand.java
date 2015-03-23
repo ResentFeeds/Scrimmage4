@@ -1,8 +1,8 @@
 package me.skylertyler.scrimmage.commands;
 
-import me.skylertyler.scrimmage.map.MapLoader;
+import me.skylertyler.scrimmage.match.Match;
 
-import org.bukkit.ChatColor;
+import static org.bukkit.ChatColor.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,10 +10,10 @@ import org.bukkit.entity.Player;
 
 public class NextCommand implements CommandExecutor {
 
-	protected MapLoader loader;
+	private Match match;
 
-	public NextCommand(MapLoader loader) {
-		this.loader = loader;
+	public NextCommand(Match match) {
+		this.match = match;
 	}
 
 	@Override
@@ -22,24 +22,21 @@ public class NextCommand implements CommandExecutor {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			if (cmd.getName().equalsIgnoreCase("next")) {
-				MapLoader loader = this.getLoader();
-				if (loader.hasNext()) {
-					player.sendMessage(ChatColor.GRAY + "The next map is "
-							+ ChatColor.GOLD
-							+ loader.getNext().getInfo().getName());
+				Match match = this.getMatch();
+				if (match.hasNext()) {
+					player.sendMessage(GRAY + "The next map is " + GOLD
+							+ match.getNext().getInfo().getName());
 				} else {
-					player.sendMessage(ChatColor.RED
-							+ "There is no map set to be next");
+					player.sendMessage(WHITE + "There is no map set do " + DARK_RED + " /setnext <map> " + WHITE + " first");
 				}
 			}
 		} else {
-			sender.sendMessage(ChatColor.RED + "You need to be a player!");
+			sender.sendMessage(RED + "You need to be a player!");
 		}
 		return false;
 	}
 
-	public MapLoader getLoader() {
-		return this.loader;
+	public Match getMatch() {
+		return this.match;
 	}
-
 }

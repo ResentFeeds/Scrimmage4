@@ -70,4 +70,15 @@ public class MapHandler {
 	public Match getMatch() {
 		return this.match;
 	}
+	
+	
+	public void clearMapsDirectory(File directory){
+		if(directory.isDirectory()){
+			for(File children : directory.listFiles()){
+				   if(children.isDirectory() && children.getName().startsWith("match-")){
+					   children.delete();
+				   }
+			}
+		}
+	}
 }

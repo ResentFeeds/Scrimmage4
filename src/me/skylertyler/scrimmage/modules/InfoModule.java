@@ -43,27 +43,26 @@ public class InfoModule extends Module {
 		MapInfo info = parseInfo(doc);
 		return new InfoModule(info);
 	}
-	 
 
-	private MapInfo parseInfo(Document doc) {
+	private MapInfo parseInfo(Document doc) throws NullPointerException {
 		Element root = doc.getDocumentElement();
 		if (!root.hasAttribute("proto")) {
 			Log.logWarning("there needs to be a 'proto' attribute!");
-		} 
- 
+		}
+
 		// map name
 		Node nameNode = doc.getElementsByTagName("name").item(0);
 		if (nameNode == null) {
-			Log.logWarning("a map needs a name!");
+			throw new NullPointerException("a map needs a name!");
 		}
 
 		String name = nameNode.getTextContent();
 
 		// objective
 
-		Node objectiveNode = doc.getElementsByTagName("objective").item(0); 
-		if (objectiveNode == null) {
-			Log.logWarning("a map needs a objective!");
+		Node objectiveNode = doc.getElementsByTagName("objective").item(0);
+		if (objectiveNode == null) {  
+			throw new NullPointerException("a map needs an objective tag!");
 		}
 
 		String objective = objectiveNode.getTextContent();
@@ -71,8 +70,8 @@ public class InfoModule extends Module {
 		// version
 
 		Node versionNode = doc.getElementsByTagName("version").item(0);
-		if (versionNode == null) {
-			Log.logWarning("there must be a version!");
+		if (versionNode == null) { 
+			throw new NullPointerException("a map needs a version tag");
 		}
 
 		String text = versionNode.getTextContent();
@@ -86,8 +85,7 @@ public class InfoModule extends Module {
 				"contributor");
 
 		// authors
-		List<Author> authors = authorList(root, "authors", "author");
-
+		List<Author> authors = authorList(root, "authors", "author"); 
 		// rules
 
 		List<Rule> rules = ruleList(root, "rules", "rule");
@@ -176,18 +174,17 @@ public class InfoModule extends Module {
 		}
 		return rules;
 	}
-	
-	 
+
 	// need to fix this!
 	// some reason its this is giving me a error -_-
 	public static Version parseVersion(Node node) {
-		 switch(node.getNodeType()){
-		 case Node.ELEMENT_NODE:
-			  break;
-		 case Node.ATTRIBUTE_NODE:
-			 break;
-		 }
-		 return null;
+		switch (node.getNodeType()) {
+		case Node.ELEMENT_NODE:
+			break;
+		case Node.ATTRIBUTE_NODE:
+			break;
+		}
+		return null;
 	}
 
 	@EventHandler

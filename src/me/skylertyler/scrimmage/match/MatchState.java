@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 
 public enum MatchState {
 
-	Idle(ChatColor.GRAY), Starting(ChatColor.GREEN), Running(ChatColor.YELLOW), Finished(ChatColor.DARK_RED);
+	Idle(ChatColor.GRAY), Starting(ChatColor.GREEN), Running(ChatColor.YELLOW), Finished(ChatColor.DARK_RED), Cycling(ChatColor.AQUA);
 
 	protected ChatColor color;
 	

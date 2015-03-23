@@ -37,6 +37,8 @@ public class JoinCommand implements CommandExecutor {
 						return false;
 					}
 
+					Team playerTeam = match.getTeamHandler().teamForPlayer(
+							player);
 					if (args.length == 1) {
 						Team team = TeamUtils.getTeamByName(args[0]);
 						if (team == null) {
@@ -44,6 +46,13 @@ public class JoinCommand implements CommandExecutor {
 									+ "There is no team called "
 									+ ChatColor.DARK_RED + args[0]
 									+ ChatColor.RED + "!");
+							return false;
+						}
+
+						if (playerTeam == team) {
+							player.sendMessage(ChatColor.RED
+									+ "You are already on the "
+									+ team.getColor() + team.getName());
 							return false;
 						}
 
