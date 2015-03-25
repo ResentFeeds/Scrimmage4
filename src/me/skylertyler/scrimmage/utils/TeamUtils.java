@@ -28,7 +28,7 @@ public class TeamUtils {
 	public static Team getTeamByID(String id) {
 		Team result = null;
 		for (Team team : ((TeamModule) Scrimmage.getScrimmageInstance()
-				.getLoader().getModuleContainer().getModule(TeamModule.class))
+				.getLoader().getContainer().getModule(TeamModule.class))
 				.getTeams()) {
 			if (team.getId().equals(id)) {
 				result = team;
@@ -41,7 +41,7 @@ public class TeamUtils {
 	public static Team getTeamByName(String name) {
 		Team searching = null;
 		for (Team team : ((TeamModule) Scrimmage.getScrimmageInstance()
-				.getLoader().getModuleContainer().getModule(TeamModule.class))
+				.getLoader().getContainer().getModule(TeamModule.class))
 				.getTeams()) {
 			if (team.getName().equalsIgnoreCase(name)) {
 				searching = team;
@@ -56,7 +56,7 @@ public class TeamUtils {
 	public static Team getTeamByType(TeamType type) {
 		Team result = null;
 		for (Team team : ((TeamModule) Scrimmage.getScrimmageInstance()
-				.getLoader().getModuleContainer().getModule(TeamModule.class))
+				.getLoader().getContainer().getModule(TeamModule.class))
 				.getTeams()) {
 			if (team.getType().equals(type)) {
 				result = team;
@@ -68,7 +68,7 @@ public class TeamUtils {
 	// gets all the particpating teams
 	public static List<Team> getParticpatingTeams() {
 		for (Team team : ((TeamModule) Scrimmage.getScrimmageInstance()
-				.getLoader().getModuleContainer().getModule(TeamModule.class))
+				.getLoader().getContainer().getModule(TeamModule.class))
 				.getTeams()) {
 			if (team.getType().equals(TeamType.Participating)) {
 				particpating.add(team);
@@ -81,7 +81,7 @@ public class TeamUtils {
 	public static Team getObservers() {
 		Team result = null;
 		for (Team team : ((TeamModule) Scrimmage.getScrimmageInstance()
-				.getLoader().getModuleContainer().getModule(TeamModule.class))
+				.getLoader().getContainer().getModule(TeamModule.class))
 				.getTeams()) {
 			if (team.getType().equals(TeamType.Observing)) {
 				result = team;
@@ -93,7 +93,7 @@ public class TeamUtils {
 	public static Team getParticipatingTeamByID(String id) {
 		Team result = null;
 		for (Team team : getParticpatingTeams()) {
-			if (team.getId().equals(id)) {
+			if (team.getId().equalsIgnoreCase(id)) {
 				result = team;
 			}
 		}

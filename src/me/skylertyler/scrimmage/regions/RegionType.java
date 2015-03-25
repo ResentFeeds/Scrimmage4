@@ -2,7 +2,7 @@ package me.skylertyler.scrimmage.regions;
 
 public enum RegionType {
 
-	BLOCK,POINT, EMPTY;
+	BLOCK,POINT, EMPTY, CUBOID;
 
 	public String toString() {
 		switch (this) {
@@ -12,6 +12,8 @@ public enum RegionType {
 			return "EmptyRegion";
 		case POINT:
 			return "PointRegion";
+		case CUBOID:
+			return "CuboidRegion";
 		default:
 			return null;
 		}

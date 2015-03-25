@@ -2,13 +2,16 @@ package me.skylertyler.scrimmage.modules;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import me.skylertyler.scrimmage.author.Author;
 import me.skylertyler.scrimmage.contributor.Contributor;
 import me.skylertyler.scrimmage.map.MapInfo;
 import me.skylertyler.scrimmage.rules.Rule;
 import me.skylertyler.scrimmage.utils.BukkitUtils;
+import me.skylertyler.scrimmage.utils.ConsoleUtils;
 import me.skylertyler.scrimmage.utils.Log;
+import me.skylertyler.scrimmage.utils.UUIDUtils;
 import me.skylertyler.scrimmage.version.Version;
 
 import org.bukkit.entity.Player;
@@ -61,7 +64,7 @@ public class InfoModule extends Module {
 		// objective
 
 		Node objectiveNode = doc.getElementsByTagName("objective").item(0);
-		if (objectiveNode == null) {  
+		if (objectiveNode == null) {
 			throw new NullPointerException("a map needs an objective tag!");
 		}
 
@@ -70,7 +73,7 @@ public class InfoModule extends Module {
 		// version
 
 		Node versionNode = doc.getElementsByTagName("version").item(0);
-		if (versionNode == null) { 
+		if (versionNode == null) {
 			throw new NullPointerException("a map needs a version tag");
 		}
 
@@ -85,7 +88,7 @@ public class InfoModule extends Module {
 				"contributor");
 
 		// authors
-		List<Author> authors = authorList(root, "authors", "author"); 
+		List<Author> authors = authorList(root, "authors", "author");
 		// rules
 
 		List<Rule> rules = ruleList(root, "rules", "rule");
@@ -120,6 +123,7 @@ public class InfoModule extends Module {
 
 			}
 		}
+
 		return contribs;
 	}
 
@@ -136,17 +140,32 @@ public class InfoModule extends Module {
 					if (node.getNodeType() == Node.ELEMENT_NODE
 							&& node.getNodeName().equals(tag)) {
 						Element authorElement = (Element) author;
-						String name = authorElement.getTextContent();
-						String uuid = authorElement.getAttribute("uuid");
-						if (authorElement.hasAttribute("contribution")) {
-							String contribution = authorElement
-									.getAttribute("contribution");
-							authors.add(new Author(name, contribution, uuid));
-						} else {
-							authors.add(new Author(name, uuid));
+
+						UUID uuid = null;
+						if (authorElement.hasAttribute("contribution")
+								&& authorElement.hasAttribute("uuid")) {
+							uuid = UUIDUtils.getUUIDFromString(authorElement
+									.getAttribute("uuid"));
+							authors.add(new Author(authorElement
+									.getAttribute("contribution"), uuid));
+						} else if (authorElement.hasAttribute("uuid")) {
+							uuid = UUIDUtils.getUUIDFromString(authorElement
+									.getAttribute("uuid"));
+							authors.add(new Author(uuid));
 						}
 					}
 				}
+			}
+
+			String format = null;
+			for (Author author : authors) {
+				if (author.hasContribution()) {
+					format = author.getContribution() + " " + author.getUUID();
+				} else {
+					format = author.getUUID() + "";
+				}
+
+				ConsoleUtils.sendConsoleMessage(format);
 			}
 		}
 		return authors;
@@ -172,6 +191,7 @@ public class InfoModule extends Module {
 				}
 			}
 		}
+
 		return rules;
 	}
 

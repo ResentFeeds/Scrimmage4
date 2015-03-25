@@ -12,46 +12,47 @@ import me.skylertyler.scrimmage.modules.InfoModule;
 import me.skylertyler.scrimmage.modules.ModuleContainer;
 import me.skylertyler.scrimmage.utils.MapDocument;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 public class MapLoader {
 
-	protected List<Map> loadedMaps = null;
+	private List<Map> loadedMaps = null;
 
-	protected Document doc;
+	private Element root;
+    private Scrimmage scrim;
 
-	protected Element root;
-	protected Scrimmage scrim;
-
-	protected ModuleContainer container;
-
-	protected Map nextMap = null;
+	private ModuleContainer container; 
 
 	public MapLoader(Scrimmage scrim) {
 		this.scrim = scrim;
 		this.loadedMaps = new ArrayList<Map>();
 	}
-
-	public void loadMaps() throws SAXException, IOException,
-			ParserConfigurationException {
-		boolean hasRotation = Scrimmage.getScrimmageInstance()
-				.hasRotationFile();
-		if (hasRotation) {
-			File rotationFile = Scrimmage.getScrimmageInstance()
-					.getRotationFile();
-			for (File file : rotationFile.listFiles()) {
-				File xml = new File(file, "map.xml");
-				if (isLoadable(file, xml)) {
-					this.doc = MapDocument.getXMLDocument(xml);
-					this.root = (Element) this.doc.getElementsByTagName("map")
-							.item(0);
+	public void loadMaps() {
+		File rot = Scrimmage.getScrimmageInstance().getRotationFile();
+		for (File maps : rot.listFiles()) {
+			if (maps != null && maps.isDirectory()) {
+				File xml, region, level;
+				xml = new File(maps, "map.xml");
+				region = new File(maps, "region");
+				level = new File(maps, "level.dat");
+				boolean validXML = xml.isFile() && !xml.isHidden()
+						&& !xml.isDirectory();
+				boolean validREGION = region.isDirectory()
+						&& !region.isHidden();
+				boolean validLEVEL = level.isFile() && !level.isHidden()
+						&& !level.isDirectory();
+				boolean loadable = validXML && validREGION && validLEVEL;
+				if (loadable) { 
 					this.container = new ModuleContainer();
-					container.enableModules(getXMLDocument());
-					Map map = new Map(xml,
-							((InfoModule) this.container
-									.getModule(InfoModule.class)).getInfo());
+					try {
+						this.container.enableModules(MapDocument.getXMLDocument(xml));
+					} catch (SAXException | IOException
+							| ParserConfigurationException e) { 
+						e.printStackTrace();
+					}
+					InfoModule mnodule = (InfoModule) getContainer().getModule(InfoModule.class);
+					Map map = new Map(xml, mnodule.getInfo());
 					loadedMaps.add(map);
 				}
 			}
@@ -60,8 +61,8 @@ public class MapLoader {
 
 	// checks if its loadable!
 
-	public boolean isLoadable(File file, File xml) {
-		if (new File(file, "region").exists() && xml.isFile() && xml.exists()
+	public boolean isLoadable(File file) {
+		if (new File(file, "region").exists()
 				&& new File(file, "level.dat").exists()) {
 			return true;
 		}
@@ -83,19 +84,11 @@ public class MapLoader {
 	public Map getMap(String name) {
 		Map map = null;
 		for (Map maps : this.getLoadedMaps()) {
-			if (maps.getInfo().getName().equalsIgnoreCase((name))){
+			if (maps.getInfo().getName().equalsIgnoreCase((name))) {
 				map = maps;
 			}
 		}
 		return map;
-	}
-
-	/**
-	 * 
-	 * @return returns the xml document
-	 */
-	public Document getXMLDocument() {
-		return this.doc;
 	}
 
 	/**
@@ -105,20 +98,20 @@ public class MapLoader {
 	public Element getRootElement() {
 		return this.root;
 	}
+	
+	public boolean containsMap(Map map) {
+		return this.getLoadedMaps().contains(map) ? true : false;
+	}
 
-	public ModuleContainer getModuleContainer() {
+	public Element getRoot() {
+		return this.root;
+	}
+
+	public Scrimmage getScrim() {
+		return this.scrim;
+	}
+
+	public ModuleContainer getContainer() {
 		return this.container;
-	}
-
-	public boolean hasNext() {
-		return this.nextMap != null;
-	}
-
-	public void setNext(Map next) {
-		this.nextMap = next;
-	}
-
-	public Map getNext() {
-		return this.nextMap;
 	}
 }

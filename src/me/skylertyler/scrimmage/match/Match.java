@@ -28,9 +28,10 @@ public class Match {
 	public Match(Scrimmage scrim, int id, Map map) {
 		this.scrim = scrim;
 		this.id = id;
-		this.map = map;
-		this.pm = scrim.getServer().getPluginManager();
+		this.map = map;  
 		this.handler = new MapHandler(this);
+		System.out.println(getMap().getInfo().getName() + " is this map ");
+		this.pm = scrim.getServer().getPluginManager();
 		this.thandler = new TeamHandler();
 		// calling match start event
 		this.setState(MatchState.Idle);
@@ -116,8 +117,8 @@ public class Match {
 	public void setNext(Map map) {
 		this.next = map;
 	}
-	
-	public Map getNext(){
+
+	public Map getNext() {
 		return this.next;
 	}
 }

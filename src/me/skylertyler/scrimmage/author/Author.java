@@ -1,32 +1,28 @@
 package me.skylertyler.scrimmage.author;
 
+import java.util.UUID;
+
 public class Author {
 
-	protected String name;
-	protected String contribution;
-	protected String uuid;
+	private final String contribution;
+	private final UUID uuid; 
 
-	public Author(String name, String contribution, String uuid) {
-		this.name = name;
+	public Author(String contribution, UUID uuid) {
 		this.contribution = contribution;
 		this.uuid = uuid;
 	}
-
-	public Author(String name, String uuid) {
-		this.name = name;
+	
+	
+	public Author(UUID uuid){
 		this.contribution = null;
 		this.uuid = uuid;
-	}
-
-	public String getName() {
-		return this.name;
 	}
 
 	public String getContribution() {
 		return this.contribution;
 	}
 
-	public String getUUID() {
+	public UUID getUUID() {
 		return this.uuid;
 	}
 

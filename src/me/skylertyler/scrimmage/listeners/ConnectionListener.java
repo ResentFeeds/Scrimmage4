@@ -2,11 +2,9 @@ package me.skylertyler.scrimmage.listeners;
 
 import java.util.Map.Entry;
 
-import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.event.MatchStartEvent;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.match.MatchState;
-import me.skylertyler.scrimmage.modules.RegionModule;
 import me.skylertyler.scrimmage.regions.Region;
 import me.skylertyler.scrimmage.regions.RegionUtils;
 import me.skylertyler.scrimmage.regions.types.BlockRegion;
@@ -64,7 +62,7 @@ public class ConnectionListener implements Listener {
 		}
 	}
 
-	//dont know if this works! 
+	//works (for now) 
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) { 
 		for (Entry<String, Region> region : RegionUtils.getRegions().entrySet()) { 

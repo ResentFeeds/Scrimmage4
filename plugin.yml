@@ -2,6 +2,8 @@ name: Scrimmage4
 main: me.skylertyler.scrimmage.Scrimmage
 version: 0.5
 commands:
+  participating:
+    description: checks
   cycle:
     description: cycle to the next map!
   myworld:
@@ -9,7 +11,7 @@ commands:
     aliases:
     - 'mw'
   region:
-    description: checking!
+    description: checks if a region has name!
   regions:
     description: tells you all the regions in the </region> tag!
   location:

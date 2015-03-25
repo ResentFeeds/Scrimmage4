@@ -97,7 +97,7 @@ public class RegionUtils {
 			y = NumberUtils.parseDouble(points[1]);
 			z = NumberUtils.parseDouble(points[2]);
 			InfoModule module = (InfoModule) Scrimmage.getScrimmageInstance()
-					.getLoader().getModuleContainer()
+					.getLoader().getContainer()
 					.getModule(InfoModule.class);
 			String name = "match-" + module.getInfo().getName();
 			Location loc = new Location(Bukkit.getWorld(name), x, y, z);
@@ -131,7 +131,7 @@ public class RegionUtils {
 		double y = NumberUtils.parseDouble(parts[1]);
 		double z = NumberUtils.parseDouble(parts[2]);
 		InfoModule module = (InfoModule) Scrimmage.getScrimmageInstance()
-				.getLoader().getModuleContainer().getModule(InfoModule.class);
+				.getLoader().getContainer().getModule(InfoModule.class);
 		String name = "match-" + module.getInfo().getName();
 		Location loc = new Location(Bukkit.getWorld(name), x, y, z);
 		Vector vec = loc.toVector();

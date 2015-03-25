@@ -18,19 +18,24 @@ import me.skylertyler.scrimmage.commands.NextCommand;
 import me.skylertyler.scrimmage.commands.RuleCommand;
 import me.skylertyler.scrimmage.commands.SetNextCommand;
 import me.skylertyler.scrimmage.commands.WorldCommand;
+import me.skylertyler.scrimmage.config.Config;
 import me.skylertyler.scrimmage.exception.InvalidModuleException;
+import me.skylertyler.scrimmage.listeners.BlockListener;
 import me.skylertyler.scrimmage.listeners.ConnectionListener;
 import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.map.MapLoader;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.match.MatchHandler;
 import me.skylertyler.scrimmage.modules.InfoModule;
+import me.skylertyler.scrimmage.modules.MaxBuildHeightModule;
 import me.skylertyler.scrimmage.modules.ModuleRegistry;
 import me.skylertyler.scrimmage.modules.RegionModule;
 import me.skylertyler.scrimmage.modules.TeamModule;
 import me.skylertyler.scrimmage.regions.Region;
 import me.skylertyler.scrimmage.regions.RegionUtils;
+import me.skylertyler.scrimmage.team.Team;
 import me.skylertyler.scrimmage.utils.ConsoleUtils;
+import me.skylertyler.scrimmage.utils.TeamUtils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,50 +51,72 @@ import org.xml.sax.SAXException;
 
 public class Scrimmage extends JavaPlugin {
 
+	// need to fix maploader using all the map.xml files at once!
+
 	// NEED TO implement SpawnModule, and RegionModule to Finish off the teams
 	// make overhead color show !
-	protected boolean sportBukkit;
-	protected Match match;
+	private boolean sportBukkit;
+	private Match match;
 
-	protected static Scrimmage scrim;
-	protected static File rotationFile = new File("rotation");
+	private static Scrimmage scrim;
+	private static File rotationFile = new File("rotation");
 	// protected File ROTATION_YML = new File(getDataFolder(), "rotation.yml");
 
-	protected List<Map> rotation;
-	protected MapLoader loader;
+	private List<Map> rotation;
+	private MapLoader loader;
 
-	protected MatchHandler mhandler;
+	private MatchHandler mhandler;
+	private Config config;
 
 	@Override
 	public void onEnable() {
 		scrim = this;
-		// make the rotation be a new list of maps every time you reload or
-		// /restart the server
-		this.rotation = new ArrayList<Map>();
-		checkSportBukkitEnabled();
 		// try to load the data folder
 		if (!getDataFolder().exists()) {
 			File file = this.getDataFolder();
 			file.mkdir();
 		}
-		/*                                                 |
-		/* put this after the loader loads the maps below  V
-		 * try { loadRotationMaps(ROTATION_YML); } catch (IOException e2) {
+		checkSportBukkitEnabled();
+		try {
+			loadConfig(new File(this.getDataFolder(), "config.yml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		/*
+		 * | /* put this after the loader loads the maps below V try {
+		 * loadRotationMaps(ROTATION_YML); } catch (IOException e2) {
 		 * e2.printStackTrace(); } loadRotation();
 		 */
 
+		if (getConfigFile().isRunning()) {
+			try {
+				loadMatch();
+			} catch (SAXException | IOException | ParserConfigurationException e) {
+				e.printStackTrace();
+			}
+		} else if (getConfigFile().inDevelopment()) {
+		}
+	}
+
+	public void loadConfig(File file) throws IOException {
+		this.config = new Config(file);
+		if (this.config.configExist()) {
+			this.config.loadConfig();
+		} else {
+			this.config.createFile(file);
+		}
+	}
+
+	public void loadMatch() throws SAXException, IOException,
+			ParserConfigurationException {
 		try {
 			loadModules();
 		} catch (InvalidModuleException e1) {
 			e1.printStackTrace();
 		}
 		this.loader = new MapLoader(getScrimmageInstance());
-		try {
-			this.loader.loadMaps();
-		} catch (SAXException | IOException | ParserConfigurationException e) {
-			e.printStackTrace();
-		}
-		// switch the default map with the first map in the current rotation!
+		this.loader.loadMaps();
 		setMatch(new Match(getScrimmageInstance(), 1, getLoader()
 				.getLoadedMaps().get(0)));
 		setMatchHandler(new MatchHandler(getMatch()));
@@ -116,7 +143,7 @@ public class Scrimmage extends JavaPlugin {
 			getCommand(label).getAliases().add(aliase);
 		}
 	}
- 
+
 	public void loadCommands() {
 		registerCommand(new ContributorCommand(getMatch()), "contributors",
 				Arrays.asList("contribs"));
@@ -142,6 +169,8 @@ public class Scrimmage extends JavaPlugin {
 	public void loadListeners() {
 		registerListener(new ConnectionListener(getMatch()));
 		registerListener(new InfoModule(getMatch().getMap().getInfo()));
+		registerListener(new BlockListener((MaxBuildHeightModule) getLoader()
+				.getContainer().getModule(MaxBuildHeightModule.class)));
 	}
 
 	@Override
@@ -154,8 +183,8 @@ public class Scrimmage extends JavaPlugin {
 				for (Entry<String, Region> regions : RegionUtils.getRegions()
 						.entrySet()) {
 					if (regions.getValue().hasName()) {
-						format = regions.getKey()
-								+ " " + regions.getValue().getType().toString();
+						format = regions.getKey() + " "
+								+ regions.getValue().getType().toString();
 					} else {
 						format = regions.getValue().getType().toString();
 					}
@@ -185,6 +214,35 @@ public class Scrimmage extends JavaPlugin {
 
 					player.sendMessage(ChatColor.GRAY + "The region is a "
 							+ ChatColor.GOLD + region.getType().toString());
+				}
+			} else if (cmd.getName().equalsIgnoreCase("participating")) {
+				if (args.length == 0 || args.length < 1) {
+					player.sendMessage(ChatColor.RED + "Not enough arguments!");
+					player.sendMessage(ChatColor.RED + "/participating <team>");
+					return false;
+				}
+
+				if (args.length > 1) {
+					player.sendMessage(ChatColor.RED + "Too many arguments!");
+					player.sendMessage(ChatColor.RED + "/participating <team>");
+					return false;
+				}
+
+				if (args.length == 1) {
+					Team team = TeamUtils.getParticipatingTeamByID(args[0]);
+
+					if (team == null) {
+						player.sendMessage(ChatColor.RED
+								+ "there is no participating team by the id of "
+								+ ChatColor.DARK_RED + args[0] + ChatColor.RED
+								+ "!");
+						return false;
+					}
+
+					player.sendMessage(ChatColor.WHITE
+							+ "the team with that id is " + team.getColor()
+							+ team.getName());
+
 				}
 			}
 		}
@@ -221,12 +279,15 @@ public class Scrimmage extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		getMatch().getMapHandler().clearMapsDirectory(
-				Bukkit.getWorldContainer());
-		// unloading the modules when the server is disabled or shut down! by
-		// using /stop or it crashes due to some error!
-		getLoader().getModuleContainer().unloadModules();
-		// make scrim null! (because the server is disabling)
+		if (getConfigFile().isRunning()) {
+			getMatch().getMapHandler().clearMapsDirectory(
+					Bukkit.getWorldContainer());
+			// unloading the modules when the server is disabled or shut down!
+			// by
+			// using /stop or it crashes due to some error!
+			getLoader().getContainer().unloadModules();
+			// make scrim null! (because the server is disabling)
+		}
 		scrim = null;
 	}
 
@@ -296,6 +357,7 @@ public class Scrimmage extends JavaPlugin {
 		ModuleRegistry.register(InfoModule.class);
 		ModuleRegistry.register(TeamModule.class);
 		ModuleRegistry.register(RegionModule.class);
+		ModuleRegistry.register(MaxBuildHeightModule.class);
 	}
 
 	public MapLoader getLoader() {
@@ -312,5 +374,17 @@ public class Scrimmage extends JavaPlugin {
 
 	public void setMatchHandler(MatchHandler mhandler) {
 		this.mhandler = mhandler;
+	}
+
+	public List<Map> getRotation() {
+		return rotation;
+	}
+
+	public MatchHandler getMhandler() {
+		return mhandler;
+	}
+
+	public Config getConfigFile() {
+		return this.config;
 	}
 }

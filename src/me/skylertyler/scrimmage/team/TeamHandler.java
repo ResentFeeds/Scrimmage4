@@ -19,7 +19,7 @@ public class TeamHandler {
 
 	public void addParticpatingMember(Team team, Player player) {
 		for (Team teams : ((TeamModule) Scrimmage.getScrimmageInstance()
-				.getLoader().getModuleContainer().getModule(TeamModule.class))
+				.getLoader().getContainer().getModule(TeamModule.class))
 				.getTeams()) {
 			teams.getMembers().remove(player.getName());
 		}

@@ -19,8 +19,7 @@ public class MapHandler {
 	protected Match match;
 
 	public MapHandler(Match match) {
-		this.match = match;
-		this.loadMap(getMatch().getMap(), +1);
+		this.match = match;  
 	}
 
 	/**
