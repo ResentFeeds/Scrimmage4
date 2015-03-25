@@ -1,6 +1,6 @@
-[?] match loading, ending, cyling someone done stll getting there!
-[?] map, contributors, rules etc....
-[?] teams (TeamType, (Observing, or Participating)
+[?] match loading, ending, cyling someone done stll getting there! (getting there)
+[?] map, contributors, rules etc....  (almost)
+[?] teams (TeamType, (Observing, or Participating) (somewhat)
 [?] objectives
 [?] scoreboard
 [?] commmands
@@ -8,13 +8,14 @@
 [?] DTM
 [?] CTW
 [?] KOTH
-[?] regions
+[?] regions (need alot more work)
 [?] listeners
-[?] barAPI
-[IDK]  CTF
-[?] TDM
+[?] ba
+[IDK] CTF (might need to look into this)
+[?] TDM  
 [?] Database 
 [Maybe] stats 
 [?] TODO add generating a new map.xml file to make maps with!
 [?] implement commands to edit the current map or the map you wanthe in game!
 [?] wtm and ctw
+[?] todo make authors use UUIDS using an attribute instead of thier name in a Node Tag
