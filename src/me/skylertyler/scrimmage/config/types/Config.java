@@ -65,11 +65,6 @@ public class Config extends CoreConfig {
 		return getServerType() == ServerType.Development;
 	}
 
-	@Override
-	public boolean hasConfigurationSection(
-			ConfigurationSection configurationSection) {
-		return configurationSection != null ? true : false;
-	}
 
 	@Override
 	public boolean configExist() {
@@ -84,11 +79,6 @@ public class Config extends CoreConfig {
 	@Override
 	public ConfigType getType() {
 		return ConfigType.CONFIG;
-	}
-
-	@Override
-	public boolean hasType() {
-		return this.getType() != null ? true : false;
 	}
 
 	public File getCONFIG() {
