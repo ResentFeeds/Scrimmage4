@@ -88,7 +88,9 @@ public class Team {
 	public boolean isObserving(Player player) {
 		List<String> members = this.getMembers();
 		return members.contains(player.getName()) ? true : false;
-	}
+	} 
+	
+	
 
 	public TeamType getType() {
 		return this.type;

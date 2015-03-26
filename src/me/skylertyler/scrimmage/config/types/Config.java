@@ -1,4 +1,4 @@
-package me.skylertyler.scrimmage.config;
+package me.skylertyler.scrimmage.config.types;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,20 +7,23 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import me.skylertyler.scrimmage.config.ConfigType;
+import me.skylertyler.scrimmage.config.CoreConfig;
 import me.skylertyler.scrimmage.test.ServerType;
 import me.skylertyler.scrimmage.utils.Log;
 
-public class Config {
+public class Config extends CoreConfig {
 
-	private File CONFIG = null;
+	private final File CONFIG;
 	private ServerType type = null;
 
 	public Config(File config) {
 		this.CONFIG = config;
 	}
 
+	@Override
 	public void loadConfig() throws IOException {
-		File file = this.getConfig();
+		File file = this.getCONFIG();
 		if (configExist()) {
 			FileConfiguration config = YamlConfiguration
 					.loadConfiguration(file);
@@ -50,36 +53,46 @@ public class Config {
 		return type;
 	}
 
-	private boolean hasConfigurationSection(
+	public ServerType getServerType() {
+		return this.type;
+	}
+
+	public boolean isRunning() {
+		return getServerType() == ServerType.Running;
+	}
+
+	public boolean inDevelopment() {
+		return getServerType() == ServerType.Development;
+	}
+
+	@Override
+	public boolean hasConfigurationSection(
 			ConfigurationSection configurationSection) {
 		return configurationSection != null ? true : false;
 	}
 
+	@Override
 	public boolean configExist() {
-		return getConfig().exists() ? true : false;
+		return getCONFIG().exists();
 	}
 
-	public File getConfig() {
-		return this.CONFIG;
+	@Override
+	public boolean createFile() throws IOException {
+		return getCONFIG().createNewFile();
 	}
 
-	public boolean createFile(File file) throws IOException {
-		return file.createNewFile();
+	@Override
+	public ConfigType getType() {
+		return ConfigType.CONFIG;
 	}
 
-	public ServerType getType() {
-		return this.type;
-	}
-
+	@Override
 	public boolean hasType() {
-		return getType() != null ? true : false;
+		return this.getType() != null ? true : false;
 	}
 
-	public boolean isRunning() {
-		return getType() == ServerType.Running;
+	public File getCONFIG() {
+		return CONFIG;
 	}
 
-	public boolean inDevelopment() {
-		return getType() == ServerType.Development;
-	}
 }

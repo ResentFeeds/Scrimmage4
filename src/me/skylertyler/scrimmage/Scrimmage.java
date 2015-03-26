@@ -13,16 +13,18 @@ import me.skylertyler.scrimmage.commands.ContributorCommand;
 import me.skylertyler.scrimmage.commands.CycleCommand;
 import me.skylertyler.scrimmage.commands.JoinCommand;
 import me.skylertyler.scrimmage.commands.LocationCommand;
+import me.skylertyler.scrimmage.commands.MapListCommand;
 import me.skylertyler.scrimmage.commands.MyTeamCommand;
 import me.skylertyler.scrimmage.commands.NextCommand;
+import me.skylertyler.scrimmage.commands.RotationCommand;
 import me.skylertyler.scrimmage.commands.RuleCommand;
 import me.skylertyler.scrimmage.commands.SetNextCommand;
 import me.skylertyler.scrimmage.commands.WorldCommand;
-import me.skylertyler.scrimmage.config.Config;
+import me.skylertyler.scrimmage.config.types.Config;
+import me.skylertyler.scrimmage.config.types.RotationConfig;
 import me.skylertyler.scrimmage.exception.InvalidModuleException;
 import me.skylertyler.scrimmage.listeners.BlockListener;
 import me.skylertyler.scrimmage.listeners.ConnectionListener;
-import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.map.MapLoader;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.match.MatchHandler;
@@ -33,8 +35,10 @@ import me.skylertyler.scrimmage.modules.RegionModule;
 import me.skylertyler.scrimmage.modules.TeamModule;
 import me.skylertyler.scrimmage.regions.Region;
 import me.skylertyler.scrimmage.regions.RegionUtils;
+import me.skylertyler.scrimmage.rotation.Rotation;
 import me.skylertyler.scrimmage.team.Team;
 import me.skylertyler.scrimmage.utils.ConsoleUtils;
+import me.skylertyler.scrimmage.utils.Log;
 import me.skylertyler.scrimmage.utils.TeamUtils;
 
 import org.bukkit.Bukkit;
@@ -60,13 +64,13 @@ public class Scrimmage extends JavaPlugin {
 
 	private static Scrimmage scrim;
 	private static File rotationFile = new File("rotation");
-	// protected File ROTATION_YML = new File(getDataFolder(), "rotation.yml");
 
-	private List<Map> rotation;
+	private Rotation rotation;
 	private MapLoader loader;
 
 	private MatchHandler mhandler;
 	private Config config;
+	private RotationConfig ROT_CONFIG;
 
 	@Override
 	public void onEnable() {
@@ -83,14 +87,10 @@ public class Scrimmage extends JavaPlugin {
 			e.printStackTrace();
 		}
 
-		/*
-		 * | /* put this after the loader loads the maps below V try {
-		 * loadRotationMaps(ROTATION_YML); } catch (IOException e2) {
-		 * e2.printStackTrace(); } loadRotation();
-		 */
-
 		if (getConfigFile().isRunning()) {
 			try {
+				loadLoadedMaps();
+				loadRotation(new File(this.getDataFolder(), "rotation.yml"));
 				loadMatch();
 			} catch (SAXException | IOException | ParserConfigurationException e) {
 				e.printStackTrace();
@@ -99,17 +99,22 @@ public class Scrimmage extends JavaPlugin {
 		}
 	}
 
-	public void loadConfig(File file) throws IOException {
-		this.config = new Config(file);
-		if (this.config.configExist()) {
-			this.config.loadConfig();
+	public void loadRotation(File rotation) throws IOException {
+		this.rotation = new Rotation();
+		this.ROT_CONFIG = new RotationConfig(rotation);
+		if (this.getRotationConfig().configExist()) {
+			this.getRotationConfig().loadConfig();
 		} else {
-			this.config.createFile(file);
+			Log.logWarning("Try to /reload again for a rotation.yml!");
+			this.getRotationConfig().createFile();
 		}
 	}
 
-	public void loadMatch() throws SAXException, IOException,
-			ParserConfigurationException {
+	public RotationConfig getRotationConfig() {
+		return this.ROT_CONFIG;
+	}
+
+	public void loadLoadedMaps() {
 		try {
 			loadModules();
 		} catch (InvalidModuleException e1) {
@@ -117,6 +122,19 @@ public class Scrimmage extends JavaPlugin {
 		}
 		this.loader = new MapLoader(getScrimmageInstance());
 		this.loader.loadMaps();
+	}
+
+	public void loadConfig(File file) throws IOException {
+		this.config = new Config(file);
+		if (this.config.configExist()) {
+			this.config.loadConfig();
+		} else {
+			this.config.createFile();
+		}
+	}
+
+	public void loadMatch() throws SAXException, IOException,
+			ParserConfigurationException {
 		setMatch(new Match(getScrimmageInstance(), 1, getLoader()
 				.getLoadedMaps().get(0)));
 		setMatchHandler(new MatchHandler(getMatch()));
@@ -160,6 +178,8 @@ public class Scrimmage extends JavaPlugin {
 		registerCommand(new LocationCommand(), "location", null);
 		registerCommand(new WorldCommand(), "myworld", Arrays.asList("mw"));
 		registerCommand(new CycleCommand(this), "cycle", null);
+		registerCommand(new MapListCommand(), "maplist", null);
+		registerCommand(new RotationCommand(this), "rotation", null);
 	}
 
 	public void registerListener(Listener listener) {
@@ -376,7 +396,7 @@ public class Scrimmage extends JavaPlugin {
 		this.mhandler = mhandler;
 	}
 
-	public List<Map> getRotation() {
+	public Rotation getRotation() {
 		return rotation;
 	}
 

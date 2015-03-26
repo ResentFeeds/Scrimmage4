@@ -1,7 +1,11 @@
 name: Scrimmage4
 main: me.skylertyler.scrimmage.Scrimmage
-version: 0.5
+version: 0.58
 commands:
+  rotation:
+    description: map rotation!
+  maplist:
+    description: all the loaded maps!
   participating:
     description: checks
   cycle:

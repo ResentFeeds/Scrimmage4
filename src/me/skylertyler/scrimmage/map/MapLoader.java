@@ -15,19 +15,21 @@ import me.skylertyler.scrimmage.utils.MapDocument;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+
 public class MapLoader {
 
 	private List<Map> loadedMaps = null;
 
 	private Element root;
-    private Scrimmage scrim;
+	private Scrimmage scrim;
 
-	private ModuleContainer container; 
+	private ModuleContainer container;
 
 	public MapLoader(Scrimmage scrim) {
 		this.scrim = scrim;
 		this.loadedMaps = new ArrayList<Map>();
 	}
+
 	public void loadMaps() {
 		File rot = Scrimmage.getScrimmageInstance().getRotationFile();
 		for (File maps : rot.listFiles()) {
@@ -43,20 +45,27 @@ public class MapLoader {
 				boolean validLEVEL = level.isFile() && !level.isHidden()
 						&& !level.isDirectory();
 				boolean loadable = validXML && validREGION && validLEVEL;
-				if (loadable) { 
+				if (loadable) {
 					this.container = new ModuleContainer();
 					try {
-						this.container.enableModules(MapDocument.getXMLDocument(xml));
+						this.container.enableModules(MapDocument
+								.getXMLDocument(xml));
 					} catch (SAXException | IOException
-							| ParserConfigurationException e) { 
+							| ParserConfigurationException e) {
 						e.printStackTrace();
 					}
-					InfoModule mnodule = (InfoModule) getContainer().getModule(InfoModule.class);
-					Map map = new Map(xml, mnodule.getInfo());
-					loadedMaps.add(map);
+
+					InfoModule mnodule = (InfoModule) getContainer().getModule(
+							InfoModule.class);
+					Map newMap = new Map(maps, mnodule.getInfo());
+					addMap(newMap);
 				}
 			}
 		}
+	}
+
+	public void addMap(Map map) {
+		this.loadedMaps.add(map);
 	}
 
 	// checks if its loadable!
@@ -98,7 +107,7 @@ public class MapLoader {
 	public Element getRootElement() {
 		return this.root;
 	}
-	
+
 	public boolean containsMap(Map map) {
 		return this.getLoadedMaps().contains(map) ? true : false;
 	}
