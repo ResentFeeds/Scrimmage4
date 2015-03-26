@@ -15,7 +15,6 @@ import me.skylertyler.scrimmage.utils.MapDocument;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-
 public class MapLoader {
 
 	private List<Map> loadedMaps = null;
@@ -110,10 +109,6 @@ public class MapLoader {
 
 	public boolean containsMap(Map map) {
 		return this.getLoadedMaps().contains(map) ? true : false;
-	}
-
-	public Element getRoot() {
-		return this.root;
 	}
 
 	public Scrimmage getScrim() {

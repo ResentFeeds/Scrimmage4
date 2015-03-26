@@ -33,6 +33,7 @@ public class RotationCommand implements CommandExecutor {
 						message = WHITE + "" + i + ") " + AQUA
 								+ map.getInfo().getName() + " " + WHITE
 								+ map.getInfo().getVersion();
+						i++;
 						player.sendMessage(message);
 					} else {
 						player.sendMessage(RED

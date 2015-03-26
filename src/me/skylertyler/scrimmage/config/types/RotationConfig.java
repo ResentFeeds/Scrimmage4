@@ -48,31 +48,30 @@ public class RotationConfig extends CoreConfig {
 		List<Map> maps = new ArrayList<Map>();
 		Scrimmage scrimmage = Scrimmage.getScrimmageInstance();
 		MapLoader loader = scrimmage.getLoader();
-		Map map = loader.getMap(stringList.get(0));
-		if (loader.getLoadedMaps().contains(map)) {
-			maps.add(map);
-			Log.logInfo(statusString(maps.size()));
-		} else {
-			Log.logWarning("[Scrimmage4] there is no loaded map by the name of"
-					+ " idk");
+		for (int i = 0; i < stringList.size(); i++) {
+			Map map = loader.getMap(stringList.get(i));
+			if (loader.getLoadedMaps().contains(map)) {
+				maps.add(map);
+			} else {
+				Log.logWarning("[Scrimmage4] there is no loaded map by the name of ");
+			}
 		}
+
+		Log.logInfo(statusString(maps.size()));
 		return maps;
 	}
 
-	private String statusString(int size) {
+	public String statusString(int size) {
 		String s = null;
-		 if(size != 1){
-			 s = " s ";
-		 }else{
-			 s = " ";
-		 }
-		return "There is "+ size + " map"+ s + "loaded"; 
-	}
-
-	@Override
-	public boolean hasConfigurationSection(
-			ConfigurationSection configurationSection) {
-		return configurationSection != null ? true : false;
+		String grammer = null;
+		if (size == 1) {
+			grammer = "is ";
+			s = "";
+		} else if (size > 1 || size == 0) {
+			grammer = "are ";
+			s = "s";
+		}
+		return "There " + grammer + size + " map" + s + " loaded";
 	}
 
 	@Override
@@ -88,11 +87,6 @@ public class RotationConfig extends CoreConfig {
 	@Override
 	public ConfigType getType() {
 		return ConfigType.ROTATION;
-	}
-
-	@Override
-	public boolean hasType() {
-		return this.getType() != null ? true : false;
 	}
 
 	public List<Map> getRotMaps() {
