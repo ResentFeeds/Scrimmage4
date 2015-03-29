@@ -12,7 +12,9 @@ import me.skylertyler.scrimmage.modules.InfoModule;
 import me.skylertyler.scrimmage.modules.ModuleContainer;
 import me.skylertyler.scrimmage.utils.MapDocument;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 public class MapLoader {
@@ -27,6 +29,7 @@ public class MapLoader {
 	public MapLoader(Scrimmage scrim) {
 		this.scrim = scrim;
 		this.loadedMaps = new ArrayList<Map>();
+		this.container = new ModuleContainer();
 	}
 
 	public void loadMaps() {
@@ -45,18 +48,21 @@ public class MapLoader {
 						&& !level.isDirectory();
 				boolean loadable = validXML && validREGION && validLEVEL;
 				if (loadable) {
-					this.container = new ModuleContainer();
+					Document doc = null;
 					try {
-						this.container.enableModules(MapDocument
-								.getXMLDocument(xml));
+						doc = MapDocument.getXMLDocument(xml);
 					} catch (SAXException | IOException
 							| ParserConfigurationException e) {
+						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-
-					InfoModule mnodule = (InfoModule) getContainer().getModule(
-							InfoModule.class);
-					Map newMap = new Map(maps, mnodule.getInfo());
+					this.container.enableModules(doc);
+					// try to fix the map constructer to get rid of the / map
+					// info and add enable modules to the match constructer to
+					// enable the modules for the current map not for all the
+					// maps that are in the rotation or loaded?
+					MapInfo info = ((InfoModule) this.getContainer().getModule(InfoModule.class)).getInfo();
+					Map newMap = new Map(maps, info);
 					addMap(newMap);
 				}
 			}
@@ -117,5 +123,9 @@ public class MapLoader {
 
 	public ModuleContainer getContainer() {
 		return this.container;
+	}
+
+	public static boolean hasNode(Node node) {
+		return node != null ? true : false;
 	}
 }

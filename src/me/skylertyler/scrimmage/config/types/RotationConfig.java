@@ -37,12 +37,12 @@ public class RotationConfig extends CoreConfig {
 					.loadConfiguration(rotation);
 			ConfigurationSection maps = config
 					.getConfigurationSection("rotation");
-			if (hasConfigurationSection(maps)
-					&& maps.getStringList("maps") != null) {
+			if (hasConfigurationSection(maps) && hasStringList(maps, "maps")) {
 				this.setRotMaps(parseMaps(maps.getStringList("maps")));
 			}
 		}
 	}
+
 
 	private List<Map> parseMaps(List<String> stringList) {
 		List<Map> maps = new ArrayList<Map>();
@@ -50,8 +50,9 @@ public class RotationConfig extends CoreConfig {
 		MapLoader loader = scrimmage.getLoader();
 		for (int i = 0; i < stringList.size(); i++) {
 			Map map = loader.getMap(stringList.get(i));
-			if (loader.getLoadedMaps().contains(map)) {
+			if (loader.containsMap(map)) {
 				maps.add(map);
+				Log.logWarning("[Scrimmage4] added map " + map.getInfo().getName());
 			} else {
 				Log.logWarning("[Scrimmage4] there is no loaded map by the name of ");
 			}
@@ -64,8 +65,8 @@ public class RotationConfig extends CoreConfig {
 	public String statusString(int size) {
 		String s = null;
 		String grammer = null;
-		if (size == 1) {
-			grammer = "is ";
+		if (size == 1){
+			grammer = "is "; 
 			s = "";
 		} else if (size > 1 || size == 0) {
 			grammer = "are ";

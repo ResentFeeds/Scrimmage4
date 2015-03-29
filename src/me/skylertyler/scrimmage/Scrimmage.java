@@ -25,6 +25,7 @@ import me.skylertyler.scrimmage.config.types.RotationConfig;
 import me.skylertyler.scrimmage.exception.InvalidModuleException;
 import me.skylertyler.scrimmage.listeners.BlockListener;
 import me.skylertyler.scrimmage.listeners.ConnectionListener;
+import me.skylertyler.scrimmage.listeners.TestConnectionListener;
 import me.skylertyler.scrimmage.map.MapLoader;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.match.MatchHandler;
@@ -37,6 +38,7 @@ import me.skylertyler.scrimmage.regions.Region;
 import me.skylertyler.scrimmage.regions.RegionUtils;
 import me.skylertyler.scrimmage.rotation.Rotation;
 import me.skylertyler.scrimmage.team.Team;
+import me.skylertyler.scrimmage.test.TestLoader;
 import me.skylertyler.scrimmage.utils.ConsoleUtils;
 import me.skylertyler.scrimmage.utils.Log;
 import me.skylertyler.scrimmage.utils.TeamUtils;
@@ -96,13 +98,23 @@ public class Scrimmage extends JavaPlugin {
 				e.printStackTrace();
 			}
 		} else if (getConfigFile().inDevelopment()) {
+			TestLoader testloader = new TestLoader();
+			try {
+				testloader.loadMaps();
+      
+			} catch (ParserConfigurationException e) {
+				e.printStackTrace();
+			}
 		}
+		
+		loadListeners();
 	}
 
 	public void loadRotation(File rotation) throws IOException {
 		this.rotation = new Rotation();
 		this.ROT_CONFIG = new RotationConfig(rotation);
-		if (this.getRotationConfig().configExist()) {
+		boolean exist = this.getRotationConfig().configExist();
+		if (exist) {
 			this.getRotationConfig().loadConfig();
 		} else {
 			Log.logWarning("Try to /reload again for a rotation.yml!");
@@ -138,7 +150,6 @@ public class Scrimmage extends JavaPlugin {
 		setMatch(new Match(getScrimmageInstance(), 1, getLoader()
 				.getLoadedMaps().get(0)));
 		setMatchHandler(new MatchHandler(getMatch()));
-		loadListeners();
 		loadCommands();
 	}
 
@@ -187,11 +198,20 @@ public class Scrimmage extends JavaPlugin {
 	}
 
 	public void loadListeners() {
-		registerListener(new ConnectionListener(getMatch()));
-		registerListener(new InfoModule(getMatch().getMap().getInfo()));
-		registerListener(new BlockListener((MaxBuildHeightModule) getLoader()
-				.getContainer().getModule(MaxBuildHeightModule.class)));
+		if(getConfigFile().isRunning()){ 
+			registerListener(new ConnectionListener(getMatch()));
+			registerListener(new InfoModule(getMatch().getMap().getInfo()));
+			registerListener(new BlockListener((MaxBuildHeightModule) getLoader()
+					.getContainer().getModule(MaxBuildHeightModule.class)));
+		} 
+		
+		if(getConfigFile().inDevelopment()){
+			registerListener(new TestConnectionListener());
+		}
 	}
+	
+	
+	
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
