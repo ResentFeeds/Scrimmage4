@@ -6,44 +6,50 @@ import me.skylertyler.scrimmage.event.MatchLoadEvent;
 import me.skylertyler.scrimmage.event.MatchStartEvent;
 import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.map.MapHandler;
+import me.skylertyler.scrimmage.scoreboard.Scoreboard;
 import me.skylertyler.scrimmage.team.TeamHandler;
 import me.skylertyler.scrimmage.timers.GameStartTimer;
 import me.skylertyler.scrimmage.utils.MessageUtils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
 
 public class Match {
 
-	protected int id;
-	protected Map map;
-	protected MatchState state;
-	protected Scrimmage scrim;
-	protected PluginManager pm;
-	protected World world;
-	protected MapHandler handler;
-	protected TeamHandler thandler;
+	private final int id;
+	private final Map map;
+	private MatchState state;
+	private Scrimmage scrim;
+	private PluginManager pm;
+	private World world;
+	private MapHandler handler;
+	private TeamHandler thandler;
 	private Map next = null;
+
+	private org.bukkit.scoreboard.Scoreboard current_board = Bukkit.getScoreboardManager().getNewScoreboard();
+	private Scoreboard board = null;
 
 	public Match(Scrimmage scrim, int id, Map map) {
 		this.scrim = scrim;
 		this.id = id;
-		this.map = map;  
+		this.map = map;
 		this.handler = new MapHandler(this);
-		System.out.println(getMap().getInfo().getName() + " is this map ");
+		this.handler.loadMap(map, id);
 		this.pm = scrim.getServer().getPluginManager();
 		this.thandler = new TeamHandler();
 		// calling match start event
 		this.setState(MatchState.Idle);
+		this.board = new Scoreboard(current_board);
 		MatchLoadEvent event = new MatchLoadEvent(this);
 		this.pm.callEvent(event);
-		// run the start game timer
 		runStartGameTimer();
 	}
 
 	public void runStartGameTimer() {
 		GameStartTimer start = new GameStartTimer(30, false, this);
 		start.run();
+
 	}
 
 	public boolean isRunning() {
@@ -121,4 +127,15 @@ public class Match {
 	public Map getNext() {
 		return this.next;
 	}
+
+	public void broadcast(String string) {
+		this.getScrimmage().getServer().broadcastMessage(string);
+	}
+
+	public Scoreboard getScoreboard() {
+		return this.board;
+	}
+	
+	 
+
 }

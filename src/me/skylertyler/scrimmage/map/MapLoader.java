@@ -10,61 +10,67 @@ import javax.xml.parsers.ParserConfigurationException;
 import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.modules.InfoModule;
 import me.skylertyler.scrimmage.modules.ModuleContainer;
+import me.skylertyler.scrimmage.utils.ConsoleUtils;
 import me.skylertyler.scrimmage.utils.MapDocument;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 public class MapLoader {
 
-	private List<Map> loadedMaps = null;
+	private final List<Map> loadedMaps;
 
 	private Element root;
-	private Scrimmage scrim;
+	private final Scrimmage scrim;
 
 	private ModuleContainer container;
 
 	public MapLoader(Scrimmage scrim) {
 		this.scrim = scrim;
 		this.loadedMaps = new ArrayList<Map>();
-		this.container = new ModuleContainer();
 	}
 
 	public void loadMaps() {
 		File rot = Scrimmage.getScrimmageInstance().getRotationFile();
-		for (File maps : rot.listFiles()) {
-			if (maps != null && maps.isDirectory()) {
-				File xml, region, level;
-				xml = new File(maps, "map.xml");
-				region = new File(maps, "region");
-				level = new File(maps, "level.dat");
-				boolean validXML = xml.isFile() && !xml.isHidden()
-						&& !xml.isDirectory();
-				boolean validREGION = region.isDirectory()
-						&& !region.isHidden();
-				boolean validLEVEL = level.isFile() && !level.isHidden()
-						&& !level.isDirectory();
-				boolean loadable = validXML && validREGION && validLEVEL;
-				if (loadable) {
-					Document doc = null;
-					try {
-						doc = MapDocument.getXMLDocument(xml);
-					} catch (SAXException | IOException
-							| ParserConfigurationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+		boolean exist = rot.exists();
+		if (exist) {
+			for (File maps : rot.listFiles()) {
+				if (maps != null && maps.isDirectory()) {
+					File xml, region, level;
+					xml = new File(maps, "map.xml");
+					region = new File(maps, "region");
+					level = new File(maps, "level.dat");
+					boolean validXML = xml.isFile() && !xml.isHidden()
+							&& !xml.isDirectory();
+					boolean validREGION = region.isDirectory()
+							&& !region.isHidden();
+					boolean validLEVEL = level.isFile() && !level.isHidden()
+							&& !level.isDirectory();
+					boolean loadable = validXML && validREGION && validLEVEL;
+					if (loadable) {
+						this.container = new ModuleContainer();
+						try {
+							this.container.enableModules(MapDocument
+									.getXMLDocument(xml));
+						} catch (SAXException | IOException
+								| ParserConfigurationException e) {
+							e.printStackTrace();
+						}
+						MapInfo info = ((InfoModule) this.getContainer()
+								.getModule(InfoModule.class)).getInfo();
+						Map newMap = new Map(xml, info);
+						addMap(newMap);
 					}
-					this.container.enableModules(doc);
-					// try to fix the map constructer to get rid of the / map
-					// info and add enable modules to the match constructer to
-					// enable the modules for the current map not for all the
-					// maps that are in the rotation or loaded?
-					MapInfo info = ((InfoModule) this.getContainer().getModule(InfoModule.class)).getInfo();
-					Map newMap = new Map(maps, info);
-					addMap(newMap);
 				}
+			}
+
+			String format = null;
+			for (Map map : getLoadedMaps()) {
+				if (map != null) {
+					format = map.getInfo().getName() + " has been loaded!";
+				}
+				ConsoleUtils.sendConsoleMessage(format);
 			}
 		}
 	}

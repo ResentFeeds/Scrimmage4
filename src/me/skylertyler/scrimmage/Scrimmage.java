@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import me.skylertyler.scrimmage.commands.BroadcastCommand;
 import me.skylertyler.scrimmage.commands.ContributorCommand;
 import me.skylertyler.scrimmage.commands.CycleCommand;
 import me.skylertyler.scrimmage.commands.JoinCommand;
@@ -97,17 +98,20 @@ public class Scrimmage extends JavaPlugin {
 			} catch (SAXException | IOException | ParserConfigurationException e) {
 				e.printStackTrace();
 			}
-		} else if (getConfigFile().inDevelopment()) {
+		}
+
+		if (getConfigFile().inDevelopment()) {
 			TestLoader testloader = new TestLoader();
 			try {
 				testloader.loadMaps();
-      
+
 			} catch (ParserConfigurationException e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		loadListeners();
+		Log.logInfo(getConfigFile().getFullPrefix() + " has been Enabled!");
 	}
 
 	public void loadRotation(File rotation) throws IOException {
@@ -117,7 +121,8 @@ public class Scrimmage extends JavaPlugin {
 		if (exist) {
 			this.getRotationConfig().loadConfig();
 		} else {
-			Log.logWarning("Try to /reload again for a rotation.yml!");
+			Log.logWarning(getConfigFile().getFullPrefix()
+					+ " Try to /reload again for a rotation.yml!");
 			this.getRotationConfig().createFile();
 		}
 	}
@@ -132,7 +137,7 @@ public class Scrimmage extends JavaPlugin {
 		} catch (InvalidModuleException e1) {
 			e1.printStackTrace();
 		}
-		this.loader = new MapLoader(getScrimmageInstance());
+		this.loader = new MapLoader(null);
 		this.loader.loadMaps();
 	}
 
@@ -191,6 +196,8 @@ public class Scrimmage extends JavaPlugin {
 		registerCommand(new CycleCommand(this), "cycle", null);
 		registerCommand(new MapListCommand(), "maplist", null);
 		registerCommand(new RotationCommand(this), "rotation", null);
+		registerCommand(new BroadcastCommand(this), "broadcast",
+				Arrays.asList("bc", "bmessage"));
 	}
 
 	public void registerListener(Listener listener) {
@@ -198,20 +205,18 @@ public class Scrimmage extends JavaPlugin {
 	}
 
 	public void loadListeners() {
-		if(getConfigFile().isRunning()){ 
+		if (getConfigFile().isRunning()) {
 			registerListener(new ConnectionListener(getMatch()));
 			registerListener(new InfoModule(getMatch().getMap().getInfo()));
-			registerListener(new BlockListener((MaxBuildHeightModule) getLoader()
-					.getContainer().getModule(MaxBuildHeightModule.class)));
-		} 
-		
-		if(getConfigFile().inDevelopment()){
+			registerListener(new BlockListener(
+					(MaxBuildHeightModule) getLoader().getContainer()
+							.getModule(MaxBuildHeightModule.class)));
+		}
+
+		if (getConfigFile().inDevelopment()) {
 			registerListener(new TestConnectionListener());
 		}
 	}
-	
-	
-	
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
@@ -220,17 +225,34 @@ public class Scrimmage extends JavaPlugin {
 			Player player = (Player) sender;
 			if (cmd.getName().equalsIgnoreCase("regions")) {
 				String format = null;
-				for (Entry<String, Region> regions : RegionUtils.getRegions()
-						.entrySet()) {
-					if (regions.getValue().hasName()) {
-						format = regions.getKey() + " "
-								+ regions.getValue().getType().toString();
-					} else {
-						format = regions.getValue().getType().toString();
-					}
 
+				if (args.length > 0) {
+					format = ChatColor.RED + "Too many arguments!";
 					player.sendMessage(format);
+					return false;
 				}
+				
+				if (args.length == 0) {
+					for (Entry<String, Region> regions : RegionUtils
+							.getRegions().entrySet()) {
+						if (regions != null) {
+							if (regions.getValue().hasName()) {
+								format = regions.getKey()
+										+ " "
+										+ regions.getValue().getType()
+												.toString();
+							} else {
+								format = regions.getValue().getType()
+										.toString();
+							}
+						} else {
+							format = ChatColor.RED + "No regions!";
+						}
+
+						player.sendMessage(format);
+					}
+				}
+
 			} else if (cmd.getName().equalsIgnoreCase("region")) {
 				if (args.length == 0 || args.length < 1) {
 					player.sendMessage(ChatColor.RED + "Not enough arguments!");
@@ -281,7 +303,7 @@ public class Scrimmage extends JavaPlugin {
 
 					player.sendMessage(ChatColor.WHITE
 							+ "the team with that id is " + team.getColor()
-							+ team.getName());
+							+ team.getName()); 
 
 				}
 			}
@@ -328,6 +350,7 @@ public class Scrimmage extends JavaPlugin {
 			getLoader().getContainer().unloadModules();
 			// make scrim null! (because the server is disabling)
 		}
+		Log.logInfo(getConfigFile().getFullPrefix() + " has been Enabled!");
 		scrim = null;
 	}
 

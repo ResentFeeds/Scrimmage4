@@ -3,12 +3,14 @@ package me.skylertyler.scrimmage.timers;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
+import me.skylertyler.scrimmage.config.types.Config;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.match.MatchState;
 
 public class GameStartTimer extends CountDownTimer {
 
 	protected Match match;
+	private int bTimer;
 
 	public GameStartTimer(int time, boolean cancelled, Match match) {
 		super(time, cancelled);
@@ -30,9 +32,32 @@ public class GameStartTimer extends CountDownTimer {
 
 	@Override
 	public void hasEnded() {
-		Match match = this.getMatch();
+		final Match match = this.getMatch();
 		match.startMatch();
 		Bukkit.getServer().getScheduler().cancelTask(getCountdown());
+
+		// this will run if the config has the 'broadcast-map' enabled etc.
+		Config config = getMatch().getScrimmage().getConfigFile();
+		if (config.isEnabled()) {
+			this.bTimer = Bukkit
+					.getServer()
+					.getScheduler()
+					.scheduleAsyncRepeatingTask(match.getScrimmage(),
+							new Runnable() {
+								int time = 1;
+								@Override
+								public void run() {
+									if (time != 0) {
+										time--;
+									} else {
+										match.broadcast(match.getMap().getShortMapDescription());
+										Bukkit.getServer().getScheduler()
+												.cancelTask(getBroadcastTimer());
+									}
+								}
+
+							}, 0, 20);
+		}
 	}
 
 	public Match getMatch() {
@@ -55,5 +80,9 @@ public class GameStartTimer extends CountDownTimer {
 		} else {
 			this.setCancelled(true);
 		}
+	}
+
+	public int getBroadcastTimer() {
+		return this.bTimer;
 	}
 }

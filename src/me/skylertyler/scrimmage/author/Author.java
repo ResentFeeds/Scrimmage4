@@ -5,15 +5,14 @@ import java.util.UUID;
 public class Author {
 
 	private final String contribution;
-	private final UUID uuid; 
+	private final UUID uuid;
 
 	public Author(String contribution, UUID uuid) {
 		this.contribution = contribution;
 		this.uuid = uuid;
 	}
-	
-	
-	public Author(UUID uuid){
+
+	public Author(UUID uuid) {
 		this.contribution = null;
 		this.uuid = uuid;
 	}
@@ -28,5 +27,9 @@ public class Author {
 
 	public boolean hasContribution() {
 		return this.contribution != null;
+	}
+
+	public boolean hasUUID() {
+		return this.uuid != null;
 	}
 }

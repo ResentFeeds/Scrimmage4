@@ -21,6 +21,6 @@ public enum MatchState {
     
     @Override
     public String toString() {
-    	return getColor() + this.name();
+    	return getColor() + "";
     }
 }

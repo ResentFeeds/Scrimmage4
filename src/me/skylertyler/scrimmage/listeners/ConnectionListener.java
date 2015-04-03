@@ -2,29 +2,34 @@ package me.skylertyler.scrimmage.listeners;
 
 import java.util.Map.Entry;
 
+import me.skylertyler.scrimmage.event.ScoreboardLoadEvent;
+import me.skylertyler.scrimmage.event.MatchLoadEvent;
 import me.skylertyler.scrimmage.event.MatchStartEvent;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.match.MatchState;
 import me.skylertyler.scrimmage.regions.Region;
 import me.skylertyler.scrimmage.regions.RegionUtils;
 import me.skylertyler.scrimmage.regions.types.BlockRegion;
+import me.skylertyler.scrimmage.utils.Characters;
 import me.skylertyler.scrimmage.utils.Log;
 import static org.bukkit.ChatColor.*;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.server.ServerListPingEvent;
+import org.bukkit.scoreboard.Scoreboard;
 
 public class ConnectionListener implements Listener {
 
-	protected Match match;
+	private final Match match;
 	private ChatColor dark_aqua = DARK_AQUA;
 	private ChatColor aqua = AQUA;
 
 	public ConnectionListener(Match match) {
-		this.match = match; 
+		this.match = match;
 	}
 
 	@EventHandler
@@ -44,7 +49,14 @@ public class ConnectionListener implements Listener {
 			MatchState ms = match.getState();
 			if (ms != null) {
 				String state = ms.toString();
-				format = prefix + state + suffix;
+				String before =  Characters.AllowCharacters(Characters.Raquo
+						.getUTF()) + " ";
+				String after =  " " + Characters.AllowCharacters(Characters.Laquo
+						.getUTF());
+				String name = match.getMap().getInfo().getName();
+				String light_purple = ChatColor.LIGHT_PURPLE + name;
+				format = prefix + state + before + light_purple + state + after
+						+ suffix;
 			}
 		}
 		event.setMotd(format);
@@ -64,7 +76,6 @@ public class ConnectionListener implements Listener {
 
 	// works (for now)
 	@EventHandler
-			if (region.getValue() instanceof BlockRegion) { 
 	public void onBlockPlace(BlockPlaceEvent event) {
 		for (Entry<String, Region> region : RegionUtils.getRegions().entrySet()) {
 			if (region.getValue() instanceof BlockRegion) {
@@ -82,6 +93,24 @@ public class ConnectionListener implements Listener {
 					}
 				}
 			}
+		}
+	}
+
+	@EventHandler
+	public void onMatchLoad(MatchLoadEvent event) {
+		Match match = event.getMatch();
+		ScoreboardLoadEvent scoreboard_event = new ScoreboardLoadEvent(match,
+				match.getScoreboard().getNewBoard());
+		match.getPluginManager().callEvent(scoreboard_event);
+	}
+
+	@EventHandler
+	public void loadBoard(ScoreboardLoadEvent event) {
+		Match match = event.getMatch();
+		Scoreboard board = event.getBoard();
+		if (match != null && board != null) {
+			Bukkit.broadcastMessage(match.getID()
+					+ " is the id of this match! ");
 		}
 	}
 }

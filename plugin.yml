@@ -2,6 +2,11 @@ name: Scrimmage4
 main: me.skylertyler.scrimmage.Scrimmage
 version: 0.58
 commands:
+  broadcast:
+    description: broadcast a message!
+    aliases:
+    - 'bmessage'
+    - 'bm'
   rotation:
     description: map rotation!
   maplist:

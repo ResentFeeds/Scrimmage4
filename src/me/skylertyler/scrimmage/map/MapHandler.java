@@ -19,7 +19,7 @@ public class MapHandler {
 	protected Match match;
 
 	public MapHandler(Match match) {
-		this.match = match;  
+		this.match = match;
 	}
 
 	/**
@@ -37,7 +37,6 @@ public class MapHandler {
 			File dest = new File(src.getParentFile().getParent(), "match-"
 					+ src.getName());
 			FileUtils.copyFolder(src, dest);
-			System.out.println("COPIED " + map.getInfo().getName());
 			String matchName = "match-" + src.getName();
 			new File(matchName + File.separator + "level.dat").delete();
 			Match match = this.getMatch();
@@ -59,7 +58,9 @@ public class MapHandler {
 			match.setWorld(world);
 		} catch (IOException e) {
 			Log.getLogger().info(
-					"[Scrimmage4] Error while loading map: "
+					Scrimmage.getScrimmageInstance().getConfigFile()
+							.getFullPrefix()
+							+ " Error while loading map: "
 							+ map.getInfo().getName());
 			e.printStackTrace();
 		}
@@ -69,14 +70,16 @@ public class MapHandler {
 	public Match getMatch() {
 		return this.match;
 	}
-	
-	
-	public void clearMapsDirectory(File directory){
-		if(directory.isDirectory()){
-			for(File children : directory.listFiles()){
-				   if(children.isDirectory() && children.getName().startsWith("match-")){
-					   children.delete();
-				   }
+
+	public void clearMapsDirectory(File directory) {
+		if (directory.isDirectory()) {
+			for (File children : directory.listFiles()) {
+				if (children != null) {
+					if (children.isDirectory()
+							&& children.getName().startsWith("match-")) {
+						children.delete();
+					}
+				}
 			}
 		}
 	}

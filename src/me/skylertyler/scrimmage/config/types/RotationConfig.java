@@ -14,6 +14,7 @@ import me.skylertyler.scrimmage.config.ConfigType;
 import me.skylertyler.scrimmage.config.CoreConfig;
 import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.map.MapLoader;
+import me.skylertyler.scrimmage.utils.ConsoleUtils;
 import me.skylertyler.scrimmage.utils.Log;
 
 public class RotationConfig extends CoreConfig {
@@ -40,9 +41,9 @@ public class RotationConfig extends CoreConfig {
 			if (hasConfigurationSection(maps) && hasStringList(maps, "maps")) {
 				this.setRotMaps(parseMaps(maps.getStringList("maps")));
 			}
+
 		}
 	}
-
 
 	private List<Map> parseMaps(List<String> stringList) {
 		List<Map> maps = new ArrayList<Map>();
@@ -52,9 +53,13 @@ public class RotationConfig extends CoreConfig {
 			Map map = loader.getMap(stringList.get(i));
 			if (loader.containsMap(map)) {
 				maps.add(map);
-				Log.logWarning("[Scrimmage4] added map " + map.getInfo().getName());
+
+				Log.logWarning(scrimmage.getConfigFile().getPrefix()
+						+ "added map " + map.getInfo().getName());
 			} else {
-				Log.logWarning("[Scrimmage4] there is no loaded map by the name of ");
+				Log.logWarning(scrimmage.getConfigFile().getPrefix()
+						+ " there is no loaded map by the name of "
+						+ stringList.get(i));
 			}
 		}
 
@@ -62,11 +67,33 @@ public class RotationConfig extends CoreConfig {
 		return maps;
 	}
 
+	public List<Map> parseRot(List<String> maps) {
+		List<Map> map = new ArrayList<Map>();
+		String resultMessage = null;
+		Scrimmage scrim = Scrimmage.getScrimmageInstance();
+		MapLoader loader = scrim.getLoader();
+		for (int i = 0; i < maps.size(); i++) {
+			Map mapInRot = loader.getMap(maps.get(i));
+			if (mapInRot.notNull()) {
+				map.add(mapInRot);
+				resultMessage = scrim.getConfigFile().getFullPrefix()
+						+ " loaded  " + mapInRot.getInfo().getName()
+						+ " to the rotation!";
+			} else {
+				resultMessage = scrim.getConfigFile().getFullPrefix()
+						+ "there isn't a map called '" + maps.get(i) + "'";
+			}
+
+			ConsoleUtils.sendConsoleMessage(resultMessage);
+		}
+		return map;
+	}
+
 	public String statusString(int size) {
 		String s = null;
 		String grammer = null;
-		if (size == 1){
-			grammer = "is "; 
+		if (size == 1) {
+			grammer = "is ";
 			s = "";
 		} else if (size > 1 || size == 0) {
 			grammer = "are ";

@@ -1,6 +1,7 @@
 package me.skylertyler.scrimmage.config;
 
 import java.io.IOException;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 public abstract class CoreConfig {
@@ -21,10 +22,20 @@ public abstract class CoreConfig {
 	public boolean hasType() {
 		return this.getType() != null;
 	}
-	
+
 	// only if needed!
-	public boolean hasStringList(ConfigurationSection section,
-			String map) {
-	   return section.getStringList(map) != null ? true : false;
+	public boolean hasStringList(ConfigurationSection section, String map) {
+		return section.getStringList(map) != null ? true : false;
 	}
+
+	// only if needed!
+	public boolean hasString(ConfigurationSection section, String input) {
+		return section.getString(input) != null ? true : false;
+	}
+
+	// only if needed!
+	public boolean hasItem(ConfigurationSection section, String input) {
+		return section.getItemStack(input) != null ? true : false;
+	} 
+	 
 }

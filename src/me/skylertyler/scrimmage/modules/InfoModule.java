@@ -26,7 +26,7 @@ import org.w3c.dom.NodeList;
 @ModuleInfo(name = "info", desc = "basic information about the current map!", module = InfoModule.class)
 public class InfoModule extends Module {
 
-	protected MapInfo info;
+    private MapInfo info;
 
 	public InfoModule() {
 		this.info = null;
@@ -81,8 +81,6 @@ public class InfoModule extends Module {
 		Version version = Version.parse(text);
 
 		String versionFormat = version.toString();
-		Log.logInfo(versionFormat);
-
 		// contributors
 		List<Contributor> contributors = contributorList(root, "contributors",
 				"contributor");

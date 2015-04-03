@@ -7,7 +7,7 @@ import org.bukkit.event.Cancellable;
 
 public abstract class CountDownTimer implements Runnable, Cancellable {
 
-	protected boolean cancelled; /* checks if its cancelled or not*/
+	protected boolean cancelled; /* checks if its cancelled or not */
 	protected int time; /* amount of time in seconds */
 	protected int timer;/* a scheduler */
 
@@ -44,5 +44,9 @@ public abstract class CountDownTimer implements Runnable, Cancellable {
 
 	public int getCountdown() {
 		return this.timer;
+	}
+
+	public boolean isRunning() {
+		return isCancelled() == true;
 	}
 }
