@@ -26,7 +26,7 @@ import org.w3c.dom.NodeList;
 @ModuleInfo(name = "info", desc = "basic information about the current map!", module = InfoModule.class)
 public class InfoModule extends Module {
 
-    private MapInfo info;
+    private final MapInfo info;
 
 	public InfoModule() {
 		this.info = null;

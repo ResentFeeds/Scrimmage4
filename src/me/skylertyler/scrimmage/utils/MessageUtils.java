@@ -3,10 +3,6 @@ package me.skylertyler.scrimmage.utils;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-
-import me.skylertyler.scrimmage.author.Author;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -66,7 +62,7 @@ public class MessageUtils {
 	public static String authorList(Iterator<String> listIterator) {
 		String comma = Joiner
 				.on(ChatColor.LIGHT_PURPLE + ", " + ChatColor.AQUA).join(listIterator);
-		return replaceLastString(comma, ", ", " and ");
+		return replaceLast(comma, ", ", " and ");
 	}
 
 	public static String replaceLast(String string, String toReplace,

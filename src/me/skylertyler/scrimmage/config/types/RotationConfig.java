@@ -52,10 +52,7 @@ public class RotationConfig extends CoreConfig {
 		for (int i = 0; i < stringList.size(); i++) {
 			Map map = loader.getMap(stringList.get(i));
 			if (loader.containsMap(map)) {
-				maps.add(map);
-
-				Log.logWarning(scrimmage.getConfigFile().getPrefix()
-						+ "added map " + map.getInfo().getName());
+				maps.add(map); 
 			} else {
 				Log.logWarning(scrimmage.getConfigFile().getPrefix()
 						+ " there is no loaded map by the name of "

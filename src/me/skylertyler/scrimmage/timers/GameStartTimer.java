@@ -44,7 +44,7 @@ public class GameStartTimer extends CountDownTimer {
 					.getScheduler()
 					.scheduleAsyncRepeatingTask(match.getScrimmage(),
 							new Runnable() {
-								int time = 1;
+								int time = 5;
 								@Override
 								public void run() {
 									if (time != 0) {

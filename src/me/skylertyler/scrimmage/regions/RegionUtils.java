@@ -6,8 +6,10 @@ import java.util.Map.Entry;
 import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.modules.InfoModule;
 import me.skylertyler.scrimmage.regions.types.BlockRegion;
+import me.skylertyler.scrimmage.regions.types.CuboidRegion;
 import me.skylertyler.scrimmage.regions.types.EmptyRegion;
 import me.skylertyler.scrimmage.regions.types.PointRegion;
+import me.skylertyler.scrimmage.utils.LocationUtils;
 import me.skylertyler.scrimmage.utils.Log;
 import me.skylertyler.scrimmage.utils.NumberUtils;
 
@@ -32,7 +34,7 @@ public class RegionUtils {
 		if (node != null) {
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element nodeElement = (Element) node;
-				// put filters' 
+				// put filters'
 				NodeList allRegions = nodeElement.getChildNodes();
 				for (int i = 0; i < allRegions.getLength(); i++) {
 					Node regionNode = allRegions.item(i);
@@ -74,12 +76,13 @@ public class RegionUtils {
 			 * RegionUtils.parsePoint(tag, inverted);
 			 */
 			if (regionNode.getNodeName().equals("block")) {
-				Log.logInfo(regionNode.getTextContent());
 				return parseBlock(regionNode);
 			} else if (regionNode.getNodeName().equals("empty")) {
 				return parseEmpty(regionNode);
 			} else if (regionNode.getNodeName().equals("point")) {
 				return parsePoint(regionNode);
+			} else if (regionNode.getNodeName().equals("cuboid")) {
+				return parseCuboid(regionNode);
 			}
 		} else {
 			Log.logWarning("there is no region called "
@@ -88,7 +91,8 @@ public class RegionUtils {
 		return null;
 	}
 
-	private static PointRegion parsePoint(Node regionNode) {
+	public static PointRegion parsePoint(Node regionNode) {
+		PointRegion point = null;
 		if (regionNode.getNodeType() == Node.ELEMENT_NODE) {
 			Element pointElement = (Element) regionNode;
 			String[] points = pointElement.getTextContent().split(",");
@@ -97,35 +101,36 @@ public class RegionUtils {
 			y = NumberUtils.parseDouble(points[1]);
 			z = NumberUtils.parseDouble(points[2]);
 			InfoModule module = (InfoModule) Scrimmage.getScrimmageInstance()
-					.getLoader().getContainer()
-					.getModule(InfoModule.class);
+					.getLoader().getContainer().getModule(InfoModule.class);
 			String name = "match-" + module.getInfo().getName();
 			Location loc = new Location(Bukkit.getWorld(name), x, y, z);
 			Vector vec = loc.toVector();
 			if (pointElement.hasAttribute("name")) {
 				String regionName = pointElement.getAttribute("name");
-				return new PointRegion(vec, regionName);
+				point = new PointRegion(vec, regionName);
 			} else {
-				return new PointRegion(vec, "");
+				point = new PointRegion(vec);
 			}
 		}
-		return null;
+		return point;
 	}
 
-	private static EmptyRegion parseEmpty(Node regionNode) {
+	public static Region parseEmpty(Node regionNode) {
+		EmptyRegion empty = null;
 		if (regionNode.getNodeType() == Node.ELEMENT_NODE) {
 			Element emptyElement = (Element) regionNode;
 			if (emptyElement.hasAttribute("name")) {
 				String name = emptyElement.getAttribute("name");
-				return new EmptyRegion(name);
+				empty = new EmptyRegion(name);
 			} else {
-				return new EmptyRegion("");
+				empty = new EmptyRegion("");
 			}
 		}
-		return null;
+		return empty;
 	}
 
-	private static Region parseBlock(Node regionNode) {
+	public static Region parseBlock(Node regionNode) {
+		BlockRegion block = null;
 		String[] parts = regionNode.getTextContent().split(",");
 		double x = NumberUtils.parseDouble(parts[0]);
 		double y = NumberUtils.parseDouble(parts[1]);
@@ -139,12 +144,33 @@ public class RegionUtils {
 			Element e = (Element) regionNode;
 			if (e.hasAttribute("name")) {
 				String attributeName = e.getAttribute("name");
-				return new BlockRegion(vec, attributeName);
+				block = new BlockRegion(vec, attributeName);
 			} else {
-				return new BlockRegion(vec);
+				block = new BlockRegion(vec);
 			}
 		}
-		return null;
+		return block;
+	}
+
+	public static Region parseCuboid(Node node) {
+		CuboidRegion cuboid = null;
+		if (node.getNodeType() == Node.ELEMENT_NODE) {
+			Element elementNode = (Element) node;
+			Vector min = LocationUtils.vectorFromString(elementNode
+					.getAttribute("min"));
+			Vector max = LocationUtils.vectorFromString(elementNode
+					.getAttribute("max"));
+
+			if (elementNode.hasAttribute("name")) {
+				String name = elementNode.getAttribute("name");
+				cuboid = new CuboidRegion(name, new BlockRegion(min),
+						new BlockRegion(max));
+			} else {
+				cuboid = new CuboidRegion(new BlockRegion(min),
+						new BlockRegion(max));
+			}
+		}
+		return cuboid;
 	}
 
 	public static boolean isRegionTag(Node node) {
@@ -153,6 +179,7 @@ public class RegionUtils {
 			case "block":
 			case "empty":
 			case "point":
+			case "cuboid":
 				return true;
 			default:
 				return false;
@@ -162,7 +189,7 @@ public class RegionUtils {
 	}
 
 	// Not tested
-	public static boolean containsRegion(Region region) {
+	public static boolean containsRegion(Region region) { 
 		for (Entry<String, Region> regions : getRegions().entrySet()) {
 			if (regions.getValue() == region) {
 				return true;

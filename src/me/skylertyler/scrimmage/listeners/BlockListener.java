@@ -8,10 +8,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
-import static org.bukkit.ChatColor.*; 
-import me.skylertyler.scrimmage.modules.MaxBuildHeightModule; 
+import static org.bukkit.ChatColor.*;
+import me.skylertyler.scrimmage.modules.MaxBuildHeightModule;
 
-public class BlockListener implements Listener{
+public class BlockListener implements Listener {
 
 	private MaxBuildHeightModule mbhm;
 
@@ -24,14 +24,25 @@ public class BlockListener implements Listener{
 		// TODO
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
+		String b = null;
+		String message = WHITE + "You have reached the maximum build height ";
+		String result = null;
+		String format = null;
 		Location blockLocation = block.getLocation();
-		if (blockLocation.getY() >= getMaxBuildHeight().getMaxHeight()
-				.getHeight()) {
+		int height = getMaxBuildHeight().getMaxHeight().getHeight();
+		if (blockLocation.getY() >= height) {
 			event.setCancelled(true);
-			player.sendMessage(WHITE
-					+ "You have reached the maximum build height " + GRAY + "("
-					+ this.getMaxBuildHeight().getMaxHeight().getHeight()
-					+ " blocks)");
+			if (height == 1) {
+				b = "";
+				result = GRAY + "(" + height + " block" + b + ")";
+			} else {
+				if (height != 0 && height > 1) {
+					b = "s";
+					result = GRAY + "(" + height + " block" + b + ")";
+				}
+			}
+			format = message + result;
+			player.sendMessage(format);
 		}
 	}
 

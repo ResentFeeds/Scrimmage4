@@ -6,9 +6,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import com.google.common.base.Preconditions;
-
+ 
 import me.skylertyler.scrimmage.author.Author;
 import me.skylertyler.scrimmage.utils.MessageUtils;
 import static org.bukkit.ChatColor.*;
@@ -58,26 +56,22 @@ public class Map {
 		String name = getInfo().getName();
 		String by = "by";
 		String mapAuthors = MessageUtils
-				.authorList(getAuthors().listIterator());
+				.authorList(getAuthors().iterator());
 		String format = currently + " " + name + " " + by + " " + mapAuthors;
 		return format;
 	}
 
 	public List<String> getAuthors() {
 		List<String> authors = new ArrayList<String>();
-		authors.clear();
-		String name = null;
+		authors.clear(); 
 		Player player = null;
-		for (Author author : getInfo().getAuthors()) {
-			Preconditions.checkArgument(author.hasContribution());
-			Preconditions.checkNotNull(author.getUUID(), "null uuid");
+		for (Author author : getInfo().getAuthors()) { 
 			if (author.hasUUID()) {
 				player = Bukkit.getPlayer(author.getUUID());
-				name = player.getName();
+			 	String name = player.getName();
 				authors.add(name);
 			}
-		}
-
+		} 
 		return authors;
 	}
 }

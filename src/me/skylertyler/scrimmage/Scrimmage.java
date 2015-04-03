@@ -27,6 +27,7 @@ import me.skylertyler.scrimmage.exception.InvalidModuleException;
 import me.skylertyler.scrimmage.listeners.BlockListener;
 import me.skylertyler.scrimmage.listeners.ConnectionListener;
 import me.skylertyler.scrimmage.listeners.TestConnectionListener;
+import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.map.MapLoader;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.match.MatchHandler;
@@ -94,7 +95,17 @@ public class Scrimmage extends JavaPlugin {
 			try {
 				loadLoadedMaps();
 				loadRotation(new File(this.getDataFolder(), "rotation.yml"));
-				loadMatch();
+				int size = getRotationConfig().getRotMaps().size();
+				if (size == 0) {
+					Log.logWarning("");
+					Log.logWarning("===================================================");
+					Log.logWarning("Scrimmage4 needs at least one map in order to run!");
+					Log.logWarning("===================================================");
+					Log.logWarning("");
+					getServer().shutdown();
+					return;
+				}
+				loadMatch(getRotationConfig().getRotMaps().get(0));
 			} catch (SAXException | IOException | ParserConfigurationException e) {
 				e.printStackTrace();
 			}
@@ -110,6 +121,7 @@ public class Scrimmage extends JavaPlugin {
 			}
 		}
 
+		loadCommands();
 		loadListeners();
 		Log.logInfo(getConfigFile().getFullPrefix() + " has been Enabled!");
 	}
@@ -150,12 +162,10 @@ public class Scrimmage extends JavaPlugin {
 		}
 	}
 
-	public void loadMatch() throws SAXException, IOException,
+	public void loadMatch(Map map) throws SAXException, IOException,
 			ParserConfigurationException {
-		setMatch(new Match(getScrimmageInstance(), 1, getLoader()
-				.getLoadedMaps().get(0)));
+		setMatch(new Match(getScrimmageInstance(), 1, map));
 		setMatchHandler(new MatchHandler(getMatch()));
-		loadCommands();
 	}
 
 	public void checkSportBukkitEnabled() {
@@ -231,7 +241,7 @@ public class Scrimmage extends JavaPlugin {
 					player.sendMessage(format);
 					return false;
 				}
-				
+
 				if (args.length == 0) {
 					for (Entry<String, Region> regions : RegionUtils
 							.getRegions().entrySet()) {
@@ -303,7 +313,7 @@ public class Scrimmage extends JavaPlugin {
 
 					player.sendMessage(ChatColor.WHITE
 							+ "the team with that id is " + team.getColor()
-							+ team.getName()); 
+							+ team.getName());
 
 				}
 			}

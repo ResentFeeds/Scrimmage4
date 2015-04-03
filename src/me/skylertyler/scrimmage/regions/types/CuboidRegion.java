@@ -24,7 +24,7 @@ public class CuboidRegion extends Region {
 
 	@Override
 	public boolean containsVector(Vector vec) {
-		return false;
+		return vec.isInAABB(getMin().getVector(), getMax().getVector());
 	}
 
 	@Override

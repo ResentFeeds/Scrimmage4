@@ -1,5 +1,6 @@
 package me.skylertyler.scrimmage.timers;
 
+import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.match.MatchState;
@@ -65,10 +66,15 @@ public class CycleTimer extends CountDownTimer {
 
 	@Override
 	public void hasEnded() {
-		// TODO!
+		Match old = this.getMatch();
+		cycleAndMakeMatch(old);
 	}
 
 	public void cycleAndMakeMatch(Match old) {
+		Scrimmage scrim = Scrimmage.getScrimmageInstance();
+		int newID = old.getID() + 1;
+		Map newMap = old.getNext();
+		scrim.setMatch(new Match(scrim, newID, newMap));
 	}
 
 	public Match getMatch() {

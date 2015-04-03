@@ -10,6 +10,7 @@ import me.skylertyler.scrimmage.match.MatchState;
 import me.skylertyler.scrimmage.regions.Region;
 import me.skylertyler.scrimmage.regions.RegionUtils;
 import me.skylertyler.scrimmage.regions.types.BlockRegion;
+import me.skylertyler.scrimmage.regions.types.CuboidRegion;
 import me.skylertyler.scrimmage.utils.Characters;
 import me.skylertyler.scrimmage.utils.Log;
 import static org.bukkit.ChatColor.*;
@@ -49,10 +50,10 @@ public class ConnectionListener implements Listener {
 			MatchState ms = match.getState();
 			if (ms != null) {
 				String state = ms.toString();
-				String before =  Characters.AllowCharacters(Characters.Raquo
+				String before = Characters.AllowCharacters(Characters.Raquo
 						.getUTF()) + " ";
-				String after =  " " + Characters.AllowCharacters(Characters.Laquo
-						.getUTF());
+				String after = " "
+						+ Characters.AllowCharacters(Characters.Laquo.getUTF());
 				String name = match.getMap().getInfo().getName();
 				String light_purple = ChatColor.LIGHT_PURPLE + name;
 				format = prefix + state + before + light_purple + state + after
@@ -74,7 +75,7 @@ public class ConnectionListener implements Listener {
 		}
 	}
 
-	// works (for now)
+	// just testing the regions below :) // will remove this when done!
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
 		for (Entry<String, Region> region : RegionUtils.getRegions().entrySet()) {
@@ -92,6 +93,25 @@ public class ConnectionListener implements Listener {
 												+ bRegion.getName());
 					}
 				}
+			} else if (region.getValue() instanceof CuboidRegion) {
+				CuboidRegion cuboid = (CuboidRegion) region.getValue();
+				if (cuboid != null) {
+					Log.logWarning("passed!");
+					if (cuboid.containsVector(event.getBlock().getLocation()
+							.toVector())) {
+						event.setCancelled(true);
+						String format = null;
+						String you = "You cant place a block here";
+						if (cuboid.hasName()) {
+							String name = cuboid.getName();
+							format = you + " in the region called " + name;
+						} else {
+							format = you;
+						}
+
+						event.getPlayer().sendMessage(format);
+					}
+				}
 			}
 		}
 	}
@@ -104,6 +124,7 @@ public class ConnectionListener implements Listener {
 		match.getPluginManager().callEvent(scoreboard_event);
 	}
 
+	// try to fix this error with this!
 	@EventHandler
 	public void loadBoard(ScoreboardLoadEvent event) {
 		Match match = event.getMatch();

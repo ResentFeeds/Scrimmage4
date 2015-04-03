@@ -20,15 +20,16 @@ public class Match {
 	private final int id;
 	private final Map map;
 	private MatchState state;
-	private Scrimmage scrim;
-	private PluginManager pm;
+	private final Scrimmage scrim;
+	private final PluginManager pm;
 	private World world;
-	private MapHandler handler;
-	private TeamHandler thandler;
+	private final MapHandler handler;
+	private final TeamHandler thandler;
 	private Map next = null;
 
-	private org.bukkit.scoreboard.Scoreboard current_board = Bukkit.getScoreboardManager().getNewScoreboard();
-	private Scoreboard board = null;
+	private org.bukkit.scoreboard.Scoreboard current_board = Bukkit
+			.getScoreboardManager().getNewScoreboard();
+	private Scoreboard board;
 
 	public Match(Scrimmage scrim, int id, Map map) {
 		this.scrim = scrim;
@@ -37,13 +38,17 @@ public class Match {
 		this.handler = new MapHandler(this);
 		this.handler.loadMap(map, id);
 		this.pm = scrim.getServer().getPluginManager();
+		// match load event
+		loadMatch(this);
 		this.thandler = new TeamHandler();
-		// calling match start event
 		this.setState(MatchState.Idle);
 		this.board = new Scoreboard(current_board);
-		MatchLoadEvent event = new MatchLoadEvent(this);
-		this.pm.callEvent(event);
 		runStartGameTimer();
+	}
+
+	public void loadMatch(Match match) {
+		MatchLoadEvent event = new MatchLoadEvent(match);
+		match.getPluginManager().callEvent(event);
 	}
 
 	public void runStartGameTimer() {
@@ -135,7 +140,5 @@ public class Match {
 	public Scoreboard getScoreboard() {
 		return this.board;
 	}
-	
-	 
 
 }

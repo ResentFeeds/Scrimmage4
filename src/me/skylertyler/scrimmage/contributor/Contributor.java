@@ -2,8 +2,8 @@ package me.skylertyler.scrimmage.contributor;
 
 public class Contributor {
 
-	protected String contribution;
-	protected String contributor;
+    private final String contribution;
+	private final String contributor;
 
 	public Contributor(String contribution, String contributor) {
 		this.contribution = contribution;
