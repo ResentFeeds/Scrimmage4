@@ -146,7 +146,7 @@ public class ConnectionListener implements Listener {
 					}
 
 					String result = format;
-					event.getPlayer().sendMessage(format);
+					event.getPlayer().sendMessage(result);
 				}
 			}
 		}
