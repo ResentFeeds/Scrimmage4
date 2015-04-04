@@ -3,7 +3,7 @@ package me.skylertyler.scrimmage.regions;
 public enum RegionType {
 
 	BLOCK("BlockRegion"), POINT("PointRegion"), EMPTY("EmptyRegion"), CUBOID(
-			"CuboidRegion"), SPHERE("SphereRegion");
+			"CuboidRegion"), SPHERE("SphereRegion"), CYLINDER("CylinderRegion");
 
 	private final String name;
 

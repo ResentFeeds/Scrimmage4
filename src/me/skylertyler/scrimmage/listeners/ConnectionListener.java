@@ -11,6 +11,7 @@ import me.skylertyler.scrimmage.regions.Region;
 import me.skylertyler.scrimmage.regions.RegionUtils;
 import me.skylertyler.scrimmage.regions.types.BlockRegion;
 import me.skylertyler.scrimmage.regions.types.CuboidRegion;
+import me.skylertyler.scrimmage.regions.types.CylinderRegion;
 import me.skylertyler.scrimmage.regions.types.SphereRegion;
 import me.skylertyler.scrimmage.utils.Characters;
 import me.skylertyler.scrimmage.utils.Log;
@@ -130,11 +131,28 @@ public class ConnectionListener implements Listener {
 					String result = format;
 					event.getPlayer().sendMessage(result);
 				}
+			} else if (region.getValue() instanceof CylinderRegion) {
+				CylinderRegion cylinder = (CylinderRegion) region.getValue();
+				String format = null;
+				if (cylinder != null
+						&& cylinder.containsVector(event.getBlock()
+								.getLocation().toVector())) {
+					event.setCancelled(true);
+					if (cylinder.hasName()) {
+						String name = cylinder.getName();
+						format = "You cant place blocks in " + name;
+					} else {
+						format = "You cant place blocks in here!";
+					}
+
+					String result = format;
+					event.getPlayer().sendMessage(format);
+				}
 			}
 		}
 	}
 
-	// make this load before 
+	// make this load before
 	@EventHandler
 	public void onMatchLoad(MatchLoadEvent event) {
 		Match match = event.getMatch();

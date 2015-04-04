@@ -7,6 +7,7 @@ import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.modules.InfoModule;
 import me.skylertyler.scrimmage.regions.types.BlockRegion;
 import me.skylertyler.scrimmage.regions.types.CuboidRegion;
+import me.skylertyler.scrimmage.regions.types.CylinderRegion;
 import me.skylertyler.scrimmage.regions.types.EmptyRegion;
 import me.skylertyler.scrimmage.regions.types.PointRegion;
 import me.skylertyler.scrimmage.regions.types.SphereRegion;
@@ -86,6 +87,8 @@ public class RegionUtils {
 				return parseCuboid(regionNode);
 			} else if (regionNode.getNodeName().equals("sphere")) {
 				return parseSphere(regionNode);
+			} else if (regionNode.getNodeName().equals("cylinder")) {
+				return parseCyclinder(regionNode);
 			}
 		} else {
 			Log.logWarning("there is no region called "
@@ -196,6 +199,27 @@ public class RegionUtils {
 		return sphere;
 	}
 
+	public static Region parseCyclinder(Node node) {
+		CylinderRegion cylinder = null;
+		BlockRegion base = null;
+		if (node.getNodeType() == Node.ELEMENT_NODE) {
+			Element element = (Element) node;
+			base = new BlockRegion(LocationUtils.vectorFromString(element
+					.getAttribute("base")));
+			int radius = NumberUtils.parseInteger(element
+					.getAttribute("radius"));
+			int height = NumberUtils.parseInteger(element
+					.getAttribute("height"));
+			if (element.hasAttribute("name")) {
+				String name = element.getAttribute("name");
+				cylinder = new CylinderRegion(name, base, radius, height);
+			} else {
+				cylinder = new CylinderRegion(base, radius, height);
+			}
+		}
+		return cylinder;
+	}
+
 	public static boolean isRegionTag(Node node) {
 		if (node.getNodeType() == Node.ELEMENT_NODE) {
 			switch (node.getNodeName()) {
@@ -204,6 +228,7 @@ public class RegionUtils {
 			case "point":
 			case "cuboid":
 			case "sphere":
+			case "cylinder":
 				return true;
 			default:
 				return false;
