@@ -7,6 +7,8 @@ commands:
     aliases:
     - 'bmessage'
     - 'bm'
+  kit:
+    description: kit
   rotation:
     description: map rotation!
   maplist:

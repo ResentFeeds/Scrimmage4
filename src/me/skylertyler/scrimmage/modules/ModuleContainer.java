@@ -7,18 +7,16 @@ import java.util.Map;
 
 import me.skylertyler.scrimmage.exception.InvalidModuleException;
 
-import org.bukkit.event.Listener;
 import org.w3c.dom.Document;
 
 public class ModuleContainer {
 	protected HashMap<Module, ModuleInfo> modules = Maps.newHashMap();
 
 	public ModuleContainer() {
-		
+
 	}
-	
-	
-	public void enableModules(Document doc){
+
+	public void enableModules(Document doc) {
 		for (ModuleInfo info : ModuleRegistry.getModules())
 			try {
 				addModule(info, doc);
@@ -28,9 +26,9 @@ public class ModuleContainer {
 				e.printStackTrace();
 			} catch (InstantiationException e) {
 				e.printStackTrace();
-			} 
-	} 
- 
+			}
+	}
+
 	public Module getModule(Class<? extends Module> clazz) {
 		for (Module module : modules.keySet())
 			if (module.getClass().equals(clazz))
@@ -69,7 +67,7 @@ public class ModuleContainer {
 		Module module = ((Module) info.module().newInstance()).parse(doc);
 		if (module == null)
 			return;
-		modules.put(module, info); 
+		modules.put(module, info);
 	}
 
 	private boolean registered(ModuleInfo info) {
@@ -77,5 +75,5 @@ public class ModuleContainer {
 			if (entry.getValue().name().equals(info.name()))
 				return true;
 		return false;
-	} 
+	}
 }

@@ -32,9 +32,11 @@ import me.skylertyler.scrimmage.map.MapLoader;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.match.MatchHandler;
 import me.skylertyler.scrimmage.modules.InfoModule;
+import me.skylertyler.scrimmage.modules.KitModule;
 import me.skylertyler.scrimmage.modules.MaxBuildHeightModule;
 import me.skylertyler.scrimmage.modules.ModuleRegistry;
 import me.skylertyler.scrimmage.modules.RegionModule;
+import me.skylertyler.scrimmage.modules.SpawnModule;
 import me.skylertyler.scrimmage.modules.TeamModule;
 import me.skylertyler.scrimmage.regions.Region;
 import me.skylertyler.scrimmage.regions.RegionUtils;
@@ -42,6 +44,7 @@ import me.skylertyler.scrimmage.rotation.Rotation;
 import me.skylertyler.scrimmage.team.Team;
 import me.skylertyler.scrimmage.test.TestLoader;
 import me.skylertyler.scrimmage.utils.ConsoleUtils;
+import me.skylertyler.scrimmage.utils.KitUtils;
 import me.skylertyler.scrimmage.utils.Log;
 import me.skylertyler.scrimmage.utils.TeamUtils;
 
@@ -316,6 +319,33 @@ public class Scrimmage extends JavaPlugin {
 							+ team.getName());
 
 				}
+			} else if (cmd.getName().equalsIgnoreCase("kit")) {
+				if (args.length == 0) {
+					String format = null;
+					String result = null;
+					for (String kit : KitUtils.getKitNames()) {
+						String[] split = kit.split(",");
+						for (int i = 0; i < split.length; i++) {
+							if (i > 1) {
+								format = split[i];
+							} else {
+								format = split[0];
+							}
+							result = format + " is a kit";
+						}
+					}
+					player.sendMessage(result);
+					return false;
+				}
+
+				if (args.length > 1) {
+					player.sendMessage(ChatColor.RED + "Too many arguments!");
+					return false;
+				}
+
+				if (args.length == 1) { 
+					KitUtils.applyKit(args[0], player);
+				}
 			}
 		}
 		return true;
@@ -431,6 +461,8 @@ public class Scrimmage extends JavaPlugin {
 		ModuleRegistry.register(TeamModule.class);
 		ModuleRegistry.register(RegionModule.class);
 		ModuleRegistry.register(MaxBuildHeightModule.class);
+		ModuleRegistry.register(SpawnModule.class);
+		ModuleRegistry.register(KitModule.class);
 	}
 
 	public MapLoader getLoader() {

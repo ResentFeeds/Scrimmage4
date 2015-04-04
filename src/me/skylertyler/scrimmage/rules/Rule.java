@@ -3,7 +3,7 @@ package me.skylertyler.scrimmage.rules;
 public class Rule {
 
 	
-	protected String rule;
+	private final String rule;
 
 	public Rule(String rule) {
 		this.rule = rule;
@@ -11,8 +11,5 @@ public class Rule {
 
 	public String getRule() {
 		return this.rule;
-	}
-	
-
-	
+	}  
 }

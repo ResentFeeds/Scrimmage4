@@ -55,7 +55,7 @@ public class RegionUtils {
 		return regions;
 	}
 
-	private static Region parseRegion(Node regionNode) {
+	public static Region parseRegion(Node regionNode) {
 		if (isRegionTag(regionNode)) {
 			/*
 			 * if (regionNode.getNodeName().equals("cylinder")) return

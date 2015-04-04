@@ -11,24 +11,24 @@ public class Team {
 	// TODO team adding and removing players (hiding and showing)
 
 	// the teams name
-	protected String name;
+	private final String name;
 	// Unique identifier used to reference teams from other places in the XML.
-	protected String id;
+	private final String id;
 	// teams color
-	protected ChatColor color;
+	private final ChatColor color;
 	// max amount of players to a point!
-	protected int max;
+	private final int max;
 
 	// even though there is not going to be donators (duh its a scrimmage
 	// plugin)
 	// total amount of players even for donators!
-	protected int overfill;
+	private final int overfill;
 
 	// members
 
 	protected List<String> members = new ArrayList<String>();
 	// TEAMTYPE Observing or participating
-	protected TeamType type;
+	private final TeamType type;
 
 	public Team(String name, String id, ChatColor color, int max, int overfill,
 			TeamType observing) {
@@ -88,9 +88,7 @@ public class Team {
 	public boolean isObserving(Player player) {
 		List<String> members = this.getMembers();
 		return members.contains(player.getName()) ? true : false;
-	} 
-	
-	
+	}
 
 	public TeamType getType() {
 		return this.type;

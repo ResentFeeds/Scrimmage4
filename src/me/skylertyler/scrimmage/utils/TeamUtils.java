@@ -99,4 +99,28 @@ public class TeamUtils {
 		}
 		return result;
 	}
+	
+	
+	public static TeamModule getTeamModule(){
+		TeamModule teamMod = (TeamModule) Scrimmage.getScrimmageInstance().getLoader().getContainer().getModule(TeamModule.class);
+		return teamMod;
+	}
+	public static Team matchTeam(String team) {
+		Team result = null;
+		String lowerName = team.toLowerCase();
+		int delta = Integer.MAX_VALUE;
+		for (Team player : getTeamModule().getTeams()) {
+			if (player.getName().toLowerCase().startsWith(lowerName)) {
+				int curDelta = player.getName().length() - lowerName.length();
+				if (curDelta < delta) {
+					result = player;
+					delta = curDelta;
+				}
+				if (curDelta == 0)
+					break;
+			}
+		}
+		return result;
+	}
+
 }
