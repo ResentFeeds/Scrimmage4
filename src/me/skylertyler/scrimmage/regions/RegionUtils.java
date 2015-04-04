@@ -9,7 +9,6 @@ import me.skylertyler.scrimmage.regions.types.BlockRegion;
 import me.skylertyler.scrimmage.regions.types.CuboidRegion;
 import me.skylertyler.scrimmage.regions.types.EmptyRegion;
 import me.skylertyler.scrimmage.regions.types.PointRegion;
-import me.skylertyler.scrimmage.regions.types.SphereRegion;
 import me.skylertyler.scrimmage.utils.LocationUtils;
 import me.skylertyler.scrimmage.utils.Log;
 import me.skylertyler.scrimmage.utils.NumberUtils;
@@ -84,8 +83,6 @@ public class RegionUtils {
 				return parsePoint(regionNode);
 			} else if (regionNode.getNodeName().equals("cuboid")) {
 				return parseCuboid(regionNode);
-			} else if (regionNode.getNodeName().equals("sphere")) {
-				return parseSphere(regionNode);
 			}
 		} else {
 			Log.logWarning("there is no region called "
@@ -176,26 +173,6 @@ public class RegionUtils {
 		return cuboid;
 	}
 
-	public static Region parseSphere(Node node) {
-		SphereRegion sphere = null;
-		BlockRegion origin = null;
-		int radius;
-		if (node.getNodeType() == Node.ELEMENT_NODE) {
-			Element nodeElement = (Element) node;
-			origin = new BlockRegion(LocationUtils.vectorFromString(nodeElement
-					.getAttribute("origin")));
-			radius = NumberUtils.parseInteger(nodeElement
-					.getAttribute("radius"));
-			if (nodeElement.hasAttribute("name")) {
-				String name = nodeElement.getAttribute("name");
-				sphere = new SphereRegion(name, origin, radius);
-			} else {
-				sphere = new SphereRegion(origin, radius);
-			}
-		}
-		return sphere;
-	}
-
 	public static boolean isRegionTag(Node node) {
 		if (node.getNodeType() == Node.ELEMENT_NODE) {
 			switch (node.getNodeName()) {
@@ -203,7 +180,6 @@ public class RegionUtils {
 			case "empty":
 			case "point":
 			case "cuboid":
-			case "sphere":
 				return true;
 			default:
 				return false;
@@ -213,7 +189,7 @@ public class RegionUtils {
 	}
 
 	// Not tested
-	public static boolean containsRegion(Region region) {
+	public static boolean containsRegion(Region region) { 
 		for (Entry<String, Region> regions : getRegions().entrySet()) {
 			if (regions.getValue() == region) {
 				return true;

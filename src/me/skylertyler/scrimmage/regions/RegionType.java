@@ -2,20 +2,20 @@ package me.skylertyler.scrimmage.regions;
 
 public enum RegionType {
 
-	BLOCK("BlockRegion"), POINT("PointRegion"), EMPTY("EmptyRegion"), CUBOID(
-			"CuboidRegion"), SPHERE("SphereRegion");
-
-	private final String name;
-
-	RegionType(String name) {
-		this.name = name;
-	}
-
-	public String getName() {
-		return this.name;
-	}
+	BLOCK,POINT, EMPTY, CUBOID;
 
 	public String toString() {
-		return this.getName();
+		switch (this) {
+		case BLOCK:
+			return "BlockRegion"; 
+		case EMPTY:
+			return "EmptyRegion";
+		case POINT:
+			return "PointRegion";
+		case CUBOID:
+			return "CuboidRegion";
+		default:
+			return null;
+		}
 	}
 }
