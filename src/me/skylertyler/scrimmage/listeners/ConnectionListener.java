@@ -11,6 +11,7 @@ import me.skylertyler.scrimmage.regions.Region;
 import me.skylertyler.scrimmage.regions.RegionUtils;
 import me.skylertyler.scrimmage.regions.types.BlockRegion;
 import me.skylertyler.scrimmage.regions.types.CuboidRegion;
+import me.skylertyler.scrimmage.regions.types.SphereRegion;
 import me.skylertyler.scrimmage.utils.Characters;
 import me.skylertyler.scrimmage.utils.Log;
 import static org.bukkit.ChatColor.*;
@@ -112,10 +113,28 @@ public class ConnectionListener implements Listener {
 						event.getPlayer().sendMessage(format);
 					}
 				}
+			} else if (region.getValue() instanceof SphereRegion) {
+				SphereRegion sphere = (SphereRegion) region.getValue();
+				if (sphere != null
+						&& sphere.containsVector(event.getBlock().getLocation()
+								.toVector())) {
+					event.setCancelled(true);
+					String format = null;
+					String you = "You cant place blocks in ";
+					if (sphere.hasName()) {
+						format = you + sphere.getName();
+					} else {
+						format = you + " here";
+					}
+
+					String result = format;
+					event.getPlayer().sendMessage(result);
+				}
 			}
 		}
 	}
 
+	// make this load before 
 	@EventHandler
 	public void onMatchLoad(MatchLoadEvent event) {
 		Match match = event.getMatch();
