@@ -1,6 +1,7 @@
 package me.skylertyler.scrimmage.utils;
 
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.w3c.dom.Element;
 
 public class XMLUtils {
@@ -32,6 +33,12 @@ public class XMLUtils {
 		}
 
 		return Material.getMaterial(input.toUpperCase().replaceAll(" ", "_"));
+	}
+
+	public static Enchantment parseEnchantment(String string) {
+		Enchantment enchant = Enchantment.getByName(string.replace(" ", "_")
+				.toUpperCase());
+		return enchant;
 	}
 
 }

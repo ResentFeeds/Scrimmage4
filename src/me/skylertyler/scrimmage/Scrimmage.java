@@ -24,6 +24,7 @@ import me.skylertyler.scrimmage.commands.WorldCommand;
 import me.skylertyler.scrimmage.config.types.Config;
 import me.skylertyler.scrimmage.config.types.RotationConfig;
 import me.skylertyler.scrimmage.exception.InvalidModuleException;
+import me.skylertyler.scrimmage.kit.Kit;
 import me.skylertyler.scrimmage.listeners.BlockListener;
 import me.skylertyler.scrimmage.listeners.ConnectionListener;
 import me.skylertyler.scrimmage.listeners.TestConnectionListener;
@@ -152,7 +153,7 @@ public class Scrimmage extends JavaPlugin {
 		} catch (InvalidModuleException e1) {
 			e1.printStackTrace();
 		}
-		this.loader = new MapLoader(null);
+		this.loader = new MapLoader(this);
 		this.loader.loadMaps();
 	}
 
@@ -248,20 +249,17 @@ public class Scrimmage extends JavaPlugin {
 				if (args.length == 0) {
 					for (Entry<String, Region> regions : RegionUtils
 							.getRegions().entrySet()) {
-						if (regions != null) {
-							if (regions.getValue().hasName()) {
-								format = regions.getKey()
-										+ " "
-										+ regions.getValue().getType()
-												.toString();
+						Region region = regions.getValue();
+						if (region != null) {
+							if (region.hasName()) {
+								format = regions.getKey() + " "
+										+ region.getType().toString();
 							} else {
-								format = regions.getValue().getType()
-										.toString();
+								format = region.getType().toString();
 							}
 						} else {
 							format = ChatColor.RED + "No regions!";
 						}
-
 						player.sendMessage(format);
 					}
 				}
@@ -321,20 +319,9 @@ public class Scrimmage extends JavaPlugin {
 				}
 			} else if (cmd.getName().equalsIgnoreCase("kit")) {
 				if (args.length == 0) {
-					String format = null;
-					String result = null;
-					for (String kit : KitUtils.getKitNames()) {
-						String[] split = kit.split(",");
-						for (int i = 0; i < split.length; i++) {
-							if (i > 1) {
-								format = split[i];
-							} else {
-								format = split[0];
-							}
-							result = format + " is a kit";
-						}
+					for (Kit name : KitUtils.getKitModule().getKits()) {
+						player.sendMessage(name.getName() + " is a kit");
 					}
-					player.sendMessage(result);
 					return false;
 				}
 
@@ -343,7 +330,7 @@ public class Scrimmage extends JavaPlugin {
 					return false;
 				}
 
-				if (args.length == 1) { 
+				if (args.length == 1) {
 					KitUtils.applyKit(args[0], player);
 				}
 			}
@@ -390,7 +377,7 @@ public class Scrimmage extends JavaPlugin {
 			getLoader().getContainer().unloadModules();
 			// make scrim null! (because the server is disabling)
 		}
-		Log.logInfo(getConfigFile().getFullPrefix() + " has been Enabled!");
+		Log.logInfo(getConfigFile().getFullPrefix() + " has been Disabled!");
 		scrim = null;
 	}
 

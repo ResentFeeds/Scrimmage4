@@ -7,8 +7,8 @@ import org.bukkit.entity.Player;
 
 public class ScrimmagePlayer {
 
-	protected Player player;
-	protected static List<ScrimmagePlayer> players = new ArrayList<ScrimmagePlayer>();
+	private final Player player;
+	private static List<ScrimmagePlayer> players = new ArrayList<ScrimmagePlayer>();
 
 	public ScrimmagePlayer(Player player) {
 		this.player = player;

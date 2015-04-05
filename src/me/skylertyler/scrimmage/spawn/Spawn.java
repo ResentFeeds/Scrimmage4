@@ -1,6 +1,8 @@
 package me.skylertyler.scrimmage.spawn;
- 
 
+import javax.annotation.Nullable;
+
+import me.skylertyler.scrimmage.kit.Kit;
 import me.skylertyler.scrimmage.regions.Region;
 import me.skylertyler.scrimmage.regions.types.BlockRegion;
 import me.skylertyler.scrimmage.team.Team;
@@ -12,17 +14,20 @@ public class Spawn {
 	private final float yaw;
 	private final float pitch;
 	private final BlockRegion angle;
-	
-	public Spawn(Team team, Region region, BlockRegion angle, float yaw, float pitch) {
+	private final Kit kit;
+
+	public Spawn(Team team, Region region, @Nullable Kit kit,
+			@Nullable BlockRegion angle, @Nullable float yaw,
+			@Nullable float pitch) {
 		this.team = team;
 		this.region = region;
+		this.kit = kit;
 		this.angle = angle;
 		this.yaw = yaw;
 		this.pitch = pitch;
 	}
-	
-	
-	public BlockRegion getAngle(){
+
+	public BlockRegion getAngle() {
 		return this.angle;
 	}
 
@@ -40,5 +45,17 @@ public class Spawn {
 
 	public float getPitch() {
 		return this.pitch;
+	}
+
+	public Kit getKit() {
+		return this.kit;
+	}
+
+	public boolean hasKit() {
+		return this.getKit() != null;
+	}
+
+	public boolean hasAngle() {
+		return this.getAngle() != null;
 	}
 }

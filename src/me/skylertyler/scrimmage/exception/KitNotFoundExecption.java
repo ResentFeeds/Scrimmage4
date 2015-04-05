@@ -1,7 +1,11 @@
 package me.skylertyler.scrimmage.exception;
 
+import javax.annotation.Nullable;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import com.google.common.base.Preconditions;
 
 public class KitNotFoundExecption extends Exception {
 
@@ -13,11 +17,14 @@ public class KitNotFoundExecption extends Exception {
 	private final Player player;
 	private String message;
 
-	public KitNotFoundExecption(String name, Player player) { 
+	public KitNotFoundExecption(String name, @Nullable  Player player) { 
+		Preconditions.checkNotNull(player, "player");
 		this.name = name;
 		this.player = player;
 		this.message = ChatColor.RED + "there is no kit by the name of " +  ChatColor.DARK_RED + getName();
-		player.sendMessage(getMessage());
+		if(this.player != null){
+			this.player.sendMessage(getMessage());
+		}
 	}
 
 	public String getName() {

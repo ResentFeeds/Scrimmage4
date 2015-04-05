@@ -109,7 +109,7 @@ public class TeamUtils {
 		Team result = null;
 		String lowerName = team.toLowerCase();
 		int delta = Integer.MAX_VALUE;
-		for (Team player : getTeamModule().getTeams()) {
+		for (Team player : getParticpatingTeams()) {
 			if (player.getName().toLowerCase().startsWith(lowerName)) {
 				int curDelta = player.getName().length() - lowerName.length();
 				if (curDelta < delta) {

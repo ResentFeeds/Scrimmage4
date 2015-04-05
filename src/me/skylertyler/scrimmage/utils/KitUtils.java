@@ -3,26 +3,27 @@ package me.skylertyler.scrimmage.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.skylertyler.scrimmage.Scrimmage;
+import me.skylertyler.scrimmage.exception.KitNotFoundExecption;
+import me.skylertyler.scrimmage.kit.ItemKit;
+import me.skylertyler.scrimmage.kit.Kit;
+import me.skylertyler.scrimmage.modules.KitModule;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import me.skylertyler.scrimmage.Scrimmage;
-import me.skylertyler.scrimmage.exception.KitNotFoundExecption;
-import me.skylertyler.scrimmage.kit.Kit;
-import me.skylertyler.scrimmage.kit.KitItem;
-import me.skylertyler.scrimmage.modules.KitModule;
-
 public class KitUtils {
 
 	public static List<Kit> kits = new ArrayList<>();
-	//TODO add KitPotion
-	//TODO fix only doing one item as (stated below)
-	
+
+	// TODO add KitPotion
+	// TODO fix only doing one item as (stated below)
+
 	// name needs to be exactly how the kit 'name' attribute is!
 	public static Kit getKitByName(String name) {
 		Kit result = null;
-		List<Kit> kits = getKits();
+		List<Kit> kits = getKitModule().getKits();
 		for (Kit kit : kits) {
 			if (kit != null) {
 				if (kit.getName().equals(name)) {
@@ -42,11 +43,9 @@ public class KitUtils {
 	// get all the kit names!
 	public static List<String> getKitNames() {
 		List<String> names = new ArrayList<String>();
-		for (Kit kit : getKits()) {
-			if (kit.hasName()) {
-				String name = kit.getName();
-				names.add(name);
-			}
+		for (Kit kit : getKitModule().getKits()) {
+			String name = kit.getName();
+			names.add(name);
 		}
 		return names;
 	}
@@ -58,29 +57,17 @@ public class KitUtils {
 			try {
 				throw new KitNotFoundExecption(name, player);
 			} catch (KitNotFoundExecption e) {
-				 // nothing
+				// nothing
 			}
 			return;
 		}
 
-		// TODO fix only doing one item -_- 
-		KitItem all = null;
-		for (KitItem items : kit.getItems()) {
-			all = items;
+		for (ItemKit items : kit.getItems()) {
+			if (items != null) {
+				int slot = items.getSlot();
+				ItemStack stack = items.getStack();
+				pi.setItem(slot, stack);
+			}
 		}
-
-		ItemStack stack = new ItemStack(all.getMaterial(), all.getAmount());
-		int slot = all.getSlot();
-		pi.setItem(slot, stack);
-	}
-
-	// weird way of adding kits -_- but works
-	public static List<Kit> getKits() {
-		Kit result = null;
-		for (Kit kit : getKitModule().getKits()) {
-			result = kit;
-		}
-		kits.add(result);
-		return kits;
-	}
+	}  
 }
