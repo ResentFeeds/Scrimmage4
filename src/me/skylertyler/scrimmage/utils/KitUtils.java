@@ -10,13 +10,9 @@ import me.skylertyler.scrimmage.kit.Kit;
 import me.skylertyler.scrimmage.modules.KitModule;
 
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 public class KitUtils {
-
-	public static List<Kit> kits = new ArrayList<>();
-
+ 
 	// TODO add KitPotion
 	// TODO fix only doing one item as (stated below)
 
@@ -50,8 +46,7 @@ public class KitUtils {
 		return names;
 	}
 
-	public static void applyKit(String name, Player player) {
-		PlayerInventory pi = player.getInventory();
+	public static void applyKit(String name, Player player) { 
 		Kit kit = getKitByName(name);
 		if (kit == null) {
 			try {
@@ -61,13 +56,9 @@ public class KitUtils {
 			}
 			return;
 		}
-
-		for (ItemKit items : kit.getItems()) {
-			if (items != null) {
-				int slot = items.getSlot();
-				ItemStack stack = items.getStack();
-				pi.setItem(slot, stack);
-			}
+		
+		for(ItemKit items : kit.getItems()){
+			items.apply(player);
 		}
 	}  
 }

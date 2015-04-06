@@ -38,8 +38,8 @@ public class Kit {
 		for (ItemKit items : this.getItems()) {
 			result = items.getMaterial().name().replace("_", " ").toUpperCase()
 					+ " " + items.getLore() + " " + items.getName() + " "
-					+ items.getSlot() + " " + items.getEnchantment();
+					+ items.getSlot() + " ";
 		}
 		return "Kit [name=" + name + ", items=" + result + "]";
-	}
+	} 
 }

@@ -36,9 +36,12 @@ public class XMLUtils {
 	}
 
 	public static Enchantment parseEnchantment(String string) {
-		Enchantment enchant = Enchantment.getByName(string.replace(" ", "_")
-				.toUpperCase());
-		return enchant;
+		for (Enchantment enchant : Enchantment.values()) {
+			if (enchant.getName().equalsIgnoreCase(string)) {
+				return enchant;
+			}
+		} 
+		return Enchantment.getByName(string.toUpperCase().replace(" ", "_"));
 	}
 
 }

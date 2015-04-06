@@ -34,7 +34,7 @@ public class SetNextCommand implements CommandExecutor {
 
 					if (args.length > 1) {
 						player.sendMessage(ChatColor.RED + "Too many arguments");
-						player.sendMessage(ChatColor.RED + "/setnext <map?");
+						player.sendMessage(ChatColor.RED + "/setnext <map>");
 						return false;
 					}
 

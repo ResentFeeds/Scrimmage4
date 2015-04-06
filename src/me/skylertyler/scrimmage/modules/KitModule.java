@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.skylertyler.scrimmage.exception.SlotNotFoundException;
+import me.skylertyler.scrimmage.kit.EnchantKit;
 import me.skylertyler.scrimmage.kit.ItemKit;
-import me.skylertyler.scrimmage.kit.Kit; 
+import me.skylertyler.scrimmage.kit.Kit;
 import me.skylertyler.scrimmage.utils.Log;
 import me.skylertyler.scrimmage.utils.NumberUtils;
 import me.skylertyler.scrimmage.utils.XMLUtils;
-
 
 //TODO
 import org.bukkit.Material;
@@ -105,12 +105,11 @@ public class KitModule extends Module {
 			throws SlotNotFoundException {
 		// when the amount is 0 it will turn to 1 :)
 		// look at the KitItem constructor before telling me this is an error :)
-		int amount;
+		EnchantKit enchantKit = null;
+		int amount = 0;
 		if (itemElement.hasAttribute("amount")) {
 			amount = NumberUtils.parseInteger(itemElement
 					.getAttribute("amount"));
-		} else {
-			amount = 0;
 		}
 
 		int slot = NumberUtils.parseInteger(itemElement.getAttribute("slot"));
@@ -133,18 +132,17 @@ public class KitModule extends Module {
 			name = itemElement.getAttribute("name");
 		}
 
-		int damage;
-		if(itemElement.hasAttribute("damage")){
-			damage = NumberUtils.parseInteger(itemElement.getAttribute("damage"));
-		}else{
-			damage = 0;
+		int damage = 0;
+		if (itemElement.hasAttribute("damage")) {
+			damage = NumberUtils.parseInteger(itemElement
+					.getAttribute("damage"));
 		}
-		String enchantment = null;
 		if (itemElement.hasAttribute("enchantment")) {
-			enchantment = itemElement.getAttribute("enchantment");
+			String enchantment = itemElement.getAttribute("enchantment");
+			enchantKit = new EnchantKit(enchantment);
 		}
 
-		return new ItemKit(slot, mat, amount, damage,name, lore, enchantment);
+		return new ItemKit(slot, mat, amount, damage, name, lore, enchantKit);
 	}
 
 	public static List<ItemKit> parseItems(Element itemElement)
