@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.skylertyler.scrimmage.exception.EnchantNotFoundException;
+import me.skylertyler.scrimmage.utils.Log;
 import me.skylertyler.scrimmage.utils.NumberUtils;
 import me.skylertyler.scrimmage.utils.XMLUtils;
 
@@ -27,7 +28,7 @@ public class EnchantKit {
 				try {
 					throw new EnchantNotFoundException(split_enchantment[0]);
 				} catch (EnchantNotFoundException e) {
-					e.printStackTrace();
+					Log.logWarning(e.getMessage());
 				}
 			}
 			Integer level = NumberUtils.parseInteger(split_enchantment[1]);

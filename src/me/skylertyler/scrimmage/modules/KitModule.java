@@ -6,7 +6,7 @@ import java.util.List;
 import me.skylertyler.scrimmage.exception.SlotNotFoundException;
 import me.skylertyler.scrimmage.kit.EnchantKit;
 import me.skylertyler.scrimmage.kit.ItemKit;
-import me.skylertyler.scrimmage.kit.Kit;
+import me.skylertyler.scrimmage.kit.Kit; 
 import me.skylertyler.scrimmage.utils.Log;
 import me.skylertyler.scrimmage.utils.NumberUtils;
 import me.skylertyler.scrimmage.utils.XMLUtils;
@@ -14,6 +14,7 @@ import me.skylertyler.scrimmage.utils.XMLUtils;
 //TODO
 import org.bukkit.Material;
 import org.bukkit.event.HandlerList;
+import org.bukkit.inventory.ItemStack;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -38,15 +39,14 @@ public class KitModule extends Module {
 		Element root = doc.getDocumentElement();
 		List<Kit> kit = null;
 		try {
-			kit = parseKit(root, "kits", "kit", "item");
+			kit = parseKit(root, "kits", "kit");
 		} catch (SlotNotFoundException e) {
 			e.printStackTrace();
 		}
 		return new KitModule(kit);
 	}
 
-	private List<Kit> parseKit(Element root, String kitsTag, String kitTag,
-			String itemTag) throws SlotNotFoundException {
+	private List<Kit> parseKit(Element root, String kitsTag, String kitTag) throws SlotNotFoundException {
 		List<Kit> all = new ArrayList<>();
 		Node kits = root.getElementsByTagName(kitsTag).item(0);
 		if (kits != null) {
@@ -64,17 +64,17 @@ public class KitModule extends Module {
 							Log.logWarning("No name found for a kit!");
 							return all;
 						}
-
 						NodeList items = kitElement.getChildNodes();
 						for (int y = 0; y < items.getLength(); y++) {
 							Node item = items.item(y);
 							if (item.getNodeType() == Node.ELEMENT_NODE
-									&& item.getNodeName().equals(itemTag)) {
+									&& item.getNodeName().equals("item")) {
 								Element itemElement = (Element) item;
 								List<ItemKit> kitItems = parseItems(itemElement);
-								Kit newKit = new Kit(name, kitItems);
+								Kit newKit = new Kit(name, kitItems, null);
 								all.add(newKit);
 							}
+
 						}
 					}
 				}
@@ -105,13 +105,7 @@ public class KitModule extends Module {
 			throws SlotNotFoundException {
 		// when the amount is 0 it will turn to 1 :)
 		// look at the KitItem constructor before telling me this is an error :)
-		EnchantKit enchantKit = null;
-		int amount = 0;
-		if (itemElement.hasAttribute("amount")) {
-			amount = NumberUtils.parseInteger(itemElement
-					.getAttribute("amount"));
-		}
-
+		EnchantKit enchantKit = null; 
 		int slot = NumberUtils.parseInteger(itemElement.getAttribute("slot"));
 		// will be invalid if the slot (id) is less than 0 or greater then 35 &
 		// below 100 or greater than 103 :)
@@ -119,8 +113,6 @@ public class KitModule extends Module {
 		if (invalid) {
 			throw new SlotNotFoundException(slot);
 		}
-
-		Material mat = XMLUtils.parseMaterial(itemElement.getTextContent());
 
 		String lore = null;
 		if (itemElement.hasAttribute("lore")) {
@@ -131,7 +123,6 @@ public class KitModule extends Module {
 		if (itemElement.hasAttribute("name")) {
 			name = itemElement.getAttribute("name");
 		}
-
 		int damage = 0;
 		if (itemElement.hasAttribute("damage")) {
 			damage = NumberUtils.parseInteger(itemElement
@@ -140,9 +131,20 @@ public class KitModule extends Module {
 		if (itemElement.hasAttribute("enchantment")) {
 			String enchantment = itemElement.getAttribute("enchantment");
 			enchantKit = new EnchantKit(enchantment);
-		}
+		} 
 
-		return new ItemKit(slot, mat, amount, damage, name, lore, enchantKit);
+		ItemStack stack = parseItemStack(itemElement);
+
+		return new ItemKit(slot, stack, damage, name, lore, enchantKit);
+	}
+
+	public static ItemStack parseItemStack(Element element) {
+		Material mat = XMLUtils.parseMaterial(element.getTextContent());
+		int amount = 1;
+		if (element.hasAttribute("amount")) {
+			amount = NumberUtils.parseInteger(element.getAttribute("amount"));
+		}
+		return new ItemStack(mat, amount);
 	}
 
 	public static List<ItemKit> parseItems(Element itemElement)
@@ -152,7 +154,7 @@ public class KitModule extends Module {
 		items.add(item);
 		return items;
 	}
-
+ 
 	public List<Kit> getKits() {
 		return this.kits;
 	}

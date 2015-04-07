@@ -5,14 +5,13 @@ import java.util.List;
 
 import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.exception.KitNotFoundExecption;
-import me.skylertyler.scrimmage.kit.ItemKit;
 import me.skylertyler.scrimmage.kit.Kit;
 import me.skylertyler.scrimmage.modules.KitModule;
 
 import org.bukkit.entity.Player;
 
 public class KitUtils {
- 
+
 	// TODO add KitPotion
 	// TODO fix only doing one item as (stated below)
 
@@ -46,7 +45,7 @@ public class KitUtils {
 		return names;
 	}
 
-	public static void applyKit(String name, Player player) { 
+	public static void applyKit(String name, Player player) {
 		Kit kit = getKitByName(name);
 		if (kit == null) {
 			try {
@@ -56,9 +55,8 @@ public class KitUtils {
 			}
 			return;
 		}
-		
-		for(ItemKit items : kit.getItems()){
-			items.apply(player);
-		}
-	}  
+
+		// some reason it only gives me one item -_-
+		kit.applyKit(player);
+	}
 }
