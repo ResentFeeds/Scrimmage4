@@ -55,7 +55,6 @@ public class KitUtils {
 			}
 			return;
 		}
-
 		// some reason it only gives me one item -_-
 		kit.applyKit(player);
 	}

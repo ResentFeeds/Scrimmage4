@@ -1,5 +1,8 @@
 package me.skylertyler.scrimmage.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.ChatColor;
 
 public class BukkitUtils {
@@ -9,4 +12,15 @@ public class BukkitUtils {
 		return ChatColor.translateAlternateColorCodes('`',
 				ChatColor.translateAlternateColorCodes('`', s));
 	}
+	
+	
+	public static List<String> colorizeList(List<String> list) {
+        List<String> result = new ArrayList<String>();
+
+        for (String line : list) {
+            result.add(colorize(line));
+        }
+
+        return result;
+    }
 }

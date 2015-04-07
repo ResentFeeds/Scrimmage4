@@ -2,16 +2,22 @@ package me.skylertyler.scrimmage.kit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import me.skylertyler.scrimmage.utils.BukkitUtils;
 
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
+
 public class ItemKit {
 
+	// but its still giving me the very bottom <item> tag item in the kit -_- (need to work on EnchantKit) wondering why it isnt working how i wanted it to > D:
 	private final int damage;
 	private final String name;
 	private final String lore;
@@ -31,7 +37,18 @@ public class ItemKit {
 		this.enchant = enchant;
 
 		if (hasEnchant()) {
-			getStack().addEnchantments(getEnchant().getEnchantments());
+			for (Entry<Enchantment, Integer> entry : getEnchant()
+					.getEnchantments().entrySet()) {
+				Enchantment enchantment = entry.getKey();
+				Integer level = entry.getValue(); 
+				if (level <= 4) {
+					getStack().addEnchantment(enchantment, level);
+				}
+
+				if (level >= 5) {
+					this.getStack().addUnsafeEnchantment(enchantment, level);
+				}
+			}
 		}
 		if (this.damage != 0) {
 			getStack().setDurability((short) this.getDamage());
@@ -46,7 +63,7 @@ public class ItemKit {
 					.toLowerCase();
 		}
 
-		// fix lore -_- 
+		// fix lore -_-
 		List<String> lores = null;
 		if (hasLore()) {
 			lores = parseLore(getLore());
@@ -106,23 +123,23 @@ public class ItemKit {
 		return this.itemMeta;
 	}
 
+	// working lorses :D
 	public List<String> parseLore(String lore) {
-		List<String> all = new ArrayList<>();
-		String[] lores = lore.split("|");
-		String newLine = null;
-		for (String line : lores) {
-			newLine = line;
-		}
-		all.add(newLine);
-		return all;
+		List<String> lores = ImmutableList.copyOf(Splitter.on("|").split(lore));
+		List<String> coloredLore = BukkitUtils.colorizeList(lores);
+		return coloredLore;
 	}
 
+	// working name :)
 	public String parseName(String name) {
+		// if it contains the ` it will have color -_- using the BukkitUtils colorize(string) method :)
 		boolean hasColor = name.contains("`");
 		String format = null;
 		if (hasColor) {
 			format = BukkitUtils.colorize(name);
+			//else 
 		} else {
+			// name will be a defualt name with no color (white) 
 			format = name;
 		}
 
