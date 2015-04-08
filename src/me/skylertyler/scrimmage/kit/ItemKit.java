@@ -123,7 +123,7 @@ public class ItemKit {
 		return this.itemMeta;
 	}
 
-	// working lorses :D
+	// working lores :D
 	public List<String> parseLore(String lore) {
 		List<String> lores = ImmutableList.copyOf(Splitter.on("|").split(lore));
 		List<String> coloredLore = BukkitUtils.colorizeList(lores);
