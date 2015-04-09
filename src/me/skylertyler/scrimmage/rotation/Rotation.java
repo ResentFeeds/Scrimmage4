@@ -14,9 +14,7 @@ public class Rotation {
 
 	public List<RotationSlot> getRotation() {
 		return this.rotation;
-	}
-	
-	
+	} 
 	
 	public boolean hasRotation(){
 		return getRotation().size() != 0;

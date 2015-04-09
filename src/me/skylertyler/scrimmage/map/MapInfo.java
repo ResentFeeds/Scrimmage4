@@ -1,5 +1,5 @@
 package me.skylertyler.scrimmage.map;
-
+ 
 import java.util.List;
 
 import me.skylertyler.scrimmage.author.Author;
@@ -13,7 +13,6 @@ public class MapInfo {
 	private final Version version;
 	private final List<Author> authors;
 	private final List<Contributor> contributors;
-
 	private final String objective;
 	// this will get updated every time they update to a newer proto version!
 	private final Version proto;
@@ -60,6 +59,7 @@ public class MapInfo {
 	}
 
 	public boolean hasContributors() {
-		return this.contributors != null || this.contributors.size() > 0;
+		return getContributors() != null || getContributors().size() > 0;
 	}
+ 
 }

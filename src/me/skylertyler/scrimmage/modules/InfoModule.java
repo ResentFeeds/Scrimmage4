@@ -6,10 +6,10 @@ import java.util.UUID;
 
 import me.skylertyler.scrimmage.author.Author;
 import me.skylertyler.scrimmage.contributor.Contributor;
+import me.skylertyler.scrimmage.exception.NoAuthorsException;
 import me.skylertyler.scrimmage.map.MapInfo;
 import me.skylertyler.scrimmage.rules.Rule;
 import me.skylertyler.scrimmage.utils.BukkitUtils;
-import me.skylertyler.scrimmage.utils.ConsoleUtils;
 import me.skylertyler.scrimmage.utils.Log;
 import me.skylertyler.scrimmage.utils.UUIDUtils;
 import me.skylertyler.scrimmage.version.Version;
@@ -26,7 +26,7 @@ import org.w3c.dom.NodeList;
 @ModuleInfo(name = "info", desc = "basic information about the current map!", module = InfoModule.class)
 public class InfoModule extends Module {
 
-    private final MapInfo info;
+	private final MapInfo info;
 
 	public InfoModule() {
 		this.info = null;
@@ -52,6 +52,8 @@ public class InfoModule extends Module {
 		if (!root.hasAttribute("proto")) {
 			Log.logWarning("there needs to be a 'proto' attribute!");
 		}
+
+		Version proto = Version.parse(root.getAttribute("proto"));
 
 		// map name
 		Node nameNode = doc.getElementsByTagName("name").item(0);
@@ -80,17 +82,26 @@ public class InfoModule extends Module {
 		String text = versionNode.getTextContent();
 		Version version = Version.parse(text);
 
-		String versionFormat = version.toString();
 		// contributors
 		List<Contributor> contributors = contributorList(root, "contributors",
 				"contributor");
 
 		// authors
 		List<Author> authors = authorList(root, "authors", "author");
+
+		boolean authors_are_null = authors.size() == 0;
+		if (authors_are_null) {
+			try {
+				throw new NoAuthorsException(name);
+			} catch (NoAuthorsException e) {
+				e.printStackTrace();
+			}
+		}
+
 		// rules
 
 		List<Rule> rules = ruleList(root, "rules", "rule");
-		return new MapInfo(null, name, version, authors, contributors, rules,
+		return new MapInfo(proto, name, version, authors, contributors, rules,
 				objective);
 	}
 
@@ -127,6 +138,7 @@ public class InfoModule extends Module {
 
 	public static List<Author> authorList(Element root, String topLevelTag,
 			String tag) {
+		Author newAuthor = null;
 		List<Author> authors = new ArrayList<Author>();
 		Node node = root.getElementsByTagName(topLevelTag).item(0);
 		if (node != null) {
@@ -138,34 +150,22 @@ public class InfoModule extends Module {
 					if (node.getNodeType() == Node.ELEMENT_NODE
 							&& node.getNodeName().equals(tag)) {
 						Element authorElement = (Element) author;
+						UUID uuid = UUIDUtils.getUUIDFromString(authorElement
+								.getAttribute("uuid"));
 
-						UUID uuid = null;
-						if (authorElement.hasAttribute("contribution")
-								&& authorElement.hasAttribute("uuid")) {
-							uuid = UUIDUtils.getUUIDFromString(authorElement
-									.getAttribute("uuid"));
-							authors.add(new Author(authorElement
-									.getAttribute("contribution"), uuid));
-						} else if (authorElement.hasAttribute("uuid")) {
-							uuid = UUIDUtils.getUUIDFromString(authorElement
-									.getAttribute("uuid"));
-							authors.add(new Author(uuid));
+						if (authorElement.hasAttribute("contribution")) {
+							String contribution = authorElement
+									.getAttribute("contribution");
+							newAuthor = new Author(uuid, contribution);
+						} else {
+							newAuthor = new Author(uuid);
 						}
 					}
 				}
 			}
-
-			String format = null;
-			for (Author author : authors) {
-				if (author.hasContribution()) {
-					format = author.getContribution() + " " + author.getUUID();
-				} else {
-					format = author.getUUID() + "";
-				}
-
-				ConsoleUtils.sendConsoleMessage(format);
-			}
 		}
+
+		authors.add(newAuthor);
 		return authors;
 	}
 

@@ -1,15 +1,8 @@
 package me.skylertyler.scrimmage.map;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import static org.bukkit.ChatColor.LIGHT_PURPLE;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
- 
-import me.skylertyler.scrimmage.author.Author;
-import me.skylertyler.scrimmage.utils.MessageUtils;
-import static org.bukkit.ChatColor.*;
+import java.io.File;
 
 public class Map {
 
@@ -51,27 +44,14 @@ public class Map {
 	 * 
 	 * @returns a short description about the map!
 	 */
+	//TODO work on Kits and the authors -_- 
 	public String getShortMapDescription() {
 		String currently = LIGHT_PURPLE + "Currently Playing";
 		String name = getInfo().getName();
 		String by = "by";
-		String mapAuthors = MessageUtils
-				.authorList(getAuthors().iterator());
-		String format = currently + " " + name + " " + by + " " + mapAuthors;
+		// String author = StringUtils.listToEnglishCompound(getAuthors());
+		String format = currently + " " + name + " " + by + " ";
+		// author;
 		return format;
-	}
-
-	public List<String> getAuthors() {
-		List<String> authors = new ArrayList<String>();
-		authors.clear(); 
-		Player player = null;
-		for (Author author : getInfo().getAuthors()) { 
-			if (author.hasUUID()) {
-				player = Bukkit.getPlayer(author.getUUID());
-			 	String name = player.getName();
-				authors.add(name);
-			}
-		} 
-		return authors;
-	}
+	} 
 }

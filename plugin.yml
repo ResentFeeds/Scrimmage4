@@ -1,7 +1,9 @@
 name: Scrimmage4
 main: me.skylertyler.scrimmage.Scrimmage
-version: 0.58
+version: 0.9
 commands:
+  authors:
+    description: authors!
   broadcast:
     description: broadcast a message!
     aliases:

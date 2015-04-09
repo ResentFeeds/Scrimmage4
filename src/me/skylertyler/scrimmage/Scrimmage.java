@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import me.skylertyler.scrimmage.commands.AuthorCommand;
 import me.skylertyler.scrimmage.commands.BroadcastCommand;
 import me.skylertyler.scrimmage.commands.ContributorCommand;
 import me.skylertyler.scrimmage.commands.CycleCommand;
@@ -63,7 +64,13 @@ import org.xml.sax.SAXException;
 
 public class Scrimmage extends JavaPlugin {
 
-	// need to fix maploader using all the map.xml files at once!
+	// Alot more in TODO.txt :)
+	// need to fix maploader using all the map.xml files at once! (somewhat
+	// better)
+
+	// need to remove List<Map> in the rotation config use the rotation slots :)
+
+	// TODO below -_-
 
 	// NEED TO implement SpawnModule, and RegionModule to Finish off the teams
 	// make overhead color show !
@@ -95,6 +102,7 @@ public class Scrimmage extends JavaPlugin {
 			e.printStackTrace();
 		}
 
+		// check the server type equals running :)
 		if (getConfigFile().isRunning()) {
 			try {
 				loadLoadedMaps();
@@ -115,6 +123,7 @@ public class Scrimmage extends JavaPlugin {
 			}
 		}
 
+		// check if servertype is in development stage
 		if (getConfigFile().inDevelopment()) {
 			TestLoader testloader = new TestLoader();
 			try {
@@ -212,6 +221,7 @@ public class Scrimmage extends JavaPlugin {
 		registerCommand(new RotationCommand(this), "rotation", null);
 		registerCommand(new BroadcastCommand(this), "broadcast",
 				Arrays.asList("bc", "bmessage"));
+		registerCommand(new AuthorCommand(getMatch()), "authors", null);
 	}
 
 	public void registerListener(Listener listener) {

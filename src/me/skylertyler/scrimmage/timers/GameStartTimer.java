@@ -12,11 +12,13 @@ public class GameStartTimer extends CountDownTimer {
 	protected Match match;
 	private int bTimer;
 
+	 
 	public GameStartTimer(int time, boolean cancelled, Match match) {
 		super(time, cancelled);
 		this.match = match;
 	}
 
+	// broadcast the message below 
 	@Override
 	public String statusString(int time) {
 		String message = ChatColor.GREEN + "Match is starting in "
@@ -30,6 +32,9 @@ public class GameStartTimer extends CountDownTimer {
 		return format;
 	}
 
+	@SuppressWarnings("deprecation")
+	
+	// call this method when the timer ends :)
 	@Override
 	public void hasEnded() {
 		final Match match = this.getMatch();
@@ -64,6 +69,7 @@ public class GameStartTimer extends CountDownTimer {
 		return this.match;
 	}
 
+	// start the timer!
 	@Override
 	public void run() {
 		if (!(isCancelled())) {

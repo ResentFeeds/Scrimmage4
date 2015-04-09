@@ -2,7 +2,7 @@ package me.skylertyler.scrimmage.contributor;
 
 public class Contributor {
 
-    private final String contribution;
+	private final String contribution;
 	private final String contributor;
 
 	public Contributor(String contribution, String contributor) {
@@ -11,8 +11,7 @@ public class Contributor {
 	}
 
 	public Contributor(String contributor) {
-		this.contributor = contributor;
-		this.contribution = null;
+		this(null, contributor);
 	}
 
 	public String getContributor() {
@@ -25,5 +24,5 @@ public class Contributor {
 
 	public boolean hasContribution() {
 		return this.contribution != null;
-	} 
+	}
 }
