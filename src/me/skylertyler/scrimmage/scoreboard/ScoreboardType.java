@@ -16,7 +16,7 @@ public enum ScoreboardType {
 		this.displayName = displayName;
 	}
 
-	// getter method for the dislay name!
+	// getter method for the display name!
 	public String getDisplayName() {
 		return this.displayName;
 	}
