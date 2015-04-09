@@ -70,7 +70,6 @@ public class Kit {
 		for (ItemKit items : getItems()) {
 			if (items != null) {
 				items.apply(player);
-				;
 			}
 		}
 	}
