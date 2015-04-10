@@ -4,11 +4,12 @@ import org.bukkit.util.Vector;
 
 public abstract class Region {
 
-	protected String name;
+	private final String name;
 
 	public Region(String name) {
 		this.name = name;
-	} 
+	}
+
 	public abstract boolean containsVector(Vector vec);
 
 	public String getName() {
