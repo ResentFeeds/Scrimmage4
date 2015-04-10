@@ -15,8 +15,7 @@ public class BlockRegion extends Region {
 	}
 
 	public BlockRegion(Vector vector) {
-		super("");
-		this.vector = vector;
+		this(vector, "");
 	}
 
 	@Override

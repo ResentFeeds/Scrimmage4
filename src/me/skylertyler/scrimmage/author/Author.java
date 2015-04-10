@@ -9,12 +9,13 @@ import org.bukkit.entity.Player;
 public class Author {
 	private Set<UUID> authors = new HashSet<>();
 	private final String contribution;
-	private final UUID uuid;
+	private final UUID uuid; 
 
 	public Author(UUID uuid, String contribution) {
 		this.uuid = uuid;
 		this.contribution = contribution;
 	}
+	 
 
 	public Author(UUID uuid) {
 		this(uuid, null);

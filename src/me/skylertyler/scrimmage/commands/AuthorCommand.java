@@ -1,9 +1,11 @@
 package me.skylertyler.scrimmage.commands;
 
 import static org.bukkit.ChatColor.*;
+
+import java.util.Map.Entry;
+
 import me.skylertyler.scrimmage.map.MapInfo;
 import me.skylertyler.scrimmage.match.Match;
-import me.skylertyler.scrimmage.version.Version;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -30,10 +32,22 @@ public class AuthorCommand implements CommandExecutor {
 					return false;
 				}
 				if (args.length == 0) {
+					String format = null;
 					MapInfo info = getMatch().getMap().getInfo();
-					Version proto = info.getProto();
-					player.sendMessage(proto.toString()
-							+ " is the proto version for this map :)");
+					for (Entry<String, String> author : info.getAuthorNames()
+							.entrySet()) {
+						String name = author.getKey();
+						String contrib = author.getValue();
+
+						if (contrib != null) {
+							format = name + "  " + contrib;
+						} else {
+							format = name;
+						}
+
+						String result = format;
+						player.sendMessage(result);
+					}
 					return true;
 				}
 			}

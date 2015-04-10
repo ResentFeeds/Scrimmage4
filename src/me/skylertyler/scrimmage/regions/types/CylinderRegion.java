@@ -19,10 +19,7 @@ public class CylinderRegion extends Region {
 	}
 
 	public CylinderRegion(BlockRegion base, int radius, int height) {
-		super("");
-		this.base = base;
-		this.radius = radius;
-		this.height = height;
+		this("", base, radius, height);
 	}
 
 	@Override

@@ -24,10 +24,10 @@ public class NextCommand implements CommandExecutor {
 			if (cmd.getName().equalsIgnoreCase("next")) {
 				Match match = this.getMatch();
 				if (match.hasNext()) {
-					player.sendMessage(GRAY + "The next map is " + GOLD
-							+ match.getNext().getInfo().getName());
+					player.sendMessage(match.getNext().getNextMapDescription());
 				} else {
-					player.sendMessage(WHITE + "There is no map set do " + DARK_RED + " /setnext <map> " + WHITE + " first");
+					player.sendMessage(WHITE + "There is no map set do "
+							+ DARK_RED + " /setnext <map> " + WHITE + " first");
 				}
 			}
 		} else {

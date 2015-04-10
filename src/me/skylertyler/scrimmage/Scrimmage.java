@@ -28,6 +28,7 @@ import me.skylertyler.scrimmage.exception.InvalidModuleException;
 import me.skylertyler.scrimmage.kit.Kit;
 import me.skylertyler.scrimmage.listeners.BlockListener;
 import me.skylertyler.scrimmage.listeners.ConnectionListener;
+import me.skylertyler.scrimmage.listeners.SetNextListener;
 import me.skylertyler.scrimmage.listeners.TestConnectionListener;
 import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.map.MapLoader;
@@ -235,6 +236,7 @@ public class Scrimmage extends JavaPlugin {
 			registerListener(new BlockListener(
 					(MaxBuildHeightModule) getLoader().getContainer()
 							.getModule(MaxBuildHeightModule.class)));
+			registerListener(new SetNextListener());
 		}
 
 		if (getConfigFile().inDevelopment()) {

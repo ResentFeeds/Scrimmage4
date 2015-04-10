@@ -1,9 +1,10 @@
 package me.skylertyler.scrimmage.commands;
 
+import me.skylertyler.scrimmage.event.SetNextEvent;
 import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.match.Match;
+import static org.bukkit.ChatColor.*;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -26,15 +27,14 @@ public class SetNextCommand implements CommandExecutor {
 			if (cmd.getName().equalsIgnoreCase("setnext")) {
 				if (match != null) {
 					if (args.length < 1) {
-						player.sendMessage(ChatColor.RED
-								+ "Not enough arguments!");
-						player.sendMessage(ChatColor.RED + "/setnext <map>");
+						player.sendMessage(RED + "Not enough arguments!");
+						player.sendMessage(RED + "/setnext <map>");
 						return false;
 					}
 
 					if (args.length > 1) {
-						player.sendMessage(ChatColor.RED + "Too many arguments");
-						player.sendMessage(ChatColor.RED + "/setnext <map>");
+						player.sendMessage(RED + "Too many arguments");
+						player.sendMessage(RED + "/setnext <map>");
 						return false;
 					}
 
@@ -42,25 +42,22 @@ public class SetNextCommand implements CommandExecutor {
 						Map map = match.getScrimmage().getLoader()
 								.getMap(args[0]);
 						if (map == null) {
-							player.sendMessage(ChatColor.RED
+							player.sendMessage(RED
 									+ "There is no map by the name of '"
-									+ ChatColor.RED + args[0] + ChatColor.RED
-									+ "'!");
+									+ DARK_RED + args[0] + RED + "'!");
 							return false;
 						}
-
-						player.sendMessage(ChatColor.GRAY + "The map "
-								+ ChatColor.GOLD + map.getInfo().getName()
-								+ ChatColor.GRAY + " has been set to be next!");
+						SetNextEvent event = new SetNextEvent(player, map);
+						// call the event above :)
+						match.getPluginManager().callEvent(event);
 						match.setNext(map);
 					}
 				} else {
-					player.sendMessage(ChatColor.RED
-							+ "wait until the match starts!");
+					player.sendMessage(RED + "wait until the match starts!");
 				}
 			}
 		} else {
-			sender.sendMessage(ChatColor.RED
+			sender.sendMessage(RED
 					+ "You need to be a player to set the next map!");
 		}
 		return true;

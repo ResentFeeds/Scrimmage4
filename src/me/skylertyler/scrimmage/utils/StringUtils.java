@@ -2,6 +2,7 @@ package me.skylertyler.scrimmage.utils;
 
 import java.util.Collection;
 import java.util.Date;
+import static org.bukkit.ChatColor.*;
 
 public class StringUtils {
 	/**
@@ -10,7 +11,7 @@ public class StringUtils {
 	 * @see #listToEnglishCompound(java.util.Collection, String, String)
 	 */
 	public static final String listToEnglishCompound(Collection<String> list) {
-		return listToEnglishCompound(list, "", "");
+		return listToEnglishCompound(list, RED + "", LIGHT_PURPLE + "");
 	}
 
 	/**

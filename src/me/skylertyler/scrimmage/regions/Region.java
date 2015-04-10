@@ -1,5 +1,5 @@
 package me.skylertyler.scrimmage.regions;
- 
+
 import org.bukkit.util.Vector;
 
 public abstract class Region {
@@ -9,7 +9,6 @@ public abstract class Region {
 	public Region(String name) {
 		this.name = name;
 	} 
-
 	public abstract boolean containsVector(Vector vec);
 
 	public String getName() {
@@ -21,5 +20,5 @@ public abstract class Region {
 	}
 
 	public abstract RegionType getType();
-   
+
 }

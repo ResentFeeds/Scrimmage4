@@ -17,9 +17,7 @@ public class CuboidRegion extends Region {
 	}
 
 	public CuboidRegion(BlockRegion min, BlockRegion max) {
-		super("");
-		this.min = min;
-		this.max = max;
+		this("", min, max);
 	}
 
 	@Override

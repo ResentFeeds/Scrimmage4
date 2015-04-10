@@ -17,9 +17,7 @@ public class SphereRegion extends Region {
 	}
 
 	public SphereRegion(BlockRegion origin, int radius) {
-		super("");
-		this.origin = origin;
-		this.radius = radius;
+		this("", origin, radius);
 	}
 
 	@Override
@@ -39,6 +37,5 @@ public class SphereRegion extends Region {
 	public BlockRegion getOrigin() {
 		return origin;
 	}
-	 
 
 }

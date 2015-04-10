@@ -6,9 +6,11 @@ import me.skylertyler.scrimmage.regions.Region;
 import me.skylertyler.scrimmage.regions.RegionType;
 
 public class EmptyRegion extends Region {
+	// will change this -_-
 	public EmptyRegion(String name) {
 		super(name);
 	} 
+
 
 	@Override
 	public boolean containsVector(Vector vec) {

@@ -6,7 +6,7 @@ public enum ScoreboardType {
 	// this wont work (until i fix the map loader parsing all the xml files at once -_-)
 	// all the scoreboard types
 	Objectives(ChatColor.GOLD + "Objectives"), Wool(ChatColor.WHITE + "Wools"), Blitz(
-			ChatColor.GOLD + "Blitz"), Rage(ChatColor.GOLD + "Rage");
+			ChatColor.GOLD + "Blitz:"), Rage(ChatColor.GOLD + "Blitz: Rage");
 
 	// field for the displayName
 	private final String displayName;

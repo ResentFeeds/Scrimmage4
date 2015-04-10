@@ -13,14 +13,13 @@ public class PointRegion extends Region {
 		super(name);
 		this.point = point;
 	}
-	
+
 	public PointRegion(Vector point) {
-		super("");
-		this.point = point;
+		this(point, "");
 	}
 
 	@Override
-	public boolean containsVector(Vector vec) { 
+	public boolean containsVector(Vector vec) {
 		return point.getX() == vec.getX() && point.getY() == vec.getY()
 				&& point.getZ() == vec.getZ();
 	}

@@ -49,6 +49,7 @@ public class InfoModule extends Module {
 
 	private MapInfo parseInfo(Document doc) throws NullPointerException {
 		Element root = doc.getDocumentElement();
+		// proto
 		if (!root.hasAttribute("proto")) {
 			Log.logWarning("there needs to be a 'proto' attribute!");
 		}
@@ -134,38 +135,35 @@ public class InfoModule extends Module {
 		}
 
 		return contribs;
-	}
+	} 
 
-	public static List<Author> authorList(Element root, String topLevelTag,
-			String tag) {
-		Author newAuthor = null;
-		List<Author> authors = new ArrayList<Author>();
-		Node node = root.getElementsByTagName(topLevelTag).item(0);
+	public static List<Author> authorList(Element root, String AuthorsTag,
+			String AuthorTag) {
+		List<Author> authors = new ArrayList<>();
+		Node node = root.getElementsByTagName(AuthorsTag).item(0);
 		if (node != null) {
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				Element element = (Element) node;
-				NodeList list = element.getChildNodes();
-				for (int i = 0; i < list.getLength(); i++) {
-					Node author = list.item(i);
-					if (node.getNodeType() == Node.ELEMENT_NODE
-							&& node.getNodeName().equals(tag)) {
-						Element authorElement = (Element) author;
+				Element nodeElement = (Element) node;
+				NodeList author = nodeElement.getChildNodes();
+				for (int i = 0; i < author.getLength(); i++) {
+					Node authorNode = author.item(i);
+					if (authorNode.getNodeType() == Node.ELEMENT_NODE
+							&& authorNode.getNodeName().equals(AuthorTag)) {
+						Element authorElement = (Element) authorNode;
 						UUID uuid = UUIDUtils.getUUIDFromString(authorElement
 								.getAttribute("uuid"));
 
 						if (authorElement.hasAttribute("contribution")) {
 							String contribution = authorElement
-									.getAttribute("contribution");
-							newAuthor = new Author(uuid, contribution);
+									.getAttribute("contribtion");
+							authors.add(new Author(uuid, contribution));
 						} else {
-							newAuthor = new Author(uuid);
+							authors.add(new Author(uuid));
 						}
 					}
 				}
 			}
 		}
-
-		authors.add(newAuthor);
 		return authors;
 	}
 
