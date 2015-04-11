@@ -10,8 +10,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 import static org.bukkit.ChatColor.*;
 import me.skylertyler.scrimmage.modules.MaxBuildHeightModule;
-import me.skylertyler.scrimmage.team.Team;
-import me.skylertyler.scrimmage.utils.TeamUtils;
 
 public class BlockListener implements Listener {
 
@@ -23,34 +21,30 @@ public class BlockListener implements Listener {
 
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
-		// TODO
-		Player player = event.getPlayer();
+		// TODO add checking if the player is on a team with a team type of particpating!
+		Player player = event.getPlayer(); 
 		Block block = event.getBlock();
 		String b = null;
 		String message = WHITE + "You have reached the maximum build height ";
 		String format = null;
 		Location blockLocation = block.getLocation();
-		int height = getMaxBuildHeight().getMaxHeight().getHeight();
-		for (Team team : TeamUtils.getParticpatingTeams()) {
-			if (team.containsPlayer(player)) {
-				if (blockLocation.getY() >= height) {
-					event.setCancelled(true);
-					if (height == 1) {
-						b = "";
+		int height = getMaxBuildHeight().getMaxHeight().getHeight(); 
+			if (blockLocation.getY() >= height) {
+				event.setCancelled(true);
+				if (height == 1) {
+					b = "";
+					format = GRAY + "(" + height + " block" + b + ")";
+				} else {
+					if (height != 0 && height > 1) {
+						b = "s";
 						format = GRAY + "(" + height + " block" + b + ")";
-					} else {
-						if (height != 0 && height > 1) {
-							b = "s";
-							format = GRAY + "(" + height + " block" + b + ")";
-						}
 					}
-
-					String result = message + format;
-					player.sendMessage(result);
 				}
+
+				String result = message + format;
+				player.sendMessage(result);
 			}
-		}
-	}
+		} 
 
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
