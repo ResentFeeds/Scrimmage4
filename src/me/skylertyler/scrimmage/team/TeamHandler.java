@@ -1,8 +1,7 @@
 package me.skylertyler.scrimmage.team;
 
 import me.skylertyler.scrimmage.Scrimmage;
-import me.skylertyler.scrimmage.modules.TeamModule;
-import me.skylertyler.scrimmage.utils.Log;
+import me.skylertyler.scrimmage.modules.TeamModule; 
 import me.skylertyler.scrimmage.utils.TeamUtils;
 
 import org.bukkit.ChatColor;
@@ -27,7 +26,8 @@ public class TeamHandler {
 
 		team.getMembers().add(player.getName());
 		player.setPlayerListName(team.getColor() + player.getName());
-		player.setDisplayName(team.getColor() + player.getName());
+		player.setDisplayName(team.getColor() + player.getName()
+				+ ChatColor.RESET);
 		// TODO make their overhead name be the teams color
 		player.sendMessage(ChatColor.GRAY + "You joined the " + team.getColor()
 				+ team.getName());
@@ -37,17 +37,12 @@ public class TeamHandler {
 		Team result = null;
 		Team obs = TeamUtils.getObservers();
 		for (Team team : TeamUtils.getParticpatingTeams()) {
-			if (team != null) {
-				if (team.containsPlayer(player)) {
-					result = team;
-				} else {
-					if (obs.containsPlayer(player)) {
-						result = obs;
-					}
-				}
+			if (team.containsPlayer(player)) {
+				result = team;
 			} else {
-				// do something
-				Log.logWarning("wtf ? the team is null!");
+				if (obs.containsPlayer(player)) {
+					result = obs;
+				}
 			}
 		}
 		return result;

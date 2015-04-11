@@ -9,12 +9,23 @@ import me.skylertyler.scrimmage.utils.StringUtils;
 public class Map {
 
 	private final File xml;
+	private final File source;
+	private final String sourceName;
 	private final MapInfo info;
 
-	public Map(File xml, MapInfo mapInfo) {
+	public Map(File xml, File source, MapInfo mapInfo) {
 		this.xml = xml;
+		this.source = source;
+		this.sourceName = this.source.getName();
 		this.info = mapInfo;
+	}
 
+	public File getSource() {
+		return this.source;
+	}
+
+	public String getSourceName() {
+		return this.sourceName;
 	}
 
 	public boolean notNull() {

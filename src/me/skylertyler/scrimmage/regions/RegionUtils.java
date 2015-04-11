@@ -259,6 +259,7 @@ public class RegionUtils {
 		return region;
 	}
 
+	// NOT TESTED
 	public static Region getRegionByType(RegionType type) {
 		Region result = null;
 		for (Entry<String, Region> regions : getRegions().entrySet()) {

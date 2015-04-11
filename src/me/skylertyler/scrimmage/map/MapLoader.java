@@ -35,12 +35,12 @@ public class MapLoader {
 		File rot = Scrimmage.getScrimmageInstance().getRotationFile();
 		boolean exist = rot.exists();
 		if (exist) {
-			for (File maps : rot.listFiles()) {
-				if (maps != null && maps.isDirectory()) {
+			for (File source : rot.listFiles()) {
+				if (source != null && source.isDirectory()) {
 					File xml, region, level;
-					xml = new File(maps, "map.xml");
-					region = new File(maps, "region");
-					level = new File(maps, "level.dat");
+					xml = new File(source, "map.xml");
+					region = new File(source, "region");
+					level = new File(source, "level.dat");
 					boolean validXML = xml.isFile() && !xml.isHidden()
 							&& !xml.isDirectory();
 					boolean validREGION = region.isDirectory()
@@ -59,7 +59,7 @@ public class MapLoader {
 						}
 						MapInfo info = ((InfoModule) this.getContainer()
 								.getModule(InfoModule.class)).getInfo();
-						Map newMap = new Map(xml, info);
+						Map newMap = new Map(xml, source, info);
 						addMap(newMap);
 					}
 				}
@@ -101,10 +101,12 @@ public class MapLoader {
 	 *            a Map Name
 	 * @return returns a map your searching for
 	 */
+	// get a map by the file name or name in the xml :)
 	public Map getMap(String name) {
 		Map map = null;
 		for (Map maps : this.getLoadedMaps()) {
-			if (maps.getInfo().getName().equalsIgnoreCase((name))) {
+			if (maps.getInfo().getName().equalsIgnoreCase((name))
+					|| maps.getSourceName().equalsIgnoreCase(name)) {
 				map = maps;
 			}
 		}

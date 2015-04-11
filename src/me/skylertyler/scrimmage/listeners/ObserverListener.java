@@ -26,8 +26,16 @@ public class ObserverListener implements Listener {
 	// the player needs to be in observers to be cancelled else it will return
 	// false;
 	/**
-	 * NOTE: The return statement is just a different way of doing an if(this !=
-	 * null){ return true; }else{ return false; }
+	 * NOTE: The return statement is just a different way of doing an (if statement) with an else statement in the if statement  :P 
+	 * 
+	 *        if(this != null){ 
+	 *             return true;
+	 *           }else{ 
+	 *        return false; 
+	 *       }
+	 * 
+	 * shorter version of the code above 
+	 * EXAMPLE: return this != null ? true : false;
 	 * 
 	 * return {@link Boolean}
 	 */
