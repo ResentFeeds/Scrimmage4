@@ -12,6 +12,7 @@ import me.skylertyler.scrimmage.rules.Rule;
 import me.skylertyler.scrimmage.utils.BukkitUtils;
 import me.skylertyler.scrimmage.utils.Log;
 import me.skylertyler.scrimmage.utils.UUIDUtils;
+import me.skylertyler.scrimmage.utils.XMLUtils;
 import me.skylertyler.scrimmage.version.Version;
 
 import org.bukkit.entity.Player;
@@ -52,6 +53,13 @@ public class InfoModule extends Module {
 		// proto
 		if (!root.hasAttribute("proto")) {
 			Log.logWarning("there needs to be a 'proto' attribute!");
+		}
+
+		// internal
+		// if the internal attribute is null or not there it will be false :) (AKA default)
+		boolean internal = false;
+		if (root.hasAttribute("internal")) {
+			internal = XMLUtils.parseBoolean(root.getAttribute("internal"));
 		}
 
 		Version proto = Version.parse(root.getAttribute("proto"));
@@ -102,8 +110,8 @@ public class InfoModule extends Module {
 		// rules
 
 		List<Rule> rules = ruleList(root, "rules", "rule");
-		return new MapInfo(proto, name, version, authors, contributors, rules,
-				objective);
+		return new MapInfo(proto, internal, name, version, authors,
+				contributors, rules, objective);
 	}
 
 	public static List<Contributor> contributorList(Element root,
@@ -135,7 +143,7 @@ public class InfoModule extends Module {
 		}
 
 		return contribs;
-	} 
+	}
 
 	public static List<Author> authorList(Element root, String AuthorsTag,
 			String AuthorTag) {
@@ -189,18 +197,6 @@ public class InfoModule extends Module {
 		}
 
 		return rules;
-	}
-
-	// need to fix this!
-	// some reason its this is giving me a error -_-
-	public static Version parseVersion(Node node) {
-		switch (node.getNodeType()) {
-		case Node.ELEMENT_NODE:
-			break;
-		case Node.ATTRIBUTE_NODE:
-			break;
-		}
-		return null;
 	}
 
 	@EventHandler

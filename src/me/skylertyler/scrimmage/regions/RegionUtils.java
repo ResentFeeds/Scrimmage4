@@ -258,4 +258,16 @@ public class RegionUtils {
 		}
 		return region;
 	}
+
+	public static Region getRegionByType(RegionType type) {
+		Region result = null;
+		for (Entry<String, Region> regions : getRegions().entrySet()) {
+			Region region = regions.getValue();
+			if (region.getType().equals(type)) {
+				result = region;
+			}
+		}
+
+		return result;
+	}
 }

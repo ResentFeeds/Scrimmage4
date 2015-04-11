@@ -20,11 +20,13 @@ public class MapInfo {
 	private final Version proto;
 	private final List<Rule> rules;
 	private HashMap<String, String> authorNames;
+	private final boolean internal;
 
-	public MapInfo(Version proto, String name, Version version,
-			List<Author> authors, List<Contributor> contributors,
-			List<Rule> rules, String objective) {
+	public MapInfo(Version proto, boolean internal, String name,
+			Version version, List<Author> authors,
+			List<Contributor> contributors, List<Rule> rules, String objective) {
 		this.proto = proto;
+		this.internal = internal;
 		this.name = name;
 		this.version = version;
 		this.authors = authors;
@@ -80,4 +82,12 @@ public class MapInfo {
 		return this.authorNames;
 	}
 
+	public boolean getInternal() {
+		return this.internal;
+	}
+
+	public boolean isInternal() {
+		return this.getInternal() != false ? true
+				: false;
+	}
 }

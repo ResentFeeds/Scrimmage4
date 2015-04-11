@@ -10,6 +10,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 import static org.bukkit.ChatColor.*;
 import me.skylertyler.scrimmage.modules.MaxBuildHeightModule;
+import me.skylertyler.scrimmage.team.Team;
+import me.skylertyler.scrimmage.utils.TeamUtils;
 
 public class BlockListener implements Listener {
 
@@ -26,23 +28,27 @@ public class BlockListener implements Listener {
 		Block block = event.getBlock();
 		String b = null;
 		String message = WHITE + "You have reached the maximum build height ";
-		String result = null;
 		String format = null;
 		Location blockLocation = block.getLocation();
 		int height = getMaxBuildHeight().getMaxHeight().getHeight();
-		if (blockLocation.getY() >= height) {
-			event.setCancelled(true);
-			if (height == 1) {
-				b = "";
-				result = GRAY + "(" + height + " block" + b + ")";
-			} else {
-				if (height != 0 && height > 1) {
-					b = "s";
-					result = GRAY + "(" + height + " block" + b + ")";
+		for (Team team : TeamUtils.getParticpatingTeams()) {
+			if (team.containsPlayer(player)) {
+				if (blockLocation.getY() >= height) {
+					event.setCancelled(true);
+					if (height == 1) {
+						b = "";
+						format = GRAY + "(" + height + " block" + b + ")";
+					} else {
+						if (height != 0 && height > 1) {
+							b = "s";
+							format = GRAY + "(" + height + " block" + b + ")";
+						}
+					}
+
+					String result = message + format;
+					player.sendMessage(result);
 				}
 			}
-			format = message + result;
-			player.sendMessage(format);
 		}
 	}
 

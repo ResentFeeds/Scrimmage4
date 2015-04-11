@@ -41,6 +41,7 @@ public class CycleTimer extends CountDownTimer {
 		}
 	}
 
+	// works perfectly :)
 	@Override
 	public String statusString(int time) {
 		Map next = getMatch().getNext();
@@ -66,15 +67,17 @@ public class CycleTimer extends CountDownTimer {
 
 	@Override
 	public void hasEnded() {
+		Bukkit.getScheduler().cancelTask(getTimer());
 		Match old = this.getMatch();
 		cycleAndMakeMatch(old);
 	}
 
+	// TODO fix cycling to the next map 
 	public void cycleAndMakeMatch(Match old) {
 		Scrimmage scrim = Scrimmage.getScrimmageInstance();
 		int newID = old.getID() + 1;
 		Map newMap = old.getNext();
-		scrim.setMatch(new Match(scrim, newID, newMap));
+		new Match(scrim, newID, newMap);
 	}
 
 	public Match getMatch() {

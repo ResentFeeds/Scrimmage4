@@ -37,17 +37,18 @@ public class TeamUtils {
 		return result;
 	}
 
-	// get a team by its name
+	// get a team by its full name or what ever it starts with :)
 	public static Team getTeamByName(String name) {
-		Team searching = null;
+		Team result = null;
 		for (Team team : ((TeamModule) Scrimmage.getScrimmageInstance()
 				.getLoader().getContainer().getModule(TeamModule.class))
 				.getTeams()) {
-			if (team.getName().equalsIgnoreCase(name)) {
-				searching = team;
+			String teamName = team.getName();
+			if (teamName.equalsIgnoreCase(name) || teamName.startsWith(name)) {
+				result = team;
 			}
 		}
-		return searching;
+		return result;
 	}
 
 	// just getting a team by their teamtype parameter (note this will get only
@@ -99,12 +100,13 @@ public class TeamUtils {
 		}
 		return result;
 	}
-	
-	
-	public static TeamModule getTeamModule(){
-		TeamModule teamMod = (TeamModule) Scrimmage.getScrimmageInstance().getLoader().getContainer().getModule(TeamModule.class);
+
+	public static TeamModule getTeamModule() {
+		TeamModule teamMod = (TeamModule) Scrimmage.getScrimmageInstance()
+				.getLoader().getContainer().getModule(TeamModule.class);
 		return teamMod;
 	}
+
 	public static Team matchTeam(String team) {
 		Team result = null;
 		String lowerName = team.toLowerCase();
@@ -122,5 +124,4 @@ public class TeamUtils {
 		}
 		return result;
 	}
-
 }

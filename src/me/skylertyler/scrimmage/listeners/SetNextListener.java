@@ -1,5 +1,6 @@
 package me.skylertyler.scrimmage.listeners;
 
+import me.skylertyler.scrimmage.event.MapsAreIdenticalEvent;
 import me.skylertyler.scrimmage.event.SetNextEvent;
 import me.skylertyler.scrimmage.map.Map;
 
@@ -23,5 +24,11 @@ public class SetNextListener implements Listener {
 		String result = RED + player.getName() + DARK_PURPLE
 				+ " set the next map to " + GOLD + map.getInfo().getName();
 		Bukkit.broadcastMessage(result);
+	}
+
+	@EventHandler
+	public void onMapExact(MapsAreIdenticalEvent event) {
+		Player player = event.getPlayer(); 
+		player.sendMessage(event.getMessage());
 	}
 }

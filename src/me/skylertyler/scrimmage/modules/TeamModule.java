@@ -7,7 +7,6 @@ import me.skylertyler.scrimmage.team.Team;
 import me.skylertyler.scrimmage.team.TeamType;
 import me.skylertyler.scrimmage.utils.ColorUtils;
 import me.skylertyler.scrimmage.utils.Log;
-
 import org.bukkit.ChatColor;
 import org.bukkit.event.HandlerList;
 import org.w3c.dom.Document;
@@ -25,7 +24,7 @@ public class TeamModule extends Module {
 	}
 
 	public TeamModule(List<Team> teams) {
-		this.teams = teams;
+		this.teams = teams; 
 	}
 
 	@Override
@@ -37,7 +36,8 @@ public class TeamModule extends Module {
 
 	public List<Team> parseTeams(Element root, String parent, String child) {
 		List<Team> teams = new ArrayList<Team>();
-		Team obs = new Team("Observers", "obs", ChatColor.AQUA, Integer.MAX_VALUE, TeamType.Observing);
+		Team obs = new Team("Observers", "obs", ChatColor.AQUA,
+				Integer.MAX_VALUE, TeamType.Observing);
 		teams.add(obs);
 		Node node = root.getElementsByTagName(parent).item(0);
 		if (node != null) {
@@ -73,11 +73,11 @@ public class TeamModule extends Module {
 
 						String name = teamElement.getTextContent();
 
-						// checks if the name is empty 
+						// checks if the name is empty
 						if (name.isEmpty()) {
 							Log.logWarning("the name cant be empty!");
 						}
- 
+
 						// checks if it has the color attribute
 						if (!teamElement.hasAttribute("color")) {
 							Log.logWarning("check all the team tags for a color attribute");
@@ -86,7 +86,6 @@ public class TeamModule extends Module {
 						ChatColor color = ColorUtils.parseChatColor(teamElement
 								.getAttribute("color"));
 
-					
 						String id = teamElement.getAttribute("id");
 						// check if the id attribute is empty!
 						// if it is it will give them this error / message -_-
@@ -94,19 +93,21 @@ public class TeamModule extends Module {
 							Log.logWarning("the team id attribute cant be empty or null");
 						}
 
-						
 						Team newTeam = null;
-						// checks if the team node has the attribut e 'max-overfill'
+						// checks if the team node has the attribut e
+						// 'max-overfill'
 						if (teamElement.hasAttribute("max-overfill")) {
-							newTeam = new Team(name, id, color, max, overfill, TeamType.Participating);
+							newTeam = new Team(name, id, color, max, overfill,
+									TeamType.Participating);
 						} else {
-							newTeam = new Team(name, id, color, max, TeamType.Participating);
+							newTeam = new Team(name, id, color, max,
+									TeamType.Participating);
 						}
-						teams.add(newTeam); 
+						teams.add(newTeam);
 					}
 				}
 			}
-		}
+		} 
 		return teams;
 	}
 
@@ -117,5 +118,5 @@ public class TeamModule extends Module {
 
 	public List<Team> getTeams() {
 		return this.teams;
-	} 
+	}
 }

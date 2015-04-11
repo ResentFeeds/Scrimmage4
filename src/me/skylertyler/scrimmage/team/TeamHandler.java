@@ -11,7 +11,8 @@ import org.bukkit.entity.Player;
 public class TeamHandler {
 
 	/**
-	 * class for handling with teams most likely adding
+	 * class for handling with teams most likely adding and removing players
+	 * 
 	 */
 
 	public TeamHandler() {
@@ -26,7 +27,7 @@ public class TeamHandler {
 
 		team.getMembers().add(player.getName());
 		player.setPlayerListName(team.getColor() + player.getName());
-		//TODO make their overhead name be the teams color 
+		// TODO make their overhead name be the teams color
 		player.sendMessage(ChatColor.GRAY + "You joined the " + team.getColor()
 				+ team.getName());
 	}
@@ -36,10 +37,12 @@ public class TeamHandler {
 		Team obs = TeamUtils.getObservers();
 		for (Team team : TeamUtils.getParticpatingTeams()) {
 			if (team != null) {
-				if (team.isParticipatingMember(player)) {
+				if (team.containsPlayer(player)) {
 					result = team;
-				} else if (obs.isObserving(player)) {
-					result = obs;
+				} else {
+					if (obs.containsPlayer(player)) {
+						result = obs;
+					}
 				}
 			} else {
 				// do something

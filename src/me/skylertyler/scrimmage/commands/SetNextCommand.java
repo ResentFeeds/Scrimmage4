@@ -1,10 +1,11 @@
 package me.skylertyler.scrimmage.commands;
 
+import me.skylertyler.scrimmage.event.MapsAreIdenticalEvent;
 import me.skylertyler.scrimmage.event.SetNextEvent;
 import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.match.Match;
-import static org.bukkit.ChatColor.*;
 
+import static org.bukkit.ChatColor.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -47,10 +48,21 @@ public class SetNextCommand implements CommandExecutor {
 									+ DARK_RED + args[0] + RED + "'!");
 							return false;
 						}
-						SetNextEvent event = new SetNextEvent(player, map);
-						// call the event above :)
+
+						Map next = match.getNext();
+						boolean same = map == next;
+
+						if (same) {
+							MapsAreIdenticalEvent identicalEvent = new MapsAreIdenticalEvent(
+									player, map, next);
+							match.getPluginManager().callEvent(identicalEvent);
+							return false;
+						}
+
+						SetNextEvent event = new SetNextEvent(match, player,
+								map);
+						// call the event SetNextEvent
 						match.getPluginManager().callEvent(event);
-						match.setNext(map);
 					}
 				} else {
 					player.sendMessage(RED + "wait until the match starts!");

@@ -30,6 +30,7 @@ public class Match {
 	private org.bukkit.scoreboard.Scoreboard current_board = Bukkit
 			.getScoreboardManager().getNewScoreboard();
 	private Scoreboard board;
+	private GameStartTimer startTimer;
 
 	public Match(Scrimmage scrim, int id, Map map) {
 		this.scrim = scrim;
@@ -42,7 +43,7 @@ public class Match {
 		loadMatch(this);
 		this.thandler = new TeamHandler();
 		this.setState(MatchState.Idle);
-		this.board = new Scoreboard(current_board);
+		this.board = new Scoreboard(getCurrentScoreboard());
 		runStartGameTimer();
 	}
 
@@ -52,9 +53,8 @@ public class Match {
 	}
 
 	public void runStartGameTimer() {
-		GameStartTimer start = new GameStartTimer(30, false, this);
-		start.run();
-
+		this.startTimer = new GameStartTimer(30, false, this);
+		this.startTimer.run();
 	}
 
 	public boolean isRunning() {
@@ -67,6 +67,10 @@ public class Match {
 
 	public void setState(MatchState state) {
 		this.state = state;
+	}
+
+	public org.bukkit.scoreboard.Scoreboard getCurrentScoreboard() {
+		return this.current_board;
 	}
 
 	public void startMatch() {
@@ -139,6 +143,10 @@ public class Match {
 
 	public Scoreboard getScoreboard() {
 		return this.board;
+	}
+
+	public GameStartTimer getStartTimer() {
+		return this.startTimer;
 	}
 
 }

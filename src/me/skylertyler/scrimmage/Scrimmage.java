@@ -28,6 +28,7 @@ import me.skylertyler.scrimmage.exception.InvalidModuleException;
 import me.skylertyler.scrimmage.kit.Kit;
 import me.skylertyler.scrimmage.listeners.BlockListener;
 import me.skylertyler.scrimmage.listeners.ConnectionListener;
+import me.skylertyler.scrimmage.listeners.ObserverListener;
 import me.skylertyler.scrimmage.listeners.SetNextListener;
 import me.skylertyler.scrimmage.listeners.TestConnectionListener;
 import me.skylertyler.scrimmage.map.Map;
@@ -237,6 +238,7 @@ public class Scrimmage extends JavaPlugin {
 					(MaxBuildHeightModule) getLoader().getContainer()
 							.getModule(MaxBuildHeightModule.class)));
 			registerListener(new SetNextListener());
+			registerListener(new ObserverListener(getMatch()));
 		}
 
 		if (getConfigFile().inDevelopment()) {
@@ -381,6 +383,7 @@ public class Scrimmage extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		if (getConfigFile().isRunning()) {
+			getMatch().getMap().getInfo().getAuthorNames().clear();
 			getMatch().getMapHandler().clearMapsDirectory(
 					Bukkit.getWorldContainer());
 			// unloading the modules when the server is disabled or shut down!
