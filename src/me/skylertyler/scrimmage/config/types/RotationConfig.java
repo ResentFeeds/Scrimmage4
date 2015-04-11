@@ -21,6 +21,7 @@ public class RotationConfig extends CoreConfig {
 
 	private final File rotationYML;
 	private List<Map> rotMaps = null;
+	private List<String> rotNames = new ArrayList<>();
 
 	public RotationConfig(File rotationYML) {
 		this.rotationYML = rotationYML;
@@ -52,7 +53,8 @@ public class RotationConfig extends CoreConfig {
 		for (int i = 0; i < stringList.size(); i++) {
 			Map map = loader.getMap(stringList.get(i));
 			if (loader.containsMap(map)) {
-				maps.add(map); 
+				maps.add(map);
+				rotNames.add(map.getInfo().getName());
 			} else {
 				Log.logWarning(scrimmage.getConfigFile().getPrefix()
 						+ " there is no loaded map by the name of "
@@ -120,6 +122,10 @@ public class RotationConfig extends CoreConfig {
 
 	public void setRotMaps(List<Map> rotMaps) {
 		this.rotMaps = rotMaps;
+	}
+
+	public List<String> getRotationMapNames() {
+		return rotNames;
 	}
 
 }

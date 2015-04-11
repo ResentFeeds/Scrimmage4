@@ -18,7 +18,7 @@ public class Kit {
 
 	// fix
 	// will add armor kit , potion kit etc. :)
-	public Kit(String name, @Nullable List<ItemKit> items,
+	public Kit(String name, List<ItemKit> items,
 			@Nullable List<ArmorKit> armor) {
 		this.name = name;
 		this.items = items;

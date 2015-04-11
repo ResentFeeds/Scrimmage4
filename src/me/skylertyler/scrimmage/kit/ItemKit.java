@@ -1,8 +1,10 @@
 package me.skylertyler.scrimmage.kit;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
+import java.util.Set;
 
 import me.skylertyler.scrimmage.utils.BukkitUtils;
 
@@ -17,7 +19,9 @@ import com.google.common.collect.ImmutableList;
 
 public class ItemKit {
 
-	// but its still giving me the very bottom <item> tag item in the kit -_- (need to work on EnchantKit) wondering why it isnt working how i wanted it to > D:
+	// but its still giving me the very bottom <item> tag item in the kit -_-
+	// (need to work on EnchantKit) wondering why it isnt working how i wanted
+	// it to > D:
 	private final int damage;
 	private final String name;
 	private final String lore;
@@ -37,16 +41,20 @@ public class ItemKit {
 		this.enchant = enchant;
 
 		if (hasEnchant()) {
-			for (Entry<Enchantment, Integer> entry : getEnchant()
-					.getEnchantments().entrySet()) {
-				Enchantment enchantment = entry.getKey();
-				Integer level = entry.getValue(); 
-				if (level <= 4) {
-					getStack().addEnchantment(enchantment, level);
-				}
+			Map<Enchantment, Integer> enchants = getEnchant().getEnchantments();
+			Set<Enchantment> enchantment = enchants.keySet();
+			Collection<Integer> level = enchants.values();
 
-				if (level >= 5) {
-					this.getStack().addUnsafeEnchantment(enchantment, level);
+			for (Integer levels : level) {
+				for (Enchantment enchantments : enchantment) {
+					if (levels <= 4) {
+						getStack().addEnchantment(enchantments, levels);
+					} else {
+						if (levels >= 5) {
+							getStack().addUnsafeEnchantment(enchantments,
+									levels);
+						}
+					}
 				}
 			}
 		}
@@ -132,14 +140,15 @@ public class ItemKit {
 
 	// working name :)
 	public String parseName(String name) {
-		// if it contains the ` it will have color -_- using the BukkitUtils colorize(string) method :)
+		// if it contains the ` it will have color -_- using the BukkitUtils
+		// colorize(string) method :)
 		boolean hasColor = name.contains("`");
 		String format = null;
 		if (hasColor) {
 			format = BukkitUtils.colorize(name);
-			//else 
+			// else
 		} else {
-			// name will be a defualt name with no color (white) 
+			// name will be a defualt name with no color (white)
 			format = name;
 		}
 

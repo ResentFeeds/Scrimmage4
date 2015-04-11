@@ -2,6 +2,10 @@ package me.skylertyler.scrimmage.utils;
 
 import java.util.Collection;
 import java.util.Date;
+
+import org.bukkit.ChatColor;
+import org.bukkit.util.ChatPaginator;
+
 import static org.bukkit.ChatColor.*;
 
 public class StringUtils {
@@ -110,5 +114,21 @@ public class StringUtils {
 		}
 
 		return String.valueOf(no) + " " + pds[v] + " ";
+	}
+
+	public static String padMessage(String message, String c,
+			ChatColor dashColor, ChatColor messageColor) {
+		message = " " + message + " ";
+		String dashes = StringUtils.repeat(c,
+				(ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH
+						- ChatColor.stripColor(message).length() - 2)
+						/ (c.length() * 2));
+		return dashColor + dashes + ChatColor.RESET + messageColor + message
+				+ ChatColor.RESET + dashColor + dashes;
+	}
+
+	public static String repeat(String c, int n) {
+		assert n >= 0;
+		return new String(new char[n]).replace("\0", c);
 	}
 }

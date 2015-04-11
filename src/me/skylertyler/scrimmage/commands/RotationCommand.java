@@ -1,8 +1,12 @@
 package me.skylertyler.scrimmage.commands;
 
 import static org.bukkit.ChatColor.*;
+
+import java.util.List;
+
 import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.map.Map;
+import me.skylertyler.scrimmage.pagination.RotationMapsPage;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,20 +30,10 @@ public class RotationCommand implements CommandExecutor {
 		if (sender instanceof Player) {
 			if (cmd.getName().equalsIgnoreCase("rotation")) {
 				Player player = (Player) sender;
-				int i = 1;
-				String message = null;
-				for (Map map : getScrimmage().getRotationConfig().getRotMaps()) {
-					if (map != null) {
-						message = WHITE + "" + i + ") " + AQUA
-								+ map.getInfo().getName() + " " + WHITE
-								+ map.getInfo().getVersion();
-						i++;
-						player.sendMessage(message);
-					} else {
-						player.sendMessage(RED
-								+ "There is no maps in the rotation!");
-					}
-				}
+				List<String> rotNames = Scrimmage.getScrimmageInstance()
+						.getRotationConfig().getRotationMapNames();
+				new RotationMapsPage<String>() {
+				}.display(player, rotNames, 1);
 			}
 		} else {
 			sender.sendMessage(RED

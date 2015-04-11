@@ -26,6 +26,8 @@ public class MapLoader {
 
 	private ModuleContainer container;
 
+	private List<String> mapNames = new ArrayList<>();
+
 	public MapLoader(Scrimmage scrim) {
 		this.scrim = scrim;
 		this.loadedMaps = new ArrayList<Map>();
@@ -77,6 +79,7 @@ public class MapLoader {
 
 	public void addMap(Map map) {
 		this.loadedMaps.add(map);
+		this.mapNames.add(map.getInfo().getName());
 	}
 
 	// checks if its loadable!
@@ -135,5 +138,9 @@ public class MapLoader {
 
 	public static boolean hasNode(Node node) {
 		return node != null ? true : false;
+	}
+
+	public List<String> getMapNames() {
+		return mapNames;
 	}
 }

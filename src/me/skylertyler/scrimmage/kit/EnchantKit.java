@@ -15,13 +15,13 @@ public class EnchantKit {
 
 	private final String enchantment;
 
-	private final Map<Enchantment, Integer> enchantments;
+	private Map<Enchantment, Integer> enchantments = new HashMap<Enchantment, Integer>();
 
-	public EnchantKit(String enchantment) {
-		this.enchantments = new HashMap<>();
+	public EnchantKit(String enchantment) { 
 		this.enchantment = enchantment;
 		// if it has a enchantment do this below -_-
 		if (hasEnchantment()) {
+			int level = 1;
 			String[] split_enchantment = this.enchantment.split(":");
 			Enchantment enchant = XMLUtils
 					.parseEnchantment(split_enchantment[0]);
@@ -32,13 +32,19 @@ public class EnchantKit {
 					Log.logWarning(e.getMessage());
 				}
 			}
-			Integer level = NumberUtils.parseInteger(split_enchantment[1]);
-			boolean invalid = level <= 0;
-			if(invalid){
-				try{
-				throw new InvalidEnchantmentLevelException(level, split_enchantment[0]);
-				} catch(InvalidEnchantmentLevelException e){
-					 e.printStackTrace();
+
+			// if the level part of the enchantment attribute is not null do this below :)
+			// else make the level 1 by default
+			if (split_enchantment[1] != null) {
+				level = NumberUtils.parseInteger(split_enchantment[1]);
+				boolean invalid = level <= 0;
+				if (invalid) {
+					try {
+						throw new InvalidEnchantmentLevelException(level,
+								split_enchantment[0]);
+					} catch (InvalidEnchantmentLevelException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			this.enchantments.put(enchant, level);

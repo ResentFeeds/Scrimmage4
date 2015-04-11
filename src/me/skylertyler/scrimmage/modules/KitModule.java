@@ -74,7 +74,6 @@ public class KitModule extends Module {
 								Kit newKit = new Kit(name, kitItems, null);
 								all.add(newKit);
 							}
-
 						}
 					}
 				}
@@ -82,24 +81,6 @@ public class KitModule extends Module {
 		}
 		return all;
 	}
-
-	/*
-	 * public static List<Kit> parseKit(Element root, String kitsTag, String
-	 * kitTag) { List<Kit> results = new ArrayList<>(); Node kitsNode =
-	 * root.getElementsByTagName(kitsTag).item(0); if (kitsNode != null) { if
-	 * (kitsNode.getNodeType() == Node.ELEMENT_NODE) { Element kitsELement =
-	 * (Element) kitsNode; NodeList children = kitsELement.getChildNodes(); for
-	 * (int i = 0; i < children.getLength(); i++) { Node kit = children.item(i);
-	 * if (kit.getNodeType() == Node.ELEMENT_NODE &&
-	 * kit.getNodeName().equals(kitTag)) { Element kitElement = (Element) kit;
-	 * String name = kitElement.getAttribute("name"); NodeList childs =
-	 * kitElement.getChildNodes(); for (int y = 0; y < childs.getLength(); y++)
-	 * { Node item = childs.item(y); if (item.getNodeType() == Node.ELEMENT_NODE
-	 * && item.getNodeName().equals("item")) { Element newItem = (Element) item;
-	 * List<KitItem> items = null; try { items = parseItems(newItem); } catch
-	 * (SlotNotFoundException e) { e.printStackTrace(); } Kit kits = new
-	 * Kit(name, items, null); results.add(kits); } } } } } } return results; }
-	 */
 
 	public static ItemKit parseItem(Element itemElement)
 			throws SlotNotFoundException {

@@ -1,7 +1,9 @@
 package me.skylertyler.scrimmage.commands;
 
+import java.util.List;
+
 import me.skylertyler.scrimmage.Scrimmage;
-import me.skylertyler.scrimmage.map.Map;
+import me.skylertyler.scrimmage.pagination.LoadedMapsPage;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,19 +20,11 @@ public class MapListCommand implements CommandExecutor {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			if (cmd.getName().equalsIgnoreCase("maplist")) {
-				String format = null;
-				int i = 1;
-				for (Map map : Scrimmage.getScrimmageInstance().getLoader()
-						.getLoadedMaps()) {
-					if (map != null) {
-						format = i + ") " + map.getInfo().getName() + " "
-								+ map.getInfo().getVersion();
-						i++;
-						player.sendMessage(format);
-					} else {
-						player.sendMessage(RED + "No maps loaded!");
-					}
-				} 
+				List<String> mapNames = Scrimmage.getScrimmageInstance()
+						.getLoader().getMapNames();
+				new LoadedMapsPage<String>() {
+
+				}.display(player, mapNames, 1);
 			}
 		} else {
 			sender.sendMessage(RED

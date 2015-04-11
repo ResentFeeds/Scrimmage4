@@ -77,4 +77,13 @@ public class Map {
 		String format = currently + " " + name + " " + by + " " + author;
 		return format;
 	}
+
+	public String getMapDescription() {
+		String name = GOLD + getInfo().getName();
+		String by =  DARK_PURPLE + "by";
+		String author = StringUtils.listToEnglishCompound(getInfo()
+				.getAuthorNames().keySet(), RED + "", DARK_PURPLE + "");
+		String format = name + " " + by + " " + author;
+		return format;
+	}
 }
