@@ -14,7 +14,6 @@ import me.skylertyler.scrimmage.config.ConfigType;
 import me.skylertyler.scrimmage.config.CoreConfig;
 import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.map.MapLoader;
-import me.skylertyler.scrimmage.utils.ConsoleUtils;
 import me.skylertyler.scrimmage.utils.Log;
 
 public class RotationConfig extends CoreConfig {
@@ -66,28 +65,6 @@ public class RotationConfig extends CoreConfig {
 		return maps;
 	}
 
-	public List<Map> parseRot(List<String> maps) {
-		List<Map> map = new ArrayList<Map>();
-		String resultMessage = null;
-		Scrimmage scrim = Scrimmage.getScrimmageInstance();
-		MapLoader loader = scrim.getLoader();
-		for (int i = 0; i < maps.size(); i++) {
-			Map mapInRot = loader.getMap(maps.get(i));
-			if (mapInRot.notNull()) {
-				map.add(mapInRot);
-				resultMessage = scrim.getConfigFile().getFullPrefix()
-						+ " loaded  " + mapInRot.getInfo().getName()
-						+ " to the rotation!";
-			} else {
-				resultMessage = scrim.getConfigFile().getFullPrefix()
-						+ "there isn't a map called '" + maps.get(i) + "'";
-			}
-
-			ConsoleUtils.sendConsoleMessage(resultMessage);
-		}
-		return map;
-	}
-
 	public String statusString(int size) {
 		String s = null;
 		String grammer = null;
@@ -126,6 +103,24 @@ public class RotationConfig extends CoreConfig {
 
 	public List<String> getRotationMapNames() {
 		return rotNames;
+	}
+
+	/**
+	 * 
+	 * @param name
+	 *            a Map Name
+	 * @return returns a map your searching for
+	 */
+	// get a map by the file name or name in the xml :)
+	public Map getMap(String name) {
+		Map map = null;
+		for (Map maps : this.getRotMaps()) {
+			if (maps.getInfo().getName().equalsIgnoreCase((name))
+					|| maps.getSourceName().equalsIgnoreCase(name)) {
+				map = maps;
+			}
+		}
+		return map;
 	}
 
 }

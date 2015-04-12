@@ -11,7 +11,6 @@ public class MapsAreIdenticalEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
 	private final Map m;
-	private final Map n;
 	private final Player p;
 	private final String message;
 
@@ -20,12 +19,10 @@ public class MapsAreIdenticalEvent extends Event {
 	 * @param player
 	 *            the player
 	 * @param map
-	 * @param next
 	 */
-	public MapsAreIdenticalEvent(Player player, Map map, Map next) {
+	public MapsAreIdenticalEvent(Player player, Map map) {
 		this.p = player;
 		this.m = map;
-		this.n = next;
 		this.message = DARK_PURPLE + "The map " + GOLD
 				+ map.getInfo().getName() + DARK_PURPLE
 				+ " has already been set to be next";
@@ -39,9 +36,6 @@ public class MapsAreIdenticalEvent extends Event {
 		return this.m;
 	}
 
-	public Map getNext() {
-		return this.n;
-	}
 
 	public String getMessage() {
 		return this.message;

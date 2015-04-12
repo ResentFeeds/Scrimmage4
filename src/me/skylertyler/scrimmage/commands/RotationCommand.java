@@ -5,7 +5,6 @@ import static org.bukkit.ChatColor.*;
 import java.util.List;
 
 import me.skylertyler.scrimmage.Scrimmage;
-import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.pagination.RotationMapsPage;
 
 import org.bukkit.command.Command;

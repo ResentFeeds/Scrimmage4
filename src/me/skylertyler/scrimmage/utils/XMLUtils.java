@@ -37,16 +37,12 @@ public class XMLUtils {
 		return Material.getMaterial(input.toUpperCase().replaceAll(" ", "_"));
 	}
 
-	// basically do the same thing like above as shown -_- but instead of doing
-	// material You're doing a enchantment
-	public static Enchantment parseEnchantment(String string) {
-		for (Enchantment enchant : Enchantment.values()) {
-			if (enchant.getName().equalsIgnoreCase(string)) {
-				return enchant;
-			}
-		}
-		return Enchantment.getByName(string.toUpperCase().replace(" ", "_"));
+	public static Enchantment parseEnchantment(String value) {
+		String uppercase = value.toUpperCase().replace(" ", "_"); 
+		return Enchantment.getByName(uppercase);
 	}
+
+	 
 
 	public static boolean isValidArmorTag(Element element) {
 		switch (element.getNodeName()) {
@@ -59,5 +55,4 @@ public class XMLUtils {
 			return false;
 		}
 	}
-
 }

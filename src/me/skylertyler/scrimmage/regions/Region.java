@@ -10,8 +10,8 @@ public abstract class Region {
 		this.name = name;
 	}
 
-	public abstract boolean containsVector(Vector vec);
-
+	public abstract boolean containsVector(Vector vec); 
+	
 	public String getName() {
 		return this.name;
 	}

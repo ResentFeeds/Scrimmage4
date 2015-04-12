@@ -1,15 +1,18 @@
 package me.skylertyler.scrimmage.kit;
 
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 public class ArmorKit {
 
-	private ItemStack helmet;
-	private ItemStack chestplate;
-	private ItemStack leggings;
-	private ItemStack boots;
+	private final ItemStack helmet;
+	private final ItemStack chestplate;
+	private final ItemStack leggings;
+	private final ItemStack boots;
 
-	//TODO add this to the main Kit class :)
+	// TODO add this to the main Kit class :)
 	public ArmorKit(ItemStack helmet, ItemStack chestplate, ItemStack leggings,
 			ItemStack boots) {
 		this.helmet = helmet;
@@ -19,18 +22,56 @@ public class ArmorKit {
 	}
 
 	public ItemStack getHelmet() {
-		return helmet;
+		return this.helmet;
+	}
+
+	public Material getHelmetMaterial() {
+		return this.getHelmet().getType();
 	}
 
 	public ItemStack getChestplate() {
-		return chestplate;
+		return this.chestplate;
+	}
+
+	public Material getChestplateMaterial() {
+		return getChestplate().getType();
 	}
 
 	public ItemStack getLeggings() {
-		return leggings;
+		return this.leggings;
+	}
+
+	public Material getLeggingsMaterial() {
+		return getLeggings().getType();
 	}
 
 	public ItemStack getBoots() {
-		return boots;
+		return this.boots;
+	}
+
+	public Material getBootsMaterial() {
+		return getBoots().getType();
+	}
+
+	/**
+	 * 
+	 * @param player
+	 *            the player to give the armor to.
+	 */
+	public void apply(Player player) {
+		PlayerInventory pi = player.getInventory();
+		ItemStack helmet = this.getHelmet();
+		ItemStack chestplate = this.getChestplate();
+		ItemStack leggings = this.getLeggings();
+		ItemStack boots = this.getBoots();
+		boolean full = helmet != null && chestplate != null && leggings != null
+				&& boots != null;
+
+		if (full) {
+			pi.setHelmet(helmet);
+			pi.setChestplate(chestplate);
+			pi.setLeggings(leggings);
+			pi.setBoots(boots);
+		}
 	}
 }

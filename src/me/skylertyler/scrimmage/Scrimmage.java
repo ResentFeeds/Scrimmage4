@@ -25,6 +25,7 @@ import me.skylertyler.scrimmage.commands.WorldCommand;
 import me.skylertyler.scrimmage.config.types.Config;
 import me.skylertyler.scrimmage.config.types.RotationConfig;
 import me.skylertyler.scrimmage.exception.InvalidModuleException;
+import me.skylertyler.scrimmage.exception.KitNotFoundExecption;
 import me.skylertyler.scrimmage.kit.Kit;
 import me.skylertyler.scrimmage.listeners.BlockListener;
 import me.skylertyler.scrimmage.listeners.ConnectionListener;
@@ -141,6 +142,15 @@ public class Scrimmage extends JavaPlugin {
 		Log.logInfo(getConfigFile().getFullPrefix() + " has been Enabled!");
 	}
 
+	/**
+	 *  
+	 * @param input a rotation map name
+	 * @return
+	 */
+	public Map getRotationMap(String input) {
+		return this.getRotationConfig().getMap(input);
+	}
+
 	public void loadRotation(File rotation) throws IOException {
 		this.rotation = new Rotation();
 		this.ROT_CONFIG = new RotationConfig(rotation);
@@ -234,9 +244,7 @@ public class Scrimmage extends JavaPlugin {
 		if (getConfigFile().isRunning()) {
 			registerListener(new ConnectionListener(getMatch()));
 			registerListener(new InfoModule(getMatch().getMap().getInfo()));
-			registerListener(new BlockListener(
-					(MaxBuildHeightModule) getLoader().getContainer()
-							.getModule(MaxBuildHeightModule.class)));
+			registerListener(new BlockListener());
 			registerListener(new SetNextListener());
 			registerListener(new ObserverListener(getMatch()));
 		}
@@ -333,9 +341,7 @@ public class Scrimmage extends JavaPlugin {
 				}
 			} else if (cmd.getName().equalsIgnoreCase("kit")) {
 				if (args.length == 0) {
-					for (Kit name : KitUtils.getKitModule().getKits()) {
-						player.sendMessage(name.getName() + " is a kit");
-					}
+					player.sendMessage(ChatColor.RED + "Not enough arguments!");
 					return false;
 				}
 
@@ -345,7 +351,18 @@ public class Scrimmage extends JavaPlugin {
 				}
 
 				if (args.length == 1) {
-					KitUtils.applyKit(args[0], player);
+					Kit kit = KitUtils.getKitByName(args[0]);
+
+					if (kit == null) {
+						try {
+							throw new KitNotFoundExecption(args[0], player);
+						} catch (KitNotFoundExecption e) {
+							// noting
+						}
+						return false;
+					}
+
+					kit.applyKit(player);
 				}
 			}
 		}

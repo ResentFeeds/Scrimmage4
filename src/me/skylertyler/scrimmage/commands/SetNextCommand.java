@@ -40,11 +40,10 @@ public class SetNextCommand implements CommandExecutor {
 					}
 
 					if (args.length == 1) {
-						Map map = match.getScrimmage().getLoader()
-								.getMap(args[0]);
+						Map map = match.getScrimmage().getRotationMap(args[0]);
 						if (map == null) {
 							player.sendMessage(RED
-									+ "There is no map by the name of '"
+									+ "There is no map in the rotation by the name of '"
 									+ DARK_RED + args[0] + RED + "'!");
 							return false;
 						}
@@ -54,7 +53,7 @@ public class SetNextCommand implements CommandExecutor {
 
 						if (same) {
 							MapsAreIdenticalEvent identicalEvent = new MapsAreIdenticalEvent(
-									player, map, next);
+									player, map);
 							match.getPluginManager().callEvent(identicalEvent);
 							return false;
 						}

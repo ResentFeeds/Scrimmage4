@@ -59,11 +59,11 @@ public class Map {
 	 */
 	// TODO work on Kits
 	public String getShortMapDescription() {
-		String currently = LIGHT_PURPLE + "Currently Playing";
-		String name = getInfo().getName();
-		String by = "by";
+		String currently = DARK_PURPLE + "Currently Playing";
+		String name = GOLD + getInfo().getName();
+		String by = DARK_PURPLE + "by";
 		String author = StringUtils.listToEnglishCompound(getInfo()
-				.getAuthorNames().keySet(), RED + "", LIGHT_PURPLE + "");
+				.getAuthorNames().keySet(), RED + "", DARK_PURPLE + "");
 		String format = currently + " " + name + " " + by + " " + author;
 		return format;
 	}
@@ -80,7 +80,7 @@ public class Map {
 
 	public String getMapDescription() {
 		String name = GOLD + getInfo().getName();
-		String by =  DARK_PURPLE + "by";
+		String by = DARK_PURPLE + "by";
 		String author = StringUtils.listToEnglishCompound(getInfo()
 				.getAuthorNames().keySet(), RED + "", DARK_PURPLE + "");
 		String format = name + " " + by + " " + author;

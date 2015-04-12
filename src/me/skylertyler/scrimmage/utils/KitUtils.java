@@ -18,7 +18,7 @@ public class KitUtils {
 	// name needs to be exactly how the kit 'name' attribute is!
 	public static Kit getKitByName(String name) {
 		Kit result = null;
-		List<Kit> kits = getKitModule().getKits();
+		List<Kit> kits = getKitModule().getKitParser().getKits();
 		for (Kit kit : kits) {
 			if (kit != null) {
 				if (kit.getName().equals(name)) {
@@ -38,7 +38,7 @@ public class KitUtils {
 	// get all the kit names!
 	public static List<String> getKitNames() {
 		List<String> names = new ArrayList<String>();
-		for (Kit kit : getKitModule().getKits()) {
+		for (Kit kit : getKitModule().getKitParser().getKits()) {
 			String name = kit.getName();
 			names.add(name);
 		}

@@ -129,7 +129,7 @@ public class RegionUtils {
 				String name = emptyElement.getAttribute("name");
 				empty = new EmptyRegion(name);
 			} else {
-				empty = new EmptyRegion("");
+				empty = new EmptyRegion();
 			}
 		}
 		return empty;

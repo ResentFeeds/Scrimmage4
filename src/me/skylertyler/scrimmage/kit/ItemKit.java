@@ -19,9 +19,8 @@ import com.google.common.collect.ImmutableList;
 
 public class ItemKit {
 
-	// but its still giving me the very bottom <item> tag item in the kit -_-
-	// (need to work on EnchantKit) wondering why it isnt working how i wanted
-	// it to > D:
+	// FIXED: giving me the very bottom <item> tag :)
+	// need to work on getting the enchants to work -_-
 	private final int damage;
 	private final String name;
 	private final String lore;
@@ -35,6 +34,7 @@ public class ItemKit {
 		this.slot = slot;
 		this.stack = stack;
 		this.itemMeta = getStack().getItemMeta();
+
 		this.damage = damage;
 		this.name = name;
 		this.lore = lore;

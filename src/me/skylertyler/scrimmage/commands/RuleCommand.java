@@ -3,7 +3,7 @@ package me.skylertyler.scrimmage.commands;
 import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.map.MapInfo;
 import me.skylertyler.scrimmage.match.Match;
-import me.skylertyler.scrimmage.rules.Rule;
+import me.skylertyler.scrimmage.pagination.CurrentMapRulesPage;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -29,15 +29,12 @@ public class RuleCommand implements CommandExecutor {
 			MapInfo info = map.getInfo();
 			if (cmd.getName().equalsIgnoreCase("rules")) {
 				if (match != null) {
-					int i = 1;
-					for (Rule rule : info.getRules()) {
-						if (rule != null) {
-							String format = i + ") " + rule.getRule();
-							player.sendMessage(format);
-							i++;
-						} else {
-							player.sendMessage(ChatColor.RED +"There are no rules for this map!");
-						}
+					if (info.hasRules()) {
+						new CurrentMapRulesPage<String>() {
+						}.display(player, info.getMapRules(), 1);
+					} else {
+						player.sendMessage(ChatColor.RED
+								+ "No rules for this map!");
 					}
 				}
 			}

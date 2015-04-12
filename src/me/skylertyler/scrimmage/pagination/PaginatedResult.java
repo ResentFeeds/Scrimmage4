@@ -39,13 +39,21 @@ public abstract class PaginatedResult<T> {
 			throw new CommandException("Unknown page selected! " + maxPages
 					+ " total pages.");
 
-		sender.sendMessage(this.formatHeader(page, maxPages));
-
+		sender.sendMessage(this.formatHeader(page, maxPages)); 
 		for (int i = this.resultsPerPage * (page - 1); i < this.resultsPerPage
 				* page
 				&& i < results.size(); i++) {
 			sender.sendMessage(this.format(results.get(i), i));
 		}
+		
+		
+		/** RESULT 
+		 *  ----- HEADER ------
+		 *  1. (string)
+		 *  2. (another String)
+		 *  
+		 *  NOTE: the the comment above is just an example:
+		 */
 	}
 
 	public abstract String formatHeader(int page, int maxPages);

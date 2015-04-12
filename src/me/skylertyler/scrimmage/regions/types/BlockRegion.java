@@ -23,7 +23,8 @@ public class BlockRegion extends Region {
 		return this.vector.getX() == vec.getX()
 				&& this.vector.getY() == vec.getY()
 				&& this.vector.getZ() == vec.getZ();
-	}
+	} 
+ 
 
 	public Vector getVector() {
 		return this.vector;
@@ -32,4 +33,5 @@ public class BlockRegion extends Region {
 	public RegionType getType() {
 		return RegionType.BLOCK;
 	}
+
 }

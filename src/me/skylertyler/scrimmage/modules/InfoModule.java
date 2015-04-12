@@ -56,7 +56,8 @@ public class InfoModule extends Module {
 		}
 
 		// internal
-		// if the internal attribute is null or not there it will be false :) (AKA default)
+		// if the internal attribute is null or not there it will be false :)
+		// (AKA default)
 		boolean internal = false;
 		if (root.hasAttribute("internal")) {
 			internal = XMLUtils.parseBoolean(root.getAttribute("internal"));
@@ -110,8 +111,8 @@ public class InfoModule extends Module {
 		// rules
 
 		List<Rule> rules = ruleList(root, "rules", "rule");
-		return new MapInfo(proto, internal, name, version, authors,
-				contributors, rules, objective);
+		return new MapInfo(proto, internal, name, objective, version, authors,
+				contributors, rules);
 	}
 
 	public static List<Contributor> contributorList(Element root,

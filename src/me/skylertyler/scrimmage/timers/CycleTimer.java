@@ -69,15 +69,18 @@ public class CycleTimer extends CountDownTimer {
 	public void hasEnded() {
 		Bukkit.getScheduler().cancelTask(getTimer());
 		Match old = this.getMatch();
-		cycleAndMakeMatch(old);
+		Map next = old.getNext();
+		cycleAndMakeMatch(old, next);
 	}
 
-	// TODO fix cycling to the next map 
-	public void cycleAndMakeMatch(Match old) {
-		Scrimmage scrim = Scrimmage.getScrimmageInstance();
-		int newID = old.getID() + 1;
-		Map newMap = old.getNext();
-		new Match(scrim, newID, newMap);
+	// TODO fix cycling to the next map
+	public void cycleAndMakeMatch(Match old, Map next) {
+		Scrimmage scrim = old.getScrimmage();
+		int oldID = old.getID();
+		int newID = oldID + 1;
+		Bukkit.unloadWorld(old.getWorld().getName(), false);
+		System.out.println("unloaded old world!");
+		scrim.setMatch(new Match(scrim, newID, next));
 	}
 
 	public Match getMatch() {
