@@ -10,7 +10,6 @@
 [?] KOTH
 [?] regions (need alot more work)
 [?] listeners
-[?] ba
 [IDK] CTF (might need to look into this)
 [?] TDM  
 [?] Database 
@@ -18,4 +17,5 @@
 [?] TODO add generating a new map.xml file to make maps with!
 [?] implement commands to edit the current map or the map you wanthe in game!
 [?] wtm and ctw
-[?] todo make authors use UUIDS using an attribute instead of thier name in a Node Tag
+[?] todo make authors use UUIDS using an attribute instead of their name in a Node Tag
+[?] todo make contributors use uuids.
