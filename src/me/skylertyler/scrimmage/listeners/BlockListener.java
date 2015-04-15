@@ -40,7 +40,8 @@ public class BlockListener extends MatchListener {
 	public void onMaxBuild(BlockPlaceEvent event) {
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
-		int height = this.getMaxBuildHeight().getMaxHeight().getHeight();
+		int height = this.getMaxBuildHeight().getMaxHeightParser()
+				.getMaxHeight().getHeight();
 		Match match = this.getMatch();
 		if (block.getY() >= height && match.isRunning() || match.isIdle()) {
 			event.setCancelled(check(player));

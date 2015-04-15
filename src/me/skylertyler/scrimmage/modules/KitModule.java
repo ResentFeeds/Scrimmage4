@@ -7,8 +7,8 @@ import org.w3c.dom.Element;
 
 //FIx kits 
 @ModuleInfo(name = "kits", module = KitModule.class, requires = TeamModule.class)
-public class KitModule extends Module { 
-	
+public class KitModule extends Module {
+
 	private final KitParser parser;
 
 	public KitModule() {

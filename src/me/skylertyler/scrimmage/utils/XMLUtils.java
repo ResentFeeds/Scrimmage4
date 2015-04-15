@@ -1,5 +1,7 @@
 package me.skylertyler.scrimmage.utils;
 
+import java.awt.Color;
+
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.w3c.dom.Element;
@@ -7,15 +9,17 @@ import org.w3c.dom.Element;
 public class XMLUtils {
 
 	// my own booleam parsing (i like this better because you can have enabled,
-	// on , true , etc instead of just true or false
+	// on , true , yes etc instead of just true or false
 	public static boolean parseBoolean(String result) {
 		switch (result) {
 		case "enabled":
 		case "on":
+		case "yes":
 		case "true":
 			return true;
 		case "disabled":
 		case "off":
+		case "no":
 		case "false":
 			return false;
 		default:
@@ -38,11 +42,9 @@ public class XMLUtils {
 	}
 
 	public static Enchantment parseEnchantment(String value) {
-		String uppercase = value.toUpperCase().replace(" ", "_"); 
+		String uppercase = value.toUpperCase().replace(" ", "_");
 		return Enchantment.getByName(uppercase);
 	}
-
-	 
 
 	public static boolean isValidArmorTag(Element element) {
 		switch (element.getNodeName()) {
@@ -54,5 +56,17 @@ public class XMLUtils {
 		default:
 			return false;
 		}
+	}
+
+	public static Color hex2Rgb(String colorStr) {
+		return new Color(Integer.valueOf(colorStr.substring(1, 3), 16),
+				Integer.valueOf(colorStr.substring(3, 5), 16), Integer.valueOf(
+						colorStr.substring(5, 7), 16));
+	}
+
+	public static org.bukkit.Color applyColor(String color) {
+		Color javaColor = hex2Rgb("#" + color);
+		return org.bukkit.Color.fromRGB(javaColor.getRed(),
+				javaColor.getGreen(), javaColor.getBlue());
 	}
 }

@@ -16,6 +16,5 @@ public @interface ModuleInfo {
 
 	String desc() default "";
 
-	Class<? extends Module>[] requires() default {}; 
-	
+	Class<? extends Module>[] requires() default {};  
 }

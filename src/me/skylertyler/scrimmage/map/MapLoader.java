@@ -31,6 +31,7 @@ public class MapLoader {
 	public MapLoader(Scrimmage scrim) {
 		this.scrim = scrim;
 		this.loadedMaps = new ArrayList<Map>();
+		this.container = new ModuleContainer();
 	}
 
 	public void loadMaps() {
@@ -50,8 +51,7 @@ public class MapLoader {
 					boolean validLEVEL = level.isFile() && !level.isHidden()
 							&& !level.isDirectory();
 					boolean loadable = validXML && validREGION && validLEVEL;
-					if (loadable) {
-						this.container = new ModuleContainer();
+					if (loadable) { 
 						try {
 							this.container.enableModules(MapDocument
 									.getXMLDocument(xml));

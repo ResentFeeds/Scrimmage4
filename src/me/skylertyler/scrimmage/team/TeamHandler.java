@@ -1,7 +1,8 @@
 package me.skylertyler.scrimmage.team;
 
 import me.skylertyler.scrimmage.Scrimmage;
-import me.skylertyler.scrimmage.modules.TeamModule; 
+import me.skylertyler.scrimmage.modules.TeamModule;
+import me.skylertyler.scrimmage.spawn.SpawnUtils;
 import me.skylertyler.scrimmage.utils.TeamUtils;
 
 import org.bukkit.ChatColor;
@@ -20,7 +21,7 @@ public class TeamHandler {
 	public void addParticpatingMember(Team team, Player player) {
 		for (Team teams : ((TeamModule) Scrimmage.getScrimmageInstance()
 				.getLoader().getContainer().getModule(TeamModule.class))
-				.getTeams()) {
+				.getTeamParser().getTeams()) {
 			teams.getMembers().remove(player.getName());
 		}
 
@@ -31,6 +32,8 @@ public class TeamHandler {
 		// TODO make their overhead name be the teams color
 		player.sendMessage(ChatColor.GRAY + "You joined the " + team.getColor()
 				+ team.getName());
+
+		SpawnUtils.spawn(player);
 	}
 
 	public Team teamForPlayer(Player player) {

@@ -21,7 +21,7 @@ public class GameStartTimer extends CountDownTimer {
 	// broadcast the message below 
 	@Override
 	public String statusString(int time) {
-		String message = ChatColor.GREEN + "Match is starting in "
+		String message = ChatColor.GREEN + "Match starting in "
 				+ ChatColor.DARK_RED + time;
 		String format = null;
 		if (time != 1) {

@@ -35,5 +35,6 @@ public class CurrentMapRulesPage<T> extends PaginatedResult<T> {
 
 	public Map getMap() {
 		return this.map;
-	}
+	} 
+	 
 }

@@ -1,7 +1,5 @@
 package me.skylertyler.scrimmage.modules;
 
-import com.google.common.collect.Maps;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +8,7 @@ import me.skylertyler.scrimmage.exception.InvalidModuleException;
 import org.w3c.dom.Document;
 
 public class ModuleContainer {
-	protected HashMap<Module, ModuleInfo> modules = Maps.newHashMap();
+	protected HashMap<Module, ModuleInfo> modules = new HashMap<Module, ModuleInfo>();
 
 	public ModuleContainer() {
 
@@ -37,15 +35,17 @@ public class ModuleContainer {
 	}
 
 	public Module getModule(String name) {
+		Module result = null;
 		for (Module module : modules.keySet()) {
-			if (module.getClass().getAnnotation(ModuleInfo.class) != null
-					&& module.getClass().getAnnotation(ModuleInfo.class).name()
-							.equals(name)) {
-				return module;
+			String moduleName = module.getClass()
+					.getAnnotation(ModuleInfo.class).name();
+
+			if (moduleName.equals(name)) {
+				result = module;
 			}
 		}
-		return null;
-	}
+		return result;
+	} 
 
 	public void unloadModules() {
 		for (Module module : modules.keySet())

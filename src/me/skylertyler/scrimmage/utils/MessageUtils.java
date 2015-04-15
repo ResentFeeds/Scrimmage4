@@ -18,9 +18,9 @@ public class MessageUtils {
 	// broadcasting the starting match message!
 	public static void broadcastStartMessage() {
 		ChatColor dark_purple = ChatColor.DARK_PURPLE;
-		ChatColor green = ChatColor.GREEN;
+		ChatColor gold = ChatColor.GOLD;
 		String header = dark_purple + " # # # # # # # # # # # # # # #";
-		String match = dark_purple + "# #" + green + " The match has started "
+		String match = dark_purple + "# #" + gold + " The match has started "
 				+ dark_purple + "# #";
 		String footer = dark_purple + " # # # # # # # # # # # # # # #";
 		Bukkit.broadcastMessage(header);

@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 import org.bukkit.entity.Player;
 import me.skylertyler.scrimmage.utils.Log;
 
-public class Kit {
+public class Kit{
 	private final String name;
 	private final List<ItemKit> items;
 
@@ -120,5 +120,5 @@ public class Kit {
 			KnockbackReductionKit reduction = this.getReductionKit();
 			reduction.apply(player);
 		}
-	}
+	}  
 }

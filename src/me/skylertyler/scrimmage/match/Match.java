@@ -1,6 +1,10 @@
 package me.skylertyler.scrimmage.match;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.skylertyler.scrimmage.Scrimmage;
+import me.skylertyler.scrimmage.channels.Channel;
 import me.skylertyler.scrimmage.event.MatchEndEvent;
 import me.skylertyler.scrimmage.event.MatchLoadEvent;
 import me.skylertyler.scrimmage.event.MatchStartEvent;
@@ -9,6 +13,7 @@ import me.skylertyler.scrimmage.map.MapHandler;
 import me.skylertyler.scrimmage.scoreboard.Scoreboard;
 import me.skylertyler.scrimmage.team.TeamHandler;
 import me.skylertyler.scrimmage.timers.GameStartTimer;
+import me.skylertyler.scrimmage.utils.ChannelUtils;
 import me.skylertyler.scrimmage.utils.MessageUtils;
 
 import org.bukkit.Bukkit;
@@ -30,9 +35,12 @@ public class Match {
 	private org.bukkit.scoreboard.Scoreboard current_board = Bukkit
 			.getScoreboardManager().getNewScoreboard();
 	private Scoreboard board;
-	private GameStartTimer startTimer;
+	private GameStartTimer startTimer; 
+	private List<Channel> channels = new ArrayList<>();
 
 	public Match(Scrimmage scrim, int id, Map map) {
+		this.channels.add(ChannelUtils.newGlobalChannel());
+		this.channels.add(ChannelUtils.newTeamChannel());
 		this.scrim = scrim;
 		this.id = id;
 		this.map = map;
@@ -147,6 +155,10 @@ public class Match {
 
 	public GameStartTimer getStartTimer() {
 		return this.startTimer;
+	} 
+
+	public List<Channel> getChannels() {
+		return channels;
 	}
 
 }

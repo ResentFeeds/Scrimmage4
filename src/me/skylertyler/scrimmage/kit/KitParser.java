@@ -3,6 +3,8 @@ package me.skylertyler.scrimmage.kit;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import me.skylertyler.scrimmage.exception.SlotNotFoundException;
 import me.skylertyler.scrimmage.utils.Log;
 import me.skylertyler.scrimmage.utils.NumberUtils;
@@ -31,6 +33,7 @@ public class KitParser {
 		/**
 		 * XML PARSING
 		 */
+
 		Node kitsTags = element.getElementsByTagName(getKitsTag()).item(0);
 		if (kitsTags.getNodeType() == Node.ELEMENT_NODE) {
 			Element kitsElement = (Element) kitsTags;
@@ -41,18 +44,14 @@ public class KitParser {
 				if (node.getNodeType() == Node.ELEMENT_NODE
 						&& node.getNodeName().equals(getKitTag())) {
 					Element kitElement = (Element) node;
-					try {
-						Kit kit = this.parseKit(kitElement);
-						kits.add(kit);
-					} catch (SlotNotFoundException e) {
-						e.printStackTrace();
-					}
+					Kit kit = this.parseKit(kitElement);
+					this.kits.add(kit);
 				}
 			}
 		}
 	}
 
-	public Kit parseKit(Element element) throws SlotNotFoundException {
+	public Kit parseKit(Element element) {
 		this.items = new ArrayList<>();
 		// knockback reduction :)
 		KnockbackReductionKit reduction = null;
@@ -68,7 +67,12 @@ public class KitParser {
 			if (item.getNodeType() == Node.ELEMENT_NODE
 					&& item.getNodeName().equals("item")) {
 				Element itemElement = (Element) item;
-				ItemKit newItemKit = parseItem(itemElement);
+				ItemKit newItemKit = null;
+				try {
+					newItemKit = parseItem(itemElement);
+				} catch (SlotNotFoundException e) {
+					e.printStackTrace();
+				}
 				this.items.add(newItemKit);
 				for (int f = 0; f < items.getLength(); f++) {
 					Node node = items.item(f);
@@ -92,8 +96,6 @@ public class KitParser {
 	public static ItemKit parseItem(Element itemElement)
 			throws SlotNotFoundException {
 		// when the amount is 0 it will turn to 1 :)
-		// look at the KitItem constructor before telling me this is an error :)
-		EnchantKit enchantKit = null;
 		int slot = NumberUtils.parseInteger(itemElement.getAttribute("slot"));
 		// will be invalid if the slot (id) is less than 0 or greater then 35 &
 		// below 100 or greater than 103 :)
@@ -118,12 +120,19 @@ public class KitParser {
 			damage = NumberUtils.parseInteger(itemElement
 					.getAttribute("damage"));
 		}
+
+		EnchantKit enchant = null;
 		if (itemElement.hasAttribute("enchantment")) {
-			String enchantment = itemElement.getAttribute("enchantment");
-			enchantKit = new EnchantKit(enchantment);
+			enchant = parseEnchantKit(itemElement.getAttribute("enchantment"));
+		}
+		
+		String color = null;
+		
+		if(itemElement.hasAttribute("color")){
+			color = itemElement.getAttribute("color");
 		}
 
-		return new ItemKit(slot, stack, damage, name, lore, enchantKit);
+		return new ItemKit(slot, stack, damage, name, lore, enchant, color);
 	}
 
 	public static ItemStack parseItemStack(Element element) {
@@ -133,6 +142,14 @@ public class KitParser {
 			amount = NumberUtils.parseInteger(element.getAttribute("amount"));
 		}
 		return new ItemStack(mat, amount);
+	}
+
+	public static EnchantKit parseEnchantKit(@Nullable String enchant) {
+		if (enchant != null) {
+			return new EnchantKit(enchant);
+		} else {
+			return null;
+		}
 	}
 
 	public Element getElement() {

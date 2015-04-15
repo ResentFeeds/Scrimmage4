@@ -13,6 +13,7 @@ import me.skylertyler.scrimmage.commands.AuthorCommand;
 import me.skylertyler.scrimmage.commands.BroadcastCommand;
 import me.skylertyler.scrimmage.commands.ContributorCommand;
 import me.skylertyler.scrimmage.commands.CycleCommand;
+import me.skylertyler.scrimmage.commands.GCommand;
 import me.skylertyler.scrimmage.commands.JoinCommand;
 import me.skylertyler.scrimmage.commands.LocationCommand;
 import me.skylertyler.scrimmage.commands.MapListCommand;
@@ -21,6 +22,7 @@ import me.skylertyler.scrimmage.commands.NextCommand;
 import me.skylertyler.scrimmage.commands.RotationCommand;
 import me.skylertyler.scrimmage.commands.RuleCommand;
 import me.skylertyler.scrimmage.commands.SetNextCommand;
+import me.skylertyler.scrimmage.commands.TCommand;
 import me.skylertyler.scrimmage.commands.WorldCommand;
 import me.skylertyler.scrimmage.config.types.Config;
 import me.skylertyler.scrimmage.config.types.RotationConfig;
@@ -28,6 +30,7 @@ import me.skylertyler.scrimmage.exception.InvalidModuleException;
 import me.skylertyler.scrimmage.exception.KitNotFoundExecption;
 import me.skylertyler.scrimmage.kit.Kit;
 import me.skylertyler.scrimmage.listeners.BlockListener;
+import me.skylertyler.scrimmage.listeners.ChatListener;
 import me.skylertyler.scrimmage.listeners.ConnectionListener;
 import me.skylertyler.scrimmage.listeners.ObserverListener;
 import me.skylertyler.scrimmage.listeners.SetNextListener;
@@ -143,8 +146,9 @@ public class Scrimmage extends JavaPlugin {
 	}
 
 	/**
-	 *  
-	 * @param input a rotation map name
+	 * 
+	 * @param input
+	 *            a rotation map name
 	 * @return
 	 */
 	public Map getRotationMap(String input) {
@@ -234,6 +238,8 @@ public class Scrimmage extends JavaPlugin {
 		registerCommand(new BroadcastCommand(this), "broadcast",
 				Arrays.asList("bc", "bmessage"));
 		registerCommand(new AuthorCommand(getMatch()), "authors", null);
+		registerCommand(new TCommand(), "t", null);
+		registerCommand(new GCommand(), "g", null);
 	}
 
 	public void registerListener(Listener listener) {
@@ -247,6 +253,7 @@ public class Scrimmage extends JavaPlugin {
 			registerListener(new BlockListener());
 			registerListener(new SetNextListener());
 			registerListener(new ObserverListener(getMatch()));
+			registerListener(new ChatListener());
 		}
 
 		if (getConfigFile().inDevelopment()) {
@@ -341,8 +348,11 @@ public class Scrimmage extends JavaPlugin {
 				}
 			} else if (cmd.getName().equalsIgnoreCase("kit")) {
 				if (args.length == 0) {
-					player.sendMessage(ChatColor.RED + "Not enough arguments!");
-					return false;
+					for (Kit kit : KitUtils.getKitModule().getKitParser()
+							.getKits()) {
+						String name = kit.getName();
+						player.sendMessage(name + " is a kit!");
+					}
 				}
 
 				if (args.length > 1) {

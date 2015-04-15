@@ -11,19 +11,13 @@ import me.skylertyler.scrimmage.modules.KitModule;
 import org.bukkit.entity.Player;
 
 public class KitUtils {
-
-	// TODO add KitPotion
-	// TODO fix only doing one item as (stated below)
-
 	// name needs to be exactly how the kit 'name' attribute is!
 	public static Kit getKitByName(String name) {
 		Kit result = null;
 		List<Kit> kits = getKitModule().getKitParser().getKits();
 		for (Kit kit : kits) {
-			if (kit != null) {
-				if (kit.getName().equals(name)) {
-					result = kit;
-				}
+			if (kit.getName().equalsIgnoreCase(name)) {
+				result = kit;
 			}
 		}
 		return result;
@@ -31,8 +25,7 @@ public class KitUtils {
 
 	// getter for the kit module :)
 	public static KitModule getKitModule() {
-		return (KitModule) Scrimmage.getScrimmageInstance().getLoader()
-				.getContainer().getModule(KitModule.class);
+		return (KitModule) Scrimmage.getScrimmageInstance().getLoader().getContainer().getModule(KitModule.class);
 	}
 
 	// get all the kit names!

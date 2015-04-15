@@ -1,18 +1,18 @@
 package me.skylertyler.scrimmage.kit;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import me.skylertyler.scrimmage.utils.BukkitUtils;
+import me.skylertyler.scrimmage.utils.XMLUtils;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
@@ -26,38 +26,37 @@ public class ItemKit {
 	private final String lore;
 	private final ItemStack stack;
 	private final int slot;
-	private final EnchantKit enchant;
 	private final ItemMeta itemMeta;
 
+	private EnchantKit enchant;
+	private String color;
+
 	public ItemKit(int slot, ItemStack stack, int damage, String name,
-			String lore, EnchantKit enchant) {
+			String lore, EnchantKit enchant, String color) {
 		this.slot = slot;
 		this.stack = stack;
 		this.itemMeta = getStack().getItemMeta();
-
 		this.damage = damage;
 		this.name = name;
 		this.lore = lore;
 		this.enchant = enchant;
+		this.color = color;
 
-		if (hasEnchant()) {
-			Map<Enchantment, Integer> enchants = getEnchant().getEnchantments();
-			Set<Enchantment> enchantment = enchants.keySet();
-			Collection<Integer> level = enchants.values();
-
-			for (Integer levels : level) {
-				for (Enchantment enchantments : enchantment) {
-					if (levels <= 4) {
-						getStack().addEnchantment(enchantments, levels);
-					} else {
-						if (levels >= 5) {
-							getStack().addUnsafeEnchantment(enchantments,
-									levels);
-						}
-					}
-				}
+		// color ?
+		if (hasColor()) {
+			if (this.itemMeta instanceof LeatherArmorMeta) {
+				LeatherArmorMeta armorMeta = (LeatherArmorMeta) this.itemMeta;
+				armorMeta.setColor(XMLUtils.applyColor(getColor()));
+				this.getStack().setItemMeta(armorMeta);
 			}
 		}
+
+		if (hasEnchant()) {
+			Map<Enchantment, Integer> enchantments = this.getEnchant()
+					.getEnchantments();
+			getStack().addEnchantments(enchantments);
+		}
+
 		if (this.damage != 0) {
 			getStack().setDurability((short) this.getDamage());
 		}
@@ -72,17 +71,15 @@ public class ItemKit {
 		}
 
 		// fix lore -_-
-		List<String> lores = null;
+		List<String> lores = new ArrayList<>();
 		if (hasLore()) {
 			lores = parseLore(getLore());
-		} else {
-			lores = new ArrayList<>();
 		}
 
 		getItemMeta().setDisplayName(newName);
 		getItemMeta().setLore(lores);
 		getStack().setItemMeta(getItemMeta());
-	}
+	} 
 
 	public boolean hasName() {
 		return this.getName() != null;
@@ -142,7 +139,7 @@ public class ItemKit {
 	public String parseName(String name) {
 		// if it contains the ` it will have color -_- using the BukkitUtils
 		// colorize(string) method :)
-		boolean hasColor = name.contains("`");
+		boolean hasColor = name.contains("`") || name.contains("§");
 		String format = null;
 		if (hasColor) {
 			format = BukkitUtils.colorize(name);
@@ -154,5 +151,13 @@ public class ItemKit {
 
 		String result = format;
 		return result;
+	}
+
+	public String getColor() {
+		return this.color;
+	}
+
+	public boolean hasColor() {
+		return this.getColor() != null;
 	}
 }

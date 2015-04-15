@@ -14,6 +14,7 @@ import org.bukkit.command.CommandSender;
  */
 public abstract class PaginatedResult<T> {
 	protected final int resultsPerPage;
+	protected int maxPages;
 
 	public PaginatedResult() {
 		this(6);
@@ -34,29 +35,30 @@ public abstract class PaginatedResult<T> {
 		if (results.size() == 0)
 			throw new CommandException("No results match!");
 
-		int maxPages = results.size() / this.resultsPerPage + 1;
+		this.maxPages = results.size() / this.resultsPerPage + 1;
 		if (page <= 0 || page > maxPages)
 			throw new CommandException("Unknown page selected! " + maxPages
 					+ " total pages.");
 
-		sender.sendMessage(this.formatHeader(page, maxPages)); 
+		sender.sendMessage(this.formatHeader(page, this.maxPages));
 		for (int i = this.resultsPerPage * (page - 1); i < this.resultsPerPage
 				* page
 				&& i < results.size(); i++) {
 			sender.sendMessage(this.format(results.get(i), i));
 		}
-		
-		
-		/** RESULT 
-		 *  ----- HEADER ------
-		 *  1. (string)
-		 *  2. (another String)
-		 *  
-		 *  NOTE: the the comment above is just an example:
+
+		/**
+		 * RESULT ----- HEADER ------ 1. (string) 2. (another String)
+		 * 
+		 * NOTE: the the comment above is just an example:
 		 */
 	}
 
 	public abstract String formatHeader(int page, int maxPages);
 
 	public abstract String format(T entry, int index);
+
+	public int getMaxPages() {
+		return this.maxPages;
+	}
 }

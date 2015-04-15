@@ -58,4 +58,13 @@ public class Spawn {
 	public boolean hasAngle() {
 		return this.getAngle() != null;
 	}
+
+	public boolean hasYaw() {
+		return this.getYaw() != 0;
+	}
+
+	public boolean hasPitch() {
+		return this.getPitch() != 0;
+	}
+	
 }

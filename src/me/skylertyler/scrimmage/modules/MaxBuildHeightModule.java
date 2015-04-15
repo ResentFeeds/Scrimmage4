@@ -1,43 +1,26 @@
 package me.skylertyler.scrimmage.modules;
 
-import me.skylertyler.scrimmage.maxheight.MaxHeight;
-import me.skylertyler.scrimmage.utils.NumberUtils;
-
+import me.skylertyler.scrimmage.maxheight.MaxHeightParser;
 import org.bukkit.event.HandlerList;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
-@ModuleInfo(name="maxheight", module = MaxBuildHeightModule.class)
+@ModuleInfo(name = "maxheight", module = MaxBuildHeightModule.class)
 public class MaxBuildHeightModule extends Module {
 
-	private MaxHeight maxheight;
+	private final MaxHeightParser mhp;
 
 	public MaxBuildHeightModule() {
-		this.maxheight = null;
+		this.mhp = null;
 	}
 
-	public MaxBuildHeightModule(MaxHeight maxheight) {
-		this.maxheight = maxheight;
+	public MaxBuildHeightModule(MaxHeightParser mhp) {
+		this.mhp = mhp;
 	}
 
 	@Override
 	public Module parse(Document doc) {
-		MaxBuildHeightModule max = null;
-		Element root = doc.getDocumentElement();
-		Node node = root.getElementsByTagName("maxbuildheight").item(0);
-		if (node != null) {
-			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				Element element = (Element) node;
-				String height = element.getTextContent();
-				int number = NumberUtils.parseInteger(height);
-				max = new MaxBuildHeightModule(new MaxHeight(number));
-			}
-		} else {
-			max = new MaxBuildHeightModule(new MaxHeight(256));
-		}
-
-		return max;
+		return new MaxBuildHeightModule(new MaxHeightParser(
+				doc.getDocumentElement(), "maxbuildheight"));
 	}
 
 	@Override
@@ -45,7 +28,7 @@ public class MaxBuildHeightModule extends Module {
 		HandlerList.unregisterAll(this);
 	}
 
-	public MaxHeight getMaxHeight() {
-		return this.maxheight;
+	public MaxHeightParser getMaxHeightParser() {
+		return this.mhp;
 	}
 }

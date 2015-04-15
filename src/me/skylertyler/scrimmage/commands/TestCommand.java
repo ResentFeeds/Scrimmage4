@@ -1,8 +1,11 @@
 package me.skylertyler.scrimmage.commands;
- 
+
 import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.map.MapInfo;
 import me.skylertyler.scrimmage.match.Match;
+import me.skylertyler.scrimmage.team.Team;
+import me.skylertyler.scrimmage.utils.TeamUtils;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,11 +26,12 @@ public class TestCommand implements CommandExecutor {
 			Player player = (Player) sender;
 			Match match = this.getMatch();
 			Map map = match.getMap();
-			MapInfo info = map.getInfo(); 
 			if (label.equalsIgnoreCase("test")) {
 				if (match != null) {
-					String name = info.getName();
-					player.sendMessage(name);
+					for (Team teams : TeamUtils.getTeamModule().getTeamParser()
+							.getTeams()) {
+						player.sendMessage(teams.getColor() + teams.getName());
+					}
 				}
 			}
 		}

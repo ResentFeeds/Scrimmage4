@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class Team {
+	// TODO fix teams .....
 	// TODO spawn module and region module
 	// TODO team adding and removing players (hiding and showing)
 

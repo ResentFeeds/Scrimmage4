@@ -29,7 +29,7 @@ public class TeamUtils {
 		Team result = null;
 		for (Team team : ((TeamModule) Scrimmage.getScrimmageInstance()
 				.getLoader().getContainer().getModule(TeamModule.class))
-				.getTeams()) {
+				.getTeamParser().getTeams()) {
 			if (team.getId().equals(id)) {
 				result = team;
 			}
@@ -42,7 +42,7 @@ public class TeamUtils {
 		Team result = null;
 		for (Team team : ((TeamModule) Scrimmage.getScrimmageInstance()
 				.getLoader().getContainer().getModule(TeamModule.class))
-				.getTeams()) {
+				.getTeamParser().getTeams()) {
 			String teamName = team.getName();
 			if (teamName.equalsIgnoreCase(name) || teamName.startsWith(name)) {
 				result = team;
@@ -58,7 +58,7 @@ public class TeamUtils {
 		Team result = null;
 		for (Team team : ((TeamModule) Scrimmage.getScrimmageInstance()
 				.getLoader().getContainer().getModule(TeamModule.class))
-				.getTeams()) {
+				.getTeamParser().getTeams()) {
 			if (team.getType().equals(type)) {
 				result = team;
 			}
@@ -66,11 +66,16 @@ public class TeamUtils {
 		return result;
 	}
 
+	public static Team getTeam(String name) {
+		String result = name.toLowerCase();
+		return getTeamByName(result);
+	}
+
 	// gets all the particpating teams
 	public static List<Team> getParticpatingTeams() {
 		for (Team team : ((TeamModule) Scrimmage.getScrimmageInstance()
 				.getLoader().getContainer().getModule(TeamModule.class))
-				.getTeams()) {
+				.getTeamParser().getTeams()) {
 			if (team.getType().equals(TeamType.Participating)) {
 				particpating.add(team);
 			}
@@ -83,7 +88,7 @@ public class TeamUtils {
 		Team result = null;
 		for (Team team : ((TeamModule) Scrimmage.getScrimmageInstance()
 				.getLoader().getContainer().getModule(TeamModule.class))
-				.getTeams()) {
+				.getTeamParser().getTeams()) {
 			if (team.getType().equals(TeamType.Observing)) {
 				result = team;
 			}

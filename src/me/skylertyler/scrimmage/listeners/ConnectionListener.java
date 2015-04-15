@@ -13,15 +13,19 @@ import me.skylertyler.scrimmage.regions.types.BlockRegion;
 import me.skylertyler.scrimmage.regions.types.CuboidRegion;
 import me.skylertyler.scrimmage.regions.types.CylinderRegion;
 import me.skylertyler.scrimmage.regions.types.SphereRegion;
+import me.skylertyler.scrimmage.team.Team;
 import me.skylertyler.scrimmage.utils.Characters;
 import me.skylertyler.scrimmage.utils.Log;
+import me.skylertyler.scrimmage.utils.TeamUtils;
 import static org.bukkit.ChatColor.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.scoreboard.Scoreboard;
 
@@ -169,6 +173,17 @@ public class ConnectionListener implements Listener {
 		if (match != null && board != null) {
 			Bukkit.broadcastMessage(match.getID()
 					+ " is the id of this match! ");
+		}
+	}
+
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		Player player = event.getPlayer();
+		Team observers = TeamUtils.getObservers();
+		event.setJoinMessage(null);
+		if (this.match != null && this.match.isIdle() || this.match.isRunning()) {
+			this.match.getTeamHandler()
+					.addParticpatingMember(observers, player);
 		}
 	}
 }
