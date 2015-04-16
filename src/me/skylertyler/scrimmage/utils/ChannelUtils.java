@@ -11,18 +11,18 @@ import me.skylertyler.scrimmage.channels.TeamChannel;
 
 public class ChannelUtils {
 
-	//new global channel
+	// new global channel
 	public static GlobalChannel newGlobalChannel() {
-		return new GlobalChannel(true,ChatColor.GOLD, "Global");
+		return new GlobalChannel(true, ChatColor.GOLD, "Global");
 	}
 
 	// new team channel
 	public static TeamChannel newTeamChannel() {
 		return new TeamChannel(false, ChatColor.GREEN, "Team");
 	}
-	
-	public static AdminChannel newAdminChannel(){
-		return new AdminChannel(false,ChatColor.RED, "Admin");
+
+	public static AdminChannel newAdminChannel() {
+		return new AdminChannel(false, ChatColor.RED, "Admin");
 	}
 
 	public static Channel getChannel(Player player) {
@@ -53,5 +53,9 @@ public class ChannelUtils {
 
 	public static TeamChannel getTeamChannel() {
 		return (TeamChannel) getChannelByName("Team");
+	}
+
+	public static AdminChannel getAdminChannel() {
+		return (AdminChannel) getChannelByName("Admin");
 	}
 }

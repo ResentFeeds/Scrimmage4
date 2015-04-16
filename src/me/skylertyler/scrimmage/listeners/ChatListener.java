@@ -10,6 +10,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import static org.bukkit.ChatColor.*;
 import me.skylertyler.scrimmage.Scrimmage;
+import me.skylertyler.scrimmage.channels.AdminChannel;
 import me.skylertyler.scrimmage.channels.Channel;
 import me.skylertyler.scrimmage.channels.GlobalChannel;
 import me.skylertyler.scrimmage.channels.TeamChannel;
@@ -31,7 +32,7 @@ public class ChatListener implements Listener {
 		Player player = event.getPlayer();
 		Team team = this.match.getTeamHandler().teamForPlayer(player);
 		Channel channel = ChannelUtils.getChannel(player);
-		// NEED to test this with one more player....
+		// works 
 		if (channel instanceof TeamChannel) {
 			TeamChannel teamChannel = (TeamChannel) channel;
 			if (teamChannel != null) {
@@ -45,8 +46,7 @@ public class ChatListener implements Listener {
 							+ ">: " + event.getMessage());
 					member.sendMessage(event.getFormat());
 				}
-			}
-			return;
+			} 
 		}
 
 		if (channel instanceof GlobalChannel) {
@@ -56,6 +56,29 @@ public class ChatListener implements Listener {
 				this.match.broadcast(WHITE + "<" + team.getColor()
 						+ player.getDisplayName() + WHITE + ">: "
 						+ event.getMessage());
+			}
+		}
+
+		if (channel instanceof AdminChannel) {
+			AdminChannel admin = (AdminChannel) channel;
+			if (admin != null) {
+				for (Player players : Bukkit.getOnlinePlayers()) {
+					if (players.isOp()
+							|| players.hasPermission("admin.channel.recieve")) {
+						event.setCancelled(true);
+						if (team != null) {
+							event.setFormat(RED + "[" + GOLD + "A" + RED + "] "
+									+ WHITE + "<" + team.getColor()
+									+ player.getName() + WHITE + ">: "
+									+ event.getMessage());
+						} else {
+							event.setFormat(RED + "[" + GOLD + "A" + RED + "] "
+									+ WHITE + "<" + player.getDisplayName()
+									+ ">: " + event.getMessage());
+						}
+						players.sendMessage(event.getFormat());
+					}
+				}
 			}
 		}
 	}

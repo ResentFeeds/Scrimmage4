@@ -35,12 +35,13 @@ public class Match {
 	private org.bukkit.scoreboard.Scoreboard current_board = Bukkit
 			.getScoreboardManager().getNewScoreboard();
 	private Scoreboard board;
-	private GameStartTimer startTimer; 
+	private GameStartTimer startTimer;
 	private List<Channel> channels = new ArrayList<>();
 
 	public Match(Scrimmage scrim, int id, Map map) {
 		this.channels.add(ChannelUtils.newGlobalChannel());
 		this.channels.add(ChannelUtils.newTeamChannel());
+		this.channels.add(ChannelUtils.newAdminChannel());
 		this.scrim = scrim;
 		this.id = id;
 		this.map = map;
@@ -155,7 +156,7 @@ public class Match {
 
 	public GameStartTimer getStartTimer() {
 		return this.startTimer;
-	} 
+	}
 
 	public List<Channel> getChannels() {
 		return channels;

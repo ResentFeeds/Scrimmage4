@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import me.skylertyler.scrimmage.commands.ACommand;
 import me.skylertyler.scrimmage.commands.AuthorCommand;
 import me.skylertyler.scrimmage.commands.BroadcastCommand;
 import me.skylertyler.scrimmage.commands.ContributorCommand;
@@ -241,6 +242,7 @@ public class Scrimmage extends JavaPlugin {
 		registerCommand(new AuthorCommand(getMatch()), "authors", null);
 		registerCommand(new TCommand(), "t", null);
 		registerCommand(new GCommand(), "g", null);
+		registerCommand(new ACommand(), "a", null);
 		registerCommand(new MyChannelCommand(), "mychannel", Arrays.asList("myc", "mc"));
 	}
 
