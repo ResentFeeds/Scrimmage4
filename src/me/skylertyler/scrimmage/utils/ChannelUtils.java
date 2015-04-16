@@ -22,7 +22,7 @@ public class ChannelUtils {
 	}
 
 	public static AdminChannel newAdminChannel() {
-		return new AdminChannel(false, ChatColor.RED, "Admin");
+		return new AdminChannel(false, ChatColor.DARK_RED, "Admin");
 	}
 
 	public static Channel getChannel(Player player) {
