@@ -6,14 +6,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static org.bukkit.ChatColor.*;
+import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.channels.Channel;
+import me.skylertyler.scrimmage.event.ChannelChangeEvent;
+import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.utils.ChannelUtils;
 
 public class GCommand implements CommandExecutor {
-
-	private Channel channel;
+ 
+	private Match match;
 
 	public GCommand() {
+		this.match = Scrimmage.getScrimmageInstance().getMatch();
 	}
 
 	@Override
@@ -23,24 +27,10 @@ public class GCommand implements CommandExecutor {
 			Player player = (Player) sender;
 			if (cmd.getName().equalsIgnoreCase("g")) {
 				if (args.length == 0) {
-					this.channel = ChannelUtils.getChannel(player);
-
-					boolean nul = this.channel == null;
-					if (nul) {
-						ChannelUtils.getGlobalChannel().addPlayer(player);
-					} else {
-						if (this.channel != ChannelUtils.getGlobalChannel()) {
-							this.channel.removePlayer(player);
-							ChannelUtils.getGlobalChannel().addPlayer(player);
-						} else {
-							// the message to tell them that they are already in
-							// this channel :)
-							player.sendMessage(RED + "You are already in the "
-									+ DARK_RED + this.channel.getChannelName()
-									+ RED + " Channel");
-							return false;
-						}
-					}
+					Channel channel = ChannelUtils.getChannel(player);
+					ChannelChangeEvent event = new ChannelChangeEvent(player,
+							channel, ChannelUtils.getGlobalChannel());
+					this.match.getPluginManager().callEvent(event);
 				}
 
 				if (args.length > 1) {

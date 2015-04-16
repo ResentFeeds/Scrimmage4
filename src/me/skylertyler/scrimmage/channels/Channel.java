@@ -71,8 +71,7 @@ public class Channel {
 	}
 
 	public void addPlayer(Player player) {
-		this.players.add(player);
-		player.sendMessage("Your channel is now " + getName());
+		this.players.add(player); 
 	}
 
 	public void removePlayer(Player player) {

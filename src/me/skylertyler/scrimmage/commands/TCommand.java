@@ -6,14 +6,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static org.bukkit.ChatColor.*;
+import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.channels.Channel;
+import me.skylertyler.scrimmage.event.ChannelChangeEvent;
+import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.utils.ChannelUtils;
 
 public class TCommand implements CommandExecutor {
 
-	private Channel channel;
+	private Match match;
 
 	public TCommand() {
+		this.match = Scrimmage.getScrimmageInstance().getMatch();
 	}
 
 	@Override
@@ -23,22 +27,10 @@ public class TCommand implements CommandExecutor {
 			Player player = (Player) sender;
 			if (cmd.getName().equalsIgnoreCase("t")) {
 				if (args.length == 0) {
-					this.channel = ChannelUtils.getChannel(player);
-
-					boolean nul = this.channel == null;
-					if (nul) {
-						ChannelUtils.getTeamChannel().addPlayer(player);
-					} else {
-						if (this.channel != ChannelUtils.getTeamChannel()) {
-							this.channel.removePlayer(player);
-							ChannelUtils.getTeamChannel().addPlayer(player);
-						} else {
-							player.sendMessage(RED + "You are already in the "
-									+ DARK_RED + this.channel.getChannelName()
-									+ RED + " Channel");
-							return false;
-						}
-					}
+					Channel channel = ChannelUtils.getChannel(player);
+					ChannelChangeEvent event = new ChannelChangeEvent(player,
+							channel, ChannelUtils.getTeamChannel());
+					this.match.getPluginManager().callEvent(event);
 				}
 
 				if (args.length > 1) {
@@ -53,7 +45,7 @@ public class TCommand implements CommandExecutor {
 			}
 		} else {
 			sender.sendMessage(RED
-					+ "You need to be a player to join a Channel");
+					+ "You need to be a player to join the Team Channel");
 		}
 		return false;
 	}

@@ -32,6 +32,7 @@ import me.skylertyler.scrimmage.exception.InvalidModuleException;
 import me.skylertyler.scrimmage.exception.KitNotFoundExecption;
 import me.skylertyler.scrimmage.kit.Kit;
 import me.skylertyler.scrimmage.listeners.BlockListener;
+import me.skylertyler.scrimmage.listeners.ChannelListener;
 import me.skylertyler.scrimmage.listeners.ChatListener;
 import me.skylertyler.scrimmage.listeners.ConnectionListener;
 import me.skylertyler.scrimmage.listeners.ObserverListener;
@@ -258,6 +259,7 @@ public class Scrimmage extends JavaPlugin {
 			registerListener(new SetNextListener());
 			registerListener(new ObserverListener(getMatch()));
 			registerListener(new ChatListener());
+			registerListener(new ChannelListener());
 		}
 
 		if (getConfigFile().inDevelopment()) {

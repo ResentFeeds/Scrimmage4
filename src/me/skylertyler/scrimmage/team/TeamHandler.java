@@ -1,8 +1,7 @@
 package me.skylertyler.scrimmage.team;
 
 import me.skylertyler.scrimmage.Scrimmage;
-import me.skylertyler.scrimmage.modules.TeamModule;
-import me.skylertyler.scrimmage.spawn.SpawnUtils;
+import me.skylertyler.scrimmage.modules.TeamModule; 
 import me.skylertyler.scrimmage.utils.TeamUtils;
 
 import org.bukkit.ChatColor;
@@ -33,7 +32,7 @@ public class TeamHandler {
 		player.sendMessage(ChatColor.GRAY + "You joined the " + team.getColor()
 				+ team.getName());
 
-		SpawnUtils.spawn(player);
+		//SpawnUtils.spawn(player);
 	}
 
 	public Team teamForPlayer(Player player) {
