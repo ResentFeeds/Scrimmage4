@@ -25,8 +25,9 @@ public class ChatListener implements Listener {
 		this.match = Scrimmage.getScrimmageInstance().getMatch();
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler
-	public void onTeamChat(AsyncPlayerChatEvent event) {
+	public void onChannelChat(AsyncPlayerChatEvent event) {
 		Player player = event.getPlayer();
 		Team team = this.match.getTeamHandler().teamForPlayer(player);
 		Channel channel = ChannelUtils.getChannel(player);

@@ -17,6 +17,7 @@ import me.skylertyler.scrimmage.commands.GCommand;
 import me.skylertyler.scrimmage.commands.JoinCommand;
 import me.skylertyler.scrimmage.commands.LocationCommand;
 import me.skylertyler.scrimmage.commands.MapListCommand;
+import me.skylertyler.scrimmage.commands.MyChannelCommand;
 import me.skylertyler.scrimmage.commands.MyTeamCommand;
 import me.skylertyler.scrimmage.commands.NextCommand;
 import me.skylertyler.scrimmage.commands.RotationCommand;
@@ -240,6 +241,7 @@ public class Scrimmage extends JavaPlugin {
 		registerCommand(new AuthorCommand(getMatch()), "authors", null);
 		registerCommand(new TCommand(), "t", null);
 		registerCommand(new GCommand(), "g", null);
+		registerCommand(new MyChannelCommand(), "mychannel", Arrays.asList("myc", "mc"));
 	}
 
 	public void registerListener(Listener listener) {

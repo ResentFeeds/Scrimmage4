@@ -2,6 +2,11 @@ name: Scrimmage4
 main: me.skylertyler.scrimmage.Scrimmage
 version: 1.0
 commands:
+  mychannel:
+    description: tells you what channel you're in.
+    aliases:
+    - 'myc'
+    - 'mc'
   authors:
     description: authors!
   broadcast:

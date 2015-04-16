@@ -25,4 +25,8 @@ public class Rotation {
 		return getRotation().size() > 0;
 	}
 
+	public Config getConfig() {
+		return this.config;
+	}
+
 }

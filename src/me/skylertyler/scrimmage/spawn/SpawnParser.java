@@ -4,14 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.skylertyler.scrimmage.exception.TeamNotFoundException;
-import me.skylertyler.scrimmage.kit.Kit;
 import me.skylertyler.scrimmage.parsers.ElementParser;
-import me.skylertyler.scrimmage.regions.Region;
-import me.skylertyler.scrimmage.regions.RegionUtils;
 import me.skylertyler.scrimmage.team.Team;
-import me.skylertyler.scrimmage.utils.KitUtils;
 import me.skylertyler.scrimmage.utils.TeamUtils;
-import me.skylertyler.scrimmage.utils.XMLUtils;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
