@@ -17,7 +17,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 public class BlockListener extends MatchListener {
 
-	private final MaxBuildHeightModule mbhm;
+	private  MaxBuildHeightModule mbhm;
 
 	public BlockListener() {
 		super(Scrimmage.getScrimmageInstance().getMatch());
@@ -28,12 +28,8 @@ public class BlockListener extends MatchListener {
 
 	public boolean check(Player player) {
 		Team team = getMatch().getTeamHandler().teamForPlayer(player);
-
-		if (team.getType() == TeamType.Participating
-				&& team.containsPlayer(player)) {
-			return true;
-		}
-		return false;
+		return team.getType() == TeamType.Participating
+				&& team.containsPlayer(player);
 	}
 
 	@EventHandler
@@ -43,7 +39,7 @@ public class BlockListener extends MatchListener {
 		int height = this.getMaxBuildHeight().getMaxHeightParser()
 				.getMaxHeight().getHeight();
 		Match match = this.getMatch();
-		if (block.getY() >= height && match.isRunning() || match.isIdle()) {
+		if (block.getY() >= height && match.isRunning()) {
 			event.setCancelled(check(player));
 			String message = WHITE
 					+ "You have reached the maximum build height ";

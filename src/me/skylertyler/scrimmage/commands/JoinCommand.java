@@ -1,8 +1,8 @@
 package me.skylertyler.scrimmage.commands;
 
+import me.skylertyler.scrimmage.event.TeamChangeEvent;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.team.Team;
-import me.skylertyler.scrimmage.team.TeamHandler;
 import me.skylertyler.scrimmage.utils.TeamUtils;
 
 import org.bukkit.ChatColor;
@@ -41,24 +41,9 @@ public class JoinCommand implements CommandExecutor {
 							player);
 					if (args.length == 1) {
 						Team team = TeamUtils.getTeamByName(args[0]);
-						if (team == null) {
-							player.sendMessage(ChatColor.RED
-									+ "There is no team called "
-									+ ChatColor.DARK_RED + args[0]
-									+ ChatColor.RED + "!");
-							return false;
-						}
-
-						if (playerTeam == team) {
-							player.sendMessage(ChatColor.RED
-									+ "You are already on the "
-									+ team.getColor() + team.getName());
-							return false;
-						}
-
-						TeamHandler handler = match.getTeamHandler();
-						handler.addParticpatingMember(team, player);
-
+						TeamChangeEvent teamcEvent = new TeamChangeEvent(
+								player, playerTeam, team, args[0]);
+						this.match.getPluginManager().callEvent(teamcEvent);
 					}
 				}
 			}

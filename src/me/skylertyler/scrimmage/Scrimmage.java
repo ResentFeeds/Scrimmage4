@@ -37,6 +37,7 @@ import me.skylertyler.scrimmage.listeners.ChatListener;
 import me.skylertyler.scrimmage.listeners.ConnectionListener;
 import me.skylertyler.scrimmage.listeners.ObserverListener;
 import me.skylertyler.scrimmage.listeners.SetNextListener;
+import me.skylertyler.scrimmage.listeners.TeamListener;
 import me.skylertyler.scrimmage.listeners.TestConnectionListener;
 import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.map.MapLoader;
@@ -244,7 +245,8 @@ public class Scrimmage extends JavaPlugin {
 		registerCommand(new TCommand(), "t", null);
 		registerCommand(new GCommand(), "g", null);
 		registerCommand(new ACommand(), "a", null);
-		registerCommand(new MyChannelCommand(), "mychannel", Arrays.asList("myc", "mc"));
+		registerCommand(new MyChannelCommand(), "mychannel",
+				Arrays.asList("myc", "mc"));
 	}
 
 	public void registerListener(Listener listener) {
@@ -260,6 +262,7 @@ public class Scrimmage extends JavaPlugin {
 			registerListener(new ObserverListener(getMatch()));
 			registerListener(new ChatListener());
 			registerListener(new ChannelListener());
+			registerListener(new TeamListener());
 		}
 
 		if (getConfigFile().inDevelopment()) {
