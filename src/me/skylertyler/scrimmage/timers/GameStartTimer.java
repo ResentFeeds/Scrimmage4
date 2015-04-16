@@ -11,14 +11,14 @@ public class GameStartTimer extends CountDownTimer {
 
 	protected Match match;
 	private int bTimer;
+	private int bTime = 5;
 
-	 
 	public GameStartTimer(int time, boolean cancelled, Match match) {
 		super(time, cancelled);
 		this.match = match;
 	}
 
-	// broadcast the message below 
+	// broadcast the message below
 	@Override
 	public String statusString(int time) {
 		String message = ChatColor.GREEN + "Match starting in "
@@ -33,7 +33,6 @@ public class GameStartTimer extends CountDownTimer {
 	}
 
 	@SuppressWarnings("deprecation")
-	
 	// call this method when the timer ends :)
 	@Override
 	public void hasEnded() {
@@ -49,15 +48,16 @@ public class GameStartTimer extends CountDownTimer {
 					.getScheduler()
 					.scheduleAsyncRepeatingTask(match.getScrimmage(),
 							new Runnable() {
-								int time = 5;
 								@Override
 								public void run() {
-									if (time != 0) {
-										time--;
+									if (bTime != 0) {
+										bTime--;
 									} else {
-										match.broadcast(match.getMap().getShortMapDescription());
-										Bukkit.getServer().getScheduler()
+										Bukkit.getServer()
+												.getScheduler()
 												.cancelTask(getBroadcastTimer());
+										match.broadcast(match.getMap()
+												.getShortMapDescription());
 									}
 								}
 

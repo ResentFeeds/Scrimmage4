@@ -3,22 +3,68 @@ package me.skylertyler.scrimmage.channels;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import static org.bukkit.ChatColor.*;
 
 public class Channel {
 
 	private final List<Player> players;
-	private final String channelName;
+	private String channelName;
+	private ChatColor color;
+	private boolean bold;
 
-	public Channel(String channelName) {
+	public Channel(@Nullable boolean bold, @Nullable ChatColor color,
+			String channelName) {
 		this.players = new ArrayList<>();
+		this.bold = bold;
+		this.color = color;
 		this.channelName = channelName;
+
+		if (this.color == null) {
+			// default color ?
+			this.color = ChatColor.AQUA;
+		}
+	}
+
+	public boolean isBold() {
+		return getBold() != false ? true : false;
+	}
+
+	public boolean getBold() {
+		return this.bold;
+	}
+
+	public ChatColor getColor() {
+		return this.color;
 	}
 
 	public String getChannelName() {
 		return this.channelName;
 	}
+
+	/**
+	 * 
+	 * @return get the name of the channel with the color :)
+	 */
+	/** if its bold it will get the bold first */
+	public String getName() {
+		String result = null;
+		if (isBold()) {
+			String bold = ChatColor.BOLD.toString();
+			result = getColor() + bold + getChannelName();
+		} else {
+			result = getColor() + getChannelName();
+		}
+		return result + " Channel";
+	}
+
+	/**
+	 * 
+	 * @return may change this but get all the players in the channel... ? idk
+	 *         why xD
+	 */
 
 	public List<Player> getPlayers() {
 		return this.players;
@@ -26,8 +72,7 @@ public class Channel {
 
 	public void addPlayer(Player player) {
 		this.players.add(player);
-		player.sendMessage("Your channel is now " + AQUA
-				+ this.getChannelName() + " Channel");
+		player.sendMessage("Your channel is now " + getName());
 	}
 
 	public void removePlayer(Player player) {

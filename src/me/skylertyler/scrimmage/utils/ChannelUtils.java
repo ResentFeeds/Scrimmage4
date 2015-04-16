@@ -1,20 +1,28 @@
 package me.skylertyler.scrimmage.utils;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.skylertyler.scrimmage.Scrimmage;
+import me.skylertyler.scrimmage.channels.AdminChannel;
 import me.skylertyler.scrimmage.channels.Channel;
 import me.skylertyler.scrimmage.channels.GlobalChannel;
 import me.skylertyler.scrimmage.channels.TeamChannel;
 
 public class ChannelUtils {
 
+	//new global channel
 	public static GlobalChannel newGlobalChannel() {
-		return new GlobalChannel("Global");
+		return new GlobalChannel(true,ChatColor.GOLD, "Global");
 	}
 
+	// new team channel
 	public static TeamChannel newTeamChannel() {
-		return new TeamChannel("Team");
+		return new TeamChannel(false, ChatColor.GREEN, "Team");
+	}
+	
+	public static AdminChannel newAdminChannel(){
+		return new AdminChannel(false,ChatColor.RED, "Admin");
 	}
 
 	public static Channel getChannel(Player player) {
