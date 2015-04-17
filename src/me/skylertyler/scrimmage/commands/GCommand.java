@@ -45,7 +45,7 @@ public class GCommand implements CommandExecutor {
 			}
 		} else {
 			sender.sendMessage(RED
-					+ "You need to be a player to join a Channel");
+					+ "You need to be a player to join the Global Channel");
 		}
 		return false;
 	}

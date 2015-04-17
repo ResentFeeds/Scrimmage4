@@ -32,6 +32,9 @@ public class Config extends CoreConfig {
 		if (configExist()) {
 			FileConfiguration config = YamlConfiguration
 					.loadConfiguration(file);
+			config.options().header(
+					"------ " + this.prefix + " Config -----");
+			config.options().copyHeader(true);
 			/** the server configuration section */
 			ConfigurationSection configuration = config
 					.getConfigurationSection("server");
@@ -41,14 +44,14 @@ public class Config extends CoreConfig {
 				if (type != null) {
 					this.type = getTypeFromString(type);
 				} else {
-					this.type = ServerType.Running;
+					configuration.addDefault("type", false);
 				}
 
 				/** prefix */
 				if (hasString(configuration, "prefix")) {
 					this.prefix = configuration.getString("prefix");
 				} else {
-					this.prefix = "Scrimmage4";
+					configuration.addDefault("prefix", "Scrimmage4");
 				}
 
 				// TODO make a match configuration to put the bar etc.
@@ -57,7 +60,7 @@ public class Config extends CoreConfig {
 					this.bar = XMLUtils.parseBoolean(configuration
 							.getString("bar"));
 				} else {
-					this.bar = false;
+					configuration.addDefault("bar", false);
 				}
 
 				/** broadcast configuration section */
@@ -70,18 +73,19 @@ public class Config extends CoreConfig {
 						String broadcast = match_settings.getString("enabled");
 						this.broadcast = XMLUtils.parseBoolean(broadcast);
 					} else {
-						this.broadcast = false;
+						match_settings.addDefault("enabled", false);
 					}
 
 					/** frequency */
 					if (hasString(match_settings, "frequency")) {
 						this.frequency = match_settings.getInt("frequency");
 					} else {
-						this.frequency = 600;
+						match_settings.addDefault("frequency", 600);
 					}
 				}
 
 			}
+			config.options().copyDefaults(true);
 			config.save(file);
 		} else {
 			Log.logWarning(file.getName() + " does not exist!");

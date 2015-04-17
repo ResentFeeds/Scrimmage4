@@ -30,7 +30,7 @@ public class ACommand implements CommandExecutor {
 							this.match.getPluginManager().callEvent(event);  
 				} else {
 					player.sendMessage(RED
-							+ "You need to be op in order to join the ");
+							+ "You need to be op in order to join the " + ChannelUtils.getAdminChannel().getName());
 				}
 			}
 		}else{
