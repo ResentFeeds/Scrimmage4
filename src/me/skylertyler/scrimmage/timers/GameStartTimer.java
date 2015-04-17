@@ -40,9 +40,9 @@ public class GameStartTimer extends CountDownTimer {
 		match.startMatch();
 		Bukkit.getServer().getScheduler().cancelTask(getCountdown());
 
-		// this will run if the config has the 'broadcast-map' enabled etc.
+		// this will run if the config has the 'broadcast.enabled' is true etc.
 		Config config = getMatch().getScrimmage().getConfigFile();
-		if (config.isEnabled()) {
+		if (config.broadcastEnabled()) {
 			this.bTimer = Bukkit
 					.getServer()
 					.getScheduler()
@@ -61,7 +61,15 @@ public class GameStartTimer extends CountDownTimer {
 									}
 								}
 
-							}, 0, 20);
+								/**
+								 * the frequency times the amount of ticks in a
+								 * second
+								 */
+								 
+								/** EXAMPLE:
+								 *  if the frequency is 2 it would equal 2 * 20 would equal 2 seconds 
+								 */
+							}, 0, config.getFrequency() * 20);
 		}
 	}
 

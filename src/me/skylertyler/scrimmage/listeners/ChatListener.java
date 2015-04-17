@@ -17,6 +17,7 @@ import me.skylertyler.scrimmage.channels.TeamChannel;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.team.Team;
 import me.skylertyler.scrimmage.utils.ChannelUtils;
+import me.skylertyler.scrimmage.utils.Characters;
 
 public class ChatListener implements Listener {
 
@@ -32,7 +33,7 @@ public class ChatListener implements Listener {
 		Player player = event.getPlayer();
 		Team team = this.match.getTeamHandler().teamForPlayer(player);
 		Channel channel = ChannelUtils.getChannel(player);
-		// works 
+		// works
 		if (channel instanceof TeamChannel) {
 			TeamChannel teamChannel = (TeamChannel) channel;
 			if (teamChannel != null) {
@@ -41,12 +42,20 @@ public class ChatListener implements Listener {
 					Player member = Bukkit.getPlayer(string);
 					// try this;
 					event.setCancelled(true);
-					event.setFormat(team.getColor() + "[Team] " + WHITE + "<"
-							+ team.getColor() + player.getDisplayName() + WHITE
-							+ ">: " + event.getMessage());
+					if (this.match.getMap().getInfo().isAuthor(player)) {
+						event.setFormat(team.getColor() + "[Team] " + WHITE
+								+ "<" + GOLD + Characters.AllowCharacters(Characters.DIAMX.getUTF())
+								+ team.getColor() + player.getDisplayName()
+								+ WHITE + ">: " + event.getMessage());
+					} else {
+						event.setFormat(team.getColor() + "[Team] " + WHITE
+								+ "<" + team.getColor()
+								+ player.getDisplayName() + WHITE + ">: "
+								+ event.getMessage());
+					}
 					member.sendMessage(event.getFormat());
 				}
-			} 
+			}
 		}
 
 		if (channel instanceof GlobalChannel) {

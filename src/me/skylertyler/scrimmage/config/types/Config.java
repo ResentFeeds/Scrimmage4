@@ -20,6 +20,7 @@ public class Config extends CoreConfig {
 	private String prefix = null;
 	private boolean bar;
 	private boolean broadcast;
+	private int frequency;
 
 	public Config(File config) {
 		this.CONFIG = config;
@@ -31,8 +32,10 @@ public class Config extends CoreConfig {
 		if (configExist()) {
 			FileConfiguration config = YamlConfiguration
 					.loadConfiguration(file);
+			/** the server configuration section */
 			ConfigurationSection configuration = config
 					.getConfigurationSection("server");
+			/** the server type */
 			if (hasConfigurationSection(configuration)) {
 				String type = configuration.getString("type");
 				if (type != null) {
@@ -41,28 +44,40 @@ public class Config extends CoreConfig {
 					this.type = ServerType.Running;
 				}
 
+				/** prefix */
 				if (hasString(configuration, "prefix")) {
 					this.prefix = configuration.getString("prefix");
 				} else {
 					this.prefix = "Scrimmage4";
 				}
 
+				// TODO make a match configuration to put the bar etc.
+				/** this is for to enable the bar */
 				if (hasString(configuration, "bar")) {
-					this.bar = XMLUtils.parseBoolean(configuration.getString("bar"));
+					this.bar = XMLUtils.parseBoolean(configuration
+							.getString("bar"));
 				} else {
 					this.bar = false;
 				}
 
+				/** broadcast configuration section */
 				ConfigurationSection match_settings = config
-						.getConfigurationSection("match");
+						.getConfigurationSection("broadcast");
 
 				if (hasConfigurationSection(match_settings)) {
-					if (hasString(match_settings, "broadcast-map")) {
-						String broadcast = match_settings
-								.getString("broadcast-map");
+					/** configurable enabled method default would be false */
+					if (hasString(match_settings, "enabled")) {
+						String broadcast = match_settings.getString("enabled");
 						this.broadcast = XMLUtils.parseBoolean(broadcast);
 					} else {
 						this.broadcast = false;
+					}
+
+					/** frequency */
+					if (hasString(match_settings, "frequency")) {
+						this.frequency = match_settings.getInt("frequency");
+					} else {
+						this.frequency = 600;
 					}
 				}
 
@@ -72,7 +87,6 @@ public class Config extends CoreConfig {
 			Log.logWarning(file.getName() + " does not exist!");
 		}
 	}
-
 
 	private ServerType getTypeFromString(String string) {
 		ServerType type = null;
@@ -131,11 +145,19 @@ public class Config extends CoreConfig {
 		return this.bar;
 	}
 
+	public boolean hasFrequency() {
+		return this.frequency > 0;
+	}
+
+	public int getFrequency() {
+		return this.frequency;
+	}
+
 	public boolean hasBar() {
 		return this.bar == true;
 	}
 
-	public boolean isEnabled() {
+	public boolean broadcastEnabled() {
 		return this.broadcast == true;
 	}
 }

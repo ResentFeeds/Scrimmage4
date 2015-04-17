@@ -12,9 +12,9 @@ public class Rotation {
 	private Config config;
 
 	public Rotation() {
-		this.config = Scrimmage.getScrimmageInstance().getConfigFile();
-		// TODO
+		this.config = Scrimmage.getScrimmageInstance().getConfigFile(); 
 		this.rotation = new ArrayList<RotationSlot>();
+		 
 	}
 
 	public List<RotationSlot> getRotation() {

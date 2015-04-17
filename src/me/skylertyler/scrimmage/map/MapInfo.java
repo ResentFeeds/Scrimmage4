@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import org.bukkit.entity.Player;
+
 import me.skylertyler.scrimmage.author.Author;
 import me.skylertyler.scrimmage.contributor.Contributor;
 import me.skylertyler.scrimmage.rules.Rule;
@@ -14,6 +16,7 @@ import me.skylertyler.scrimmage.version.Version;
 
 public class MapInfo {
 
+	// TODO add the newer Contributor parser ?
 	private final String name;
 	/** the name for the map */
 	private final Version version;
@@ -30,7 +33,8 @@ public class MapInfo {
 	private final List<Rule> rules;
 	/** the rules for the map */
 	private HashMap<String, String> authorNames;
-	/** used to get the other names from the uuid with the contribution */
+	/** used to get the author names from the uuid with the contribution */
+	private HashMap<String, String> contributorNames;
 	private List<String> mapRules;
 	/** used for current maps rules page not the parsing for the rules */
 	private final boolean internal;
@@ -50,13 +54,20 @@ public class MapInfo {
 		this.rules = rules;
 
 		/**
-		 * used for reloading and clearing for authors, contributors, and rules, etc
+		 * used for reloading and clearing for authors, contributors, and rules,
+		 * etc
 		 */
-		/** NOTE: You need to wait until the match start to reload (if needed) .... */
-		// KNOWN BUG: when you reload before the match starts it will make the authors "null"
+		/**
+		 * NOTE: You need to wait until the match start to reload (if needed)
+		 * ....
+		 */
+		// KNOWN BUG: when you reload before the match starts it will make the
+		// uthors "null".
 		this.authorNames = new HashMap<>();
+		this.contributorNames = new HashMap<>();
 		this.mapRules = new ArrayList<>();
 		addAuthorNames();
+		addContributorNames();
 		addMapRules();
 	}
 
@@ -99,6 +110,19 @@ public class MapInfo {
 			String contribution = author.getContribution();
 			authorNames.put(name, contribution);
 		}
+	}
+
+	public void addContributorNames() {
+		clearContributorNames();
+		for (Contributor contributor : getContributors()) {
+			String name = UUIDUtils.getNameByUUID(contributor.getUUID());
+			String contribution = contributor.getContribution();
+			contributorNames.put(name, contribution);
+		}
+	}
+
+	public void clearContributorNames() {
+		getContributors().clear();
 	}
 
 	public HashMap<String, String> getAuthorNames() {
@@ -150,5 +174,14 @@ public class MapInfo {
 			}
 		}
 		return r;
+	}
+
+	public boolean isAuthor(Player player) {
+		for (Author author : getAuthors()) {
+			if (player.getUniqueId().equals(author.getUUID())) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

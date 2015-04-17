@@ -105,6 +105,7 @@ public class Scrimmage extends JavaPlugin {
 			File file = this.getDataFolder();
 			file.mkdir();
 		}
+		
 		checkSportBukkitEnabled();
 		try {
 			loadConfig(new File(this.getDataFolder(), "config.yml"));
@@ -112,7 +113,7 @@ public class Scrimmage extends JavaPlugin {
 			e.printStackTrace();
 		}
 
-		// check the server type equals running :)
+		/** check if the server type is running */ 
 		if (getConfigFile().isRunning()) {
 			try {
 				loadLoadedMaps();
@@ -124,6 +125,7 @@ public class Scrimmage extends JavaPlugin {
 					Log.logWarning("Scrimmage4 needs at least one map in order to run!");
 					Log.logWarning("===================================================");
 					Log.logWarning("");
+					/** shutdown the server if there are no maps loaded */
 					getServer().shutdown();
 					return;
 				}
@@ -265,6 +267,7 @@ public class Scrimmage extends JavaPlugin {
 			registerListener(new TeamListener());
 		}
 
+		/** if the servertype is in development register this listener below */
 		if (getConfigFile().inDevelopment()) {
 			registerListener(new TestConnectionListener());
 		}
@@ -493,7 +496,7 @@ public class Scrimmage extends JavaPlugin {
 		return rotationFile;
 	}
 
-	// modules
+	/** register modules here */
 	public void loadModules() throws InvalidModuleException {
 		ModuleRegistry.register(InfoModule.class);
 		ModuleRegistry.register(TeamModule.class);
