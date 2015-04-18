@@ -13,16 +13,20 @@ public class ChannelUtils {
 
 	// new global channel
 	public static GlobalChannel newGlobalChannel() {
-		return new GlobalChannel(true, ChatColor.GOLD, "Global");
+		return new GlobalChannel(ChatColor.LIGHT_PURPLE + "*", true,
+				ChatColor.GOLD, "Global");
 	}
 
 	// new team channel
 	public static TeamChannel newTeamChannel() {
-		return new TeamChannel(false, ChatColor.GREEN, "Team");
+		return new TeamChannel(ChatColor.LIGHT_PURPLE + "*", false,
+				ChatColor.GREEN, "Team");
 	}
 
+	// new admin channel
 	public static AdminChannel newAdminChannel() {
-		return new AdminChannel(false, ChatColor.DARK_RED, "Admin");
+		return new AdminChannel(ChatColor.LIGHT_PURPLE + "*", false,
+				ChatColor.DARK_RED, "Admin");
 	}
 
 	public static Channel getChannel(Player player) {

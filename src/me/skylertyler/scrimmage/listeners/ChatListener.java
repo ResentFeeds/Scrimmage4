@@ -2,13 +2,6 @@ package me.skylertyler.scrimmage.listeners;
 
 import java.util.List;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-
-import static org.bukkit.ChatColor.*;
 import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.channels.AdminChannel;
 import me.skylertyler.scrimmage.channels.Channel;
@@ -17,7 +10,12 @@ import me.skylertyler.scrimmage.channels.TeamChannel;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.team.Team;
 import me.skylertyler.scrimmage.utils.ChannelUtils;
-import me.skylertyler.scrimmage.utils.Characters;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener {
 
@@ -33,6 +31,7 @@ public class ChatListener implements Listener {
 		Player player = event.getPlayer();
 		Team team = this.match.getTeamHandler().teamForPlayer(player);
 		Channel channel = ChannelUtils.getChannel(player);
+		String message = event.getMessage();
 		// works
 		if (channel instanceof TeamChannel) {
 			TeamChannel teamChannel = (TeamChannel) channel;
@@ -43,15 +42,11 @@ public class ChatListener implements Listener {
 					// try this;
 					event.setCancelled(true);
 					if (this.match.getMap().getInfo().isAuthor(player)) {
-						event.setFormat(team.getColor() + "[Team] " + WHITE
-								+ "<" + GOLD + Characters.AllowCharacters(Characters.DIAMX.getUTF())
-								+ team.getColor() + player.getDisplayName()
-								+ WHITE + ">: " + event.getMessage());
+						event.setFormat(teamChannel.format(team, player,
+								message));
 					} else {
-						event.setFormat(team.getColor() + "[Team] " + WHITE
-								+ "<" + team.getColor()
-								+ player.getDisplayName() + WHITE + ">: "
-								+ event.getMessage());
+						event.setFormat(teamChannel.format(team, player,
+								message));
 					}
 					member.sendMessage(event.getFormat());
 				}
@@ -62,9 +57,11 @@ public class ChatListener implements Listener {
 			GlobalChannel global = (GlobalChannel) channel;
 			if (global != null) {
 				event.setCancelled(true);
-				this.match.broadcast(WHITE + "<" + team.getColor()
-						+ player.getDisplayName() + WHITE + ">: "
-						+ event.getMessage());
+				if (this.match.getMap().getInfo().isAuthor(player)) {
+					this.match.broadcast(global.format(team, player, message));
+				} else {
+					this.match.broadcast(global.format(team, player, message));
+				}
 			}
 		}
 
@@ -72,18 +69,21 @@ public class ChatListener implements Listener {
 			AdminChannel admin = (AdminChannel) channel;
 			if (admin != null) {
 				for (Player players : Bukkit.getOnlinePlayers()) {
+					/**
+					 * the player needs to be op. or have the persmission
+					 * 'admin.channel.receieve' to get the message
+					 */
 					if (players.isOp()
 							|| players.hasPermission("admin.channel.recieve")) {
 						event.setCancelled(true);
-						if (team != null) {
-							event.setFormat(RED + "[" + GOLD + "A" + RED + "] "
-									+ WHITE + "<" + team.getColor()
-									+ player.getName() + WHITE + ">: "
-									+ event.getMessage());
+						/** check the player is a contributor or a author */
+						if (this.match.getMap().getInfo().isAuthor(player)) {
+							event.setFormat(admin.format(team, player, message));
 						} else {
-							event.setFormat(RED + "[" + GOLD + "A" + RED + "] "
-									+ WHITE + "<" + player.getDisplayName()
-									+ ">: " + event.getMessage());
+							/**
+							 * do this if they are not a contributor or a author
+							 */
+							event.setFormat(admin.format(team, player, message));
 						}
 						players.sendMessage(event.getFormat());
 					}

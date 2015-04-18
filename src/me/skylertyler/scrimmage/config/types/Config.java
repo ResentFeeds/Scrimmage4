@@ -32,9 +32,6 @@ public class Config extends CoreConfig {
 		if (configExist()) {
 			FileConfiguration config = YamlConfiguration
 					.loadConfiguration(file);
-			config.options().header(
-					"------ " + this.prefix + " Config -----");
-			config.options().copyHeader(true);
 			/** the server configuration section */
 			ConfigurationSection configuration = config
 					.getConfigurationSection("server");
@@ -44,7 +41,7 @@ public class Config extends CoreConfig {
 				if (type != null) {
 					this.type = getTypeFromString(type);
 				} else {
-					configuration.addDefault("type", false);
+					configuration.addDefault("type", "running");
 				}
 
 				/** prefix */
@@ -52,15 +49,6 @@ public class Config extends CoreConfig {
 					this.prefix = configuration.getString("prefix");
 				} else {
 					configuration.addDefault("prefix", "Scrimmage4");
-				}
-
-				// TODO make a match configuration to put the bar etc.
-				/** this is for to enable the bar */
-				if (hasString(configuration, "bar")) {
-					this.bar = XMLUtils.parseBoolean(configuration
-							.getString("bar"));
-				} else {
-					configuration.addDefault("bar", false);
 				}
 
 				/** broadcast configuration section */
@@ -83,9 +71,22 @@ public class Config extends CoreConfig {
 						match_settings.addDefault("frequency", 600);
 					}
 				}
-
+				
+				
+				/** bar configuration section */
+				ConfigurationSection bar_section = config.getConfigurationSection("bar");
+				 if(bar_section != null){
+					 
+				 } else{
+					 /** create the section if it doesnt exist */
+					 config.createSection("bar"); 
+				 }
 			}
+			/** do this little backwards because i like to use the prefix within the header */
+			// NOTE You can actually change whater ever the prefix is and it will be in the header whenever you reload 
 			config.options().copyDefaults(true);
+			config.options().header("------ " + this.prefix + " Config -----");
+			config.options().copyHeader(true);
 			config.save(file);
 		} else {
 			Log.logWarning(file.getName() + " does not exist!");

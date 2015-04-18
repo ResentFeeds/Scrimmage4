@@ -5,6 +5,7 @@ import me.skylertyler.scrimmage.modules.TeamModule;
 import me.skylertyler.scrimmage.utils.TeamUtils;
 
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 public class TeamHandler {
@@ -31,17 +32,26 @@ public class TeamHandler {
 		// TODO make their overhead name be the teams color
 		player.sendMessage(ChatColor.GRAY + "You joined the " + team.getColor()
 				+ team.getName());
-
+		
+		/** if the team is observers */
+		if(team == TeamUtils.getTeamByName("Observers")){
+			player.setGameMode(GameMode.CREATIVE);
+		}else{
+			player.setGameMode(GameMode.SURVIVAL);
+		}
 		//SpawnUtils.spawn(player);
 	}
 
+	/** get the team that the player is currently on */
 	public Team teamForPlayer(Player player) {
 		Team result = null;
 		Team obs = TeamUtils.getObservers();
 		for (Team team : TeamUtils.getParticpatingTeams()) {
+			/** check all the particpating teams */
 			if (team.containsPlayer(player)) {
 				result = team;
 			} else {
+				/** check the observers */
 				if (obs.containsPlayer(player)) {
 					result = obs;
 				}

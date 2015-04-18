@@ -5,23 +5,26 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import me.skylertyler.scrimmage.team.Team;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-public class Channel {
+public abstract class Channel {
 
 	private final List<Player> players;
 	private String channelName;
 	private ChatColor color;
 	private boolean bold;
+	private String prefix;
 
-	public Channel(@Nullable boolean bold, @Nullable ChatColor color,
-			String channelName) {
+	public Channel(String prefix, @Nullable boolean bold,
+			@Nullable ChatColor color, String channelName) {
 		this.players = new ArrayList<>();
+		this.prefix = prefix;
 		this.bold = bold;
 		this.color = color;
 		this.channelName = channelName;
-
 		if (this.color == null) {
 			// default color ?
 			this.color = ChatColor.AQUA;
@@ -71,7 +74,7 @@ public class Channel {
 	}
 
 	public void addPlayer(Player player) {
-		this.players.add(player); 
+		this.players.add(player);
 	}
 
 	public void removePlayer(Player player) {
@@ -84,4 +87,15 @@ public class Channel {
 		}
 		return false;
 	}
+
+	public String getPrefix() {
+		return this.prefix;
+	}
+
+	public boolean hasPrefix() {
+		return getPrefix() != "";
+	}
+
+	/** format the message */
+	public abstract String format(Team team, Player player, String mesage);
 }
