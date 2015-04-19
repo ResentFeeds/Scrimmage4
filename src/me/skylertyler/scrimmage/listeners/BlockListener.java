@@ -7,7 +7,7 @@ import me.skylertyler.scrimmage.event.MaxHeightReachedEvent;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.modules.MaxBuildHeightModule;
 import me.skylertyler.scrimmage.team.Team;
-import me.skylertyler.scrimmage.team.TeamType;
+import me.skylertyler.scrimmage.utils.TeamUtils;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -17,7 +17,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 public class BlockListener extends MatchListener {
 
-	private  MaxBuildHeightModule mbhm;
+	private MaxBuildHeightModule mbhm;
 
 	public BlockListener() {
 		super(Scrimmage.getScrimmageInstance().getMatch());
@@ -28,8 +28,8 @@ public class BlockListener extends MatchListener {
 
 	public boolean check(Player player) {
 		Team team = getMatch().getTeamHandler().teamForPlayer(player);
-		return team.getType() == TeamType.Participating
-				&& team.containsPlayer(player);
+		return team.containsPlayer(player)
+				&& team.getType() == TeamUtils.getTypebyID(1);
 	}
 
 	@EventHandler
@@ -39,13 +39,15 @@ public class BlockListener extends MatchListener {
 		int height = this.getMaxBuildHeight().getMaxHeightParser()
 				.getMaxHeight().getHeight();
 		Match match = this.getMatch();
-		if (block.getY() >= height && match.isRunning()) {
-			event.setCancelled(check(player));
-			String message = WHITE
-					+ "You have reached the maximum build height ";
-			MaxHeightReachedEvent reached = new MaxHeightReachedEvent(match,
-					player, height, message);
-			match.getPluginManager().callEvent(reached);
+		if (check(player)) {
+			if (block.getY() >= height && match.isRunning()) {
+				event.setCancelled(true);
+				String message = WHITE
+						+ "You have reached the maximum build height ";
+				MaxHeightReachedEvent reached = new MaxHeightReachedEvent(
+						match, player, height, message);
+				match.getPluginManager().callEvent(reached);
+			}
 		}
 	}
 

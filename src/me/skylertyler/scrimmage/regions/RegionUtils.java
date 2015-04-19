@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.modules.InfoModule;
 import me.skylertyler.scrimmage.regions.types.BlockRegion;
+import me.skylertyler.scrimmage.regions.types.CircleRegion;
 import me.skylertyler.scrimmage.regions.types.CuboidRegion;
 import me.skylertyler.scrimmage.regions.types.CylinderRegion;
 import me.skylertyler.scrimmage.regions.types.EmptyRegion;
@@ -89,12 +90,34 @@ public class RegionUtils {
 				return parseSphere(regionNode);
 			} else if (regionNode.getNodeName().equals("cylinder")) {
 				return parseCyclinder(regionNode);
+			} else if (regionNode.getNodeName().equals("circle")) {
+				return parseCircle(regionNode);
 			}
 		} else {
 			Log.logWarning("there is no region called "
 					+ regionNode.getNodeName());
 		}
 		return null;
+	}
+
+	private static CircleRegion parseCircle(Node regionNode) {
+		CircleRegion circle = null;
+		if (regionNode.getNodeType() == Node.ELEMENT_NODE) {
+			Element element = (Element) regionNode;
+
+			Vector center = LocationUtils.vectorFromString(element
+					.getAttribute("center"));
+			int radius = NumberUtils.parseInteger(element
+					.getAttribute("radius"));
+
+			if (element.hasAttribute("name")) {
+				String name = element.getAttribute("name");
+				circle = new CircleRegion(name, new BlockRegion(center), radius);
+			} else {
+				circle = new CircleRegion(new BlockRegion(center), radius);
+			}
+		}
+		return circle;
 	}
 
 	public static PointRegion parsePoint(Node regionNode) {
@@ -229,6 +252,7 @@ public class RegionUtils {
 			case "cuboid":
 			case "sphere":
 			case "cylinder":
+			case "circle":
 				return true;
 			default:
 				return false;

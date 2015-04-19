@@ -2,6 +2,8 @@ package me.skylertyler.scrimmage.listeners;
 
 import java.util.Map.Entry;
 
+import me.skylertyler.scrimmage.MatchListener;
+import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.event.ScoreboardLoadEvent;
 import me.skylertyler.scrimmage.event.MatchLoadEvent;
 import me.skylertyler.scrimmage.event.MatchStartEvent;
@@ -10,6 +12,7 @@ import me.skylertyler.scrimmage.match.MatchState;
 import me.skylertyler.scrimmage.regions.Region;
 import me.skylertyler.scrimmage.regions.RegionUtils;
 import me.skylertyler.scrimmage.regions.types.BlockRegion;
+import me.skylertyler.scrimmage.regions.types.CircleRegion;
 import me.skylertyler.scrimmage.regions.types.CuboidRegion;
 import me.skylertyler.scrimmage.regions.types.CylinderRegion;
 import me.skylertyler.scrimmage.regions.types.SphereRegion;
@@ -23,20 +26,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.scoreboard.Scoreboard;
 
-public class ConnectionListener implements Listener {
+/** a match listener */
+public class ConnectionListener extends MatchListener {
 
-	private final Match match;
 	private ChatColor dark_aqua = DARK_AQUA;
 	private ChatColor aqua = AQUA;
 
-	public ConnectionListener(Match match) {
-		this.match = match;
+	public ConnectionListener() {
+		super(Scrimmage.getScrimmageInstance().getMatch());
 	}
 
 	@EventHandler
@@ -67,10 +69,6 @@ public class ConnectionListener implements Listener {
 			}
 		}
 		event.setMotd(format);
-	}
-
-	public Match getMatch() {
-		return this.match;
 	}
 
 	@EventHandler
@@ -149,6 +147,22 @@ public class ConnectionListener implements Listener {
 						format = "You cant place blocks in here!";
 					}
 
+					String result = format;
+					event.getPlayer().sendMessage(result);
+				}
+			} else if (region.getValue() instanceof CircleRegion) {
+				CircleRegion circle = (CircleRegion) region.getValue();
+				if (circle != null
+						&& circle.containsVector(event.getBlock().getLocation()
+								.toVector())) {
+					event.setCancelled(true);
+					String format = null;
+					if (circle.hasName()) {
+						format = "You can't build in the " + RED
+								+ circle.getName();
+					} else {
+						format = "You cant build here!";
+					}
 					String result = format;
 					event.getPlayer().sendMessage(result);
 				}

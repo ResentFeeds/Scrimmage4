@@ -5,6 +5,7 @@ import java.util.List;
 
 import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.channels.Channel;
+import me.skylertyler.scrimmage.config.types.Config;
 import me.skylertyler.scrimmage.event.MatchEndEvent;
 import me.skylertyler.scrimmage.event.MatchLoadEvent;
 import me.skylertyler.scrimmage.event.MatchStartEvent;
@@ -15,6 +16,7 @@ import me.skylertyler.scrimmage.team.TeamHandler;
 import me.skylertyler.scrimmage.timers.GameStartTimer;
 import me.skylertyler.scrimmage.utils.ChannelUtils;
 import me.skylertyler.scrimmage.utils.MessageUtils;
+import me.skylertyler.scrimmage.utils.StringUtils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -37,6 +39,7 @@ public class Match {
 	private Scoreboard board;
 	private GameStartTimer startTimer;
 	private List<Channel> channels = new ArrayList<>();
+	private String barMessage;
 
 	public Match(Scrimmage scrim, int id, Map map) {
 		this.channels.add(ChannelUtils.newGlobalChannel());
@@ -45,6 +48,18 @@ public class Match {
 		this.scrim = scrim;
 		this.id = id;
 		this.map = map;
+		/**
+		 * the message for the bar if enabled!
+		 */
+		Config config = this.scrim.getConfigFile();
+		if (config.barEnabled()) {
+			String message = config.getBarMessage();
+			this.barMessage = message.replace("#map#", map.getInfo().getName())
+					.replace(
+							"$authors$",
+							StringUtils.listToEnglishCompound(map.getInfo()
+									.getAuthorNames().keySet()));
+		}
 		this.handler = new MapHandler(this);
 		this.handler.loadMap(map, id);
 		this.pm = scrim.getServer().getPluginManager();
@@ -160,6 +175,14 @@ public class Match {
 
 	public List<Channel> getChannels() {
 		return channels;
+	}
+
+	public boolean hasBarMessage() {
+		return getBarMessage() != null;
+	}
+
+	public String getBarMessage() {
+		return this.barMessage;
 	}
 
 }

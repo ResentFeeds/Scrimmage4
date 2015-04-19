@@ -5,9 +5,10 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import org.bukkit.entity.Player;
+
 import me.skylertyler.scrimmage.utils.Log;
 
-public class Kit{
+public class Kit {
 	private final String name;
 	private final List<ItemKit> items;
 
@@ -17,20 +18,21 @@ public class Kit{
 	// these work
 	private final HealthKit health;
 	private final HungerKit hunger;
-	
+
 	// need to test -_-
 	private KnockbackReductionKit reduction;
-
 	// fix
 	// will add armor kit , potion kit etc. :)
 	public Kit(String name, @Nullable List<ItemKit> items,
-			@Nullable ArmorKit armor, @Nullable KnockbackReductionKit reduction) {
+			@Nullable ArmorKit armor,
+			@Nullable KnockbackReductionKit reduction) {
 		this.name = name;
 		this.items = items;
 		this.armor = armor;
 		this.health = new HealthKit(20, 20);
 		this.hunger = new HungerKit(20, 5.0f);
-
+		this.reduction = reduction;
+		
 		if (hasReductionKit()) {
 			this.reduction = reduction;
 		} else {
@@ -120,5 +122,5 @@ public class Kit{
 			KnockbackReductionKit reduction = this.getReductionKit();
 			reduction.apply(player);
 		}
-	}  
+	}
 }

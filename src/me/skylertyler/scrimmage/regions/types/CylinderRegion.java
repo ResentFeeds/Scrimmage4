@@ -10,12 +10,14 @@ public class CylinderRegion extends Region {
 	private final BlockRegion base;
 	private final int radius;
 	private final int height;
+	private int rSquared;
 
 	public CylinderRegion(String name, BlockRegion base, int radius, int height) {
 		super(name);
 		this.base = base;
 		this.radius = radius;
 		this.height = height;
+		this.rSquared = this.radius * this.radius;
 	}
 
 	public CylinderRegion(BlockRegion base, int radius, int height) {
@@ -28,7 +30,7 @@ public class CylinderRegion extends Region {
 		double newZ = (getBase().getVector().getZ() - vec.getZ());
 		boolean h = vec.getY() <= getBase().getVector().getY() + getHeight()
 				&& vec.getY() >= getBase().getVector().getY();
-		return h && newX * newX + newZ * newZ < getRadius() * getRadius();
+		return h && newX * newX + newZ * newZ < this.rSquared;
 	}
 
 	@Override

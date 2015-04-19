@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import me.skylertyler.scrimmage.Scrimmage;
+import me.skylertyler.scrimmage.config.types.Config;
+
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import static org.bukkit.ChatColor.*;
+
 import org.bukkit.command.Command;
 
 import com.google.common.base.Joiner;
@@ -17,12 +21,10 @@ public class MessageUtils {
 
 	// broadcasting the starting match message!
 	public static void broadcastStartMessage() {
-		ChatColor dark_purple = ChatColor.DARK_PURPLE;
-		ChatColor gold = ChatColor.GOLD;
-		String header = dark_purple + " # # # # # # # # # # # # # # #";
-		String match = dark_purple + "# #" + gold + " The match has started "
-				+ dark_purple + "# #";
-		String footer = dark_purple + " # # # # # # # # # # # # # # #";
+		String header = DARK_PURPLE + " # # # # # # # # # # # # # # #";
+		String match = DARK_PURPLE + "# #" + GOLD + " The match has started "
+				+ DARK_PURPLE + "# #";
+		String footer = DARK_PURPLE + " # # # # # # # # # # # # # # #";
 		Bukkit.broadcastMessage(header);
 		Bukkit.broadcastMessage(match);
 		Bukkit.broadcastMessage(footer);
@@ -31,15 +33,12 @@ public class MessageUtils {
 	// broadcast the ending game message
 	// TOdo add team winning!
 	public static void broadcastFinishedMessage() {
-		ChatColor dark_purple = ChatColor.DARK_PURPLE;
-		ChatColor gold = ChatColor.GOLD;
-		ChatColor red = ChatColor.RED;
-		String header = dark_purple + " # # # # # # # # #";
-		String match = dark_purple + "# #" + gold + " Game Over " + dark_purple
+		String header = DARK_PURPLE + " # # # # # # # # #";
+		String match = DARK_PURPLE + "# #" + GOLD + " Game Over " + DARK_PURPLE
 				+ "# #";
-		String team = dark_purple + "# #" + red + " No Team wins "
-				+ dark_purple + "# #";
-		String footer = dark_purple + " # # # # # # # # #";
+		String team = DARK_PURPLE + "# #" + RED + " No Team wins "
+				+ DARK_PURPLE + "# #";
+		String footer = DARK_PURPLE + " # # # # # # # # #";
 		Bukkit.broadcastMessage(header);
 		Bukkit.broadcastMessage(match);
 		Bukkit.broadcastMessage(team);
@@ -49,8 +48,8 @@ public class MessageUtils {
 	public static String notEnoughArgs(Command cmd) {
 		String message = null;
 		COMMAND_ERROR_MESSAGE = new ArrayList<>();
-		COMMAND_ERROR_MESSAGE.add(ChatColor.RED + "Not enough arguments!");
-		COMMAND_ERROR_MESSAGE.add(ChatColor.RED + " /" + cmd.getName() + " <"
+		COMMAND_ERROR_MESSAGE.add(RED + "Not enough arguments!");
+		COMMAND_ERROR_MESSAGE.add(RED + " /" + cmd.getName() + " <"
 				+ cmd.getUsage() + ">");
 
 		for (String messages : COMMAND_ERROR_MESSAGE) {
@@ -61,8 +60,7 @@ public class MessageUtils {
 	}
 
 	public static String authorList(Iterator<String> iterator) {
-		String comma = Joiner
-				.on(ChatColor.LIGHT_PURPLE + ", " + ChatColor.AQUA).join(iterator);
+		String comma = Joiner.on(LIGHT_PURPLE + ", " + AQUA).join(iterator);
 		return replaceLast(comma, ", ", " and ");
 	}
 
@@ -92,5 +90,32 @@ public class MessageUtils {
 		}
 
 		return string;
+	}
+
+	public static String broadcast(String[] args) {
+
+		StringBuilder msg = new StringBuilder();
+
+		for (int i = 0; i < args.length; i++) {
+			if (msg.length() > 0) {
+				msg.append(" ");
+			}
+
+			msg.append(args[i]);
+		}
+
+		Config config = Scrimmage.getScrimmageInstance().getConfigFile();
+
+		String format = null;
+		String message = msg.toString();
+
+		if (message.contains("`")) {
+			format = BukkitUtils.colorize(message);
+		} else {
+			format = RED + message;
+		}
+
+		String result = format;
+		return config.getBroadcastPrefix() + " " + result;
 	}
 }

@@ -17,6 +17,6 @@ public class GlobalChannel extends Channel {
 	@Override
 	public String format(Team team, Player player, String message) {
 		return "<" + getPrefix() + team.getColor() + player.getDisplayName()
-				+ WHITE + ">:" + message;
+				+ WHITE + ">: " + message;
 	}
 }

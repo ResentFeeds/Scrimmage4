@@ -9,56 +9,22 @@ import java.util.Map.Entry;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import me.skylertyler.scrimmage.commands.ACommand;
-import me.skylertyler.scrimmage.commands.AuthorCommand;
-import me.skylertyler.scrimmage.commands.BroadcastCommand;
-import me.skylertyler.scrimmage.commands.ContributorCommand;
-import me.skylertyler.scrimmage.commands.CycleCommand;
-import me.skylertyler.scrimmage.commands.GCommand;
-import me.skylertyler.scrimmage.commands.JoinCommand;
-import me.skylertyler.scrimmage.commands.LocationCommand;
-import me.skylertyler.scrimmage.commands.MapListCommand;
-import me.skylertyler.scrimmage.commands.MyChannelCommand;
-import me.skylertyler.scrimmage.commands.MyTeamCommand;
-import me.skylertyler.scrimmage.commands.NextCommand;
-import me.skylertyler.scrimmage.commands.RotationCommand;
-import me.skylertyler.scrimmage.commands.RuleCommand;
-import me.skylertyler.scrimmage.commands.SetNextCommand;
-import me.skylertyler.scrimmage.commands.TCommand;
-import me.skylertyler.scrimmage.commands.WorldCommand;
+import me.skylertyler.scrimmage.commands.*;
 import me.skylertyler.scrimmage.config.types.Config;
 import me.skylertyler.scrimmage.config.types.RotationConfig;
 import me.skylertyler.scrimmage.exception.InvalidModuleException;
 import me.skylertyler.scrimmage.exception.KitNotFoundExecption;
 import me.skylertyler.scrimmage.kit.Kit;
-import me.skylertyler.scrimmage.listeners.BlockListener;
-import me.skylertyler.scrimmage.listeners.ChannelListener;
-import me.skylertyler.scrimmage.listeners.ChatListener;
-import me.skylertyler.scrimmage.listeners.ConnectionListener;
-import me.skylertyler.scrimmage.listeners.ObserverListener;
-import me.skylertyler.scrimmage.listeners.SetNextListener;
-import me.skylertyler.scrimmage.listeners.TeamListener;
-import me.skylertyler.scrimmage.listeners.TestConnectionListener;
-import me.skylertyler.scrimmage.map.Map;
-import me.skylertyler.scrimmage.map.MapLoader;
-import me.skylertyler.scrimmage.match.Match;
-import me.skylertyler.scrimmage.match.MatchHandler;
-import me.skylertyler.scrimmage.modules.InfoModule;
-import me.skylertyler.scrimmage.modules.KitModule;
-import me.skylertyler.scrimmage.modules.MaxBuildHeightModule;
-import me.skylertyler.scrimmage.modules.ModuleRegistry;
-import me.skylertyler.scrimmage.modules.RegionModule;
-import me.skylertyler.scrimmage.modules.SpawnModule;
-import me.skylertyler.scrimmage.modules.TeamModule;
+import me.skylertyler.scrimmage.listeners.*;
+import me.skylertyler.scrimmage.map.*;
+import me.skylertyler.scrimmage.match.*;
+import me.skylertyler.scrimmage.modules.*;
 import me.skylertyler.scrimmage.regions.Region;
 import me.skylertyler.scrimmage.regions.RegionUtils;
 import me.skylertyler.scrimmage.rotation.Rotation;
 import me.skylertyler.scrimmage.team.Team;
 import me.skylertyler.scrimmage.test.TestLoader;
-import me.skylertyler.scrimmage.utils.ConsoleUtils;
-import me.skylertyler.scrimmage.utils.KitUtils;
-import me.skylertyler.scrimmage.utils.Log;
-import me.skylertyler.scrimmage.utils.TeamUtils;
+import me.skylertyler.scrimmage.utils.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -105,7 +71,7 @@ public class Scrimmage extends JavaPlugin {
 			File file = this.getDataFolder();
 			file.mkdir();
 		}
-		
+
 		checkSportBukkitEnabled();
 		try {
 			loadConfig(new File(this.getDataFolder(), "config.yml"));
@@ -113,17 +79,19 @@ public class Scrimmage extends JavaPlugin {
 			e.printStackTrace();
 		}
 
-		/** check if the server type is running */ 
+		/** check if the server type is running */
 		if (getConfigFile().isRunning()) {
 			try {
 				loadLoadedMaps();
 				loadRotation(new File(this.getDataFolder(), "rotation.yml"));
 				int size = getRotationConfig().getRotMaps().size();
 				if (size == 0) {
+					/** add a line with nothing to give a space */
 					Log.logWarning("");
 					Log.logWarning("===================================================");
 					Log.logWarning("Scrimmage4 needs at least one map in order to run!");
 					Log.logWarning("===================================================");
+					/** add a line with nothing to give a space */
 					Log.logWarning("");
 					/** shutdown the server if there are no maps loaded */
 					getServer().shutdown();
@@ -257,11 +225,11 @@ public class Scrimmage extends JavaPlugin {
 
 	public void loadListeners() {
 		if (getConfigFile().isRunning()) {
-			registerListener(new ConnectionListener(getMatch()));
+			registerListener(new ConnectionListener());
 			registerListener(new InfoModule(getMatch().getMap().getInfo()));
 			registerListener(new BlockListener());
 			registerListener(new SetNextListener());
-			registerListener(new ObserverListener(getMatch()));
+			registerListener(new ObserverListener());
 			registerListener(new ChatListener());
 			registerListener(new ChannelListener());
 			registerListener(new TeamListener());
@@ -423,8 +391,7 @@ public class Scrimmage extends JavaPlugin {
 	public void onDisable() {
 		if (getConfigFile().isRunning()) {
 			getMatch().getMap().getInfo().getAuthorNames().clear();
-			getMatch().getMapHandler().clearMapsDirectory(
-					Bukkit.getWorldContainer());
+			getMatch().getMapHandler().clearMapsDirectory(new File("server"));
 			// unloading the modules when the server is disabled or shut down!
 			// by
 			// using /stop or it crashes due to some error!

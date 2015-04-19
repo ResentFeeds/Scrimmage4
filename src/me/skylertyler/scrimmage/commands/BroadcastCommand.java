@@ -18,29 +18,20 @@ public class BroadcastCommand implements CommandExecutor {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
-		 if(sender instanceof Player){
-			 Player player = (Player) sender;
-			 if(cmd.getName().equalsIgnoreCase("broadcast")){
-				  if(args.length <= 0){
-				      player.sendMessage(MessageUtils.notEnoughArgs(cmd));
-				      return false;
-				  }
-				  
-				  
-				  String message = null;
-				  if(args.length >= 1){
-					  Scrimmage scrim = this.getScrimmage();
-					  for(int i = 0; i < args.length; i++){
-						  message += args.toString().substring(i);
-					  }
-					  
-					  String prefix = scrim.getConfigFile().getFullPrefix();
-					  Bukkit.broadcastMessage(prefix + " " + message);
-				  }
-			 }
-		 }
-	                                                                                       
+	public boolean onCommand(CommandSender sender, Command cmd, String label,
+			String[] args) {
+		if (sender instanceof Player) {
+			Player player = (Player) sender;
+			if (cmd.getName().equalsIgnoreCase("broadcast")) {
+				if (args.length <= 0) {
+					player.sendMessage(MessageUtils.notEnoughArgs(cmd));
+					return false;
+				}
+				String msg = MessageUtils.broadcast(args);
+				Bukkit.broadcastMessage(msg);
+			}
+		}
+
 		return false;
 	}
 

@@ -6,7 +6,7 @@ import me.skylertyler.scrimmage.match.Match;
 
 public abstract class MatchListener implements Listener {
 
-	private final Match match;
+	protected final Match match;
 
 	public MatchListener(Match match) {
 		this.match = match;

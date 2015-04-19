@@ -1,5 +1,7 @@
 package me.skylertyler.scrimmage.listeners;
 
+import me.skylertyler.scrimmage.MatchListener;
+import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.map.MapInfo;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.team.Team;
@@ -9,31 +11,18 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class ObserverListener implements Listener {
+public class ObserverListener extends MatchListener {
 
-	private final Match match;
-
-	public ObserverListener(Match match) {
-		this.match = match;
+	public ObserverListener() {
+		super(Scrimmage.getScrimmageInstance().getMatch());
 	}
 
-	// the player needs to be in observers to be cancelled else it will return
-	// false;
 	/**
-	 * NOTE: The return statement is just a different way of doing an (if
-	 * statement) with an else statement in the if statement :P
-	 * 
-	 * if(this != null){ return true; }else{ return false; }
-	 * 
-	 * shorter version of the code above EXAMPLE: return this != null ? true :
-	 * false;
-	 * 
 	 * return {@link Boolean}
 	 */
 	public boolean check(Player player) {
@@ -72,9 +61,5 @@ public class ObserverListener implements Listener {
 				event.setCancelled(check(player));
 			}
 		}
-	}
-
-	public Match getMatch() {
-		return this.match;
 	}
 }

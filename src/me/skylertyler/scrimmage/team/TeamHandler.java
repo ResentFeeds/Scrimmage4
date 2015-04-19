@@ -1,7 +1,9 @@
 package me.skylertyler.scrimmage.team;
 
 import me.skylertyler.scrimmage.Scrimmage;
-import me.skylertyler.scrimmage.modules.TeamModule; 
+import me.skylertyler.scrimmage.config.types.Config;
+import me.skylertyler.scrimmage.kit.BookKit;
+import me.skylertyler.scrimmage.modules.TeamModule;
 import me.skylertyler.scrimmage.utils.TeamUtils;
 
 import org.bukkit.ChatColor;
@@ -32,14 +34,21 @@ public class TeamHandler {
 		// TODO make their overhead name be the teams color
 		player.sendMessage(ChatColor.GRAY + "You joined the " + team.getColor()
 				+ team.getName());
-		
+
 		/** if the team is observers */
-		if(team == TeamUtils.getTeamByName("Observers")){
+		if (team == TeamUtils.getTeamByName("Observers")) {
 			player.setGameMode(GameMode.CREATIVE);
-		}else{
+			Config config = Scrimmage.getScrimmageInstance().getConfigFile();
+			/** only apply the book if the book is enabled */
+			if (config.bookEnabled()) {
+				BookKit obs_book = config.getObserversBook();
+				obs_book.apply(player);
+			}
+			/** other wise if they are not observers do this below */
+		} else {
 			player.setGameMode(GameMode.SURVIVAL);
 		}
-		//SpawnUtils.spawn(player);
+		// SpawnUtils.spawn(player);
 	}
 
 	/** get the team that the player is currently on */

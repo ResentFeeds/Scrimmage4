@@ -8,10 +8,9 @@ import org.w3c.dom.Document;
 @ModuleInfo(name = "team", desc = "team module", module = TeamModule.class)
 public class TeamModule extends Module {
 
-	private final TeamParser tp;
+	private TeamParser tp;
 
 	public TeamModule() {
-		this.tp = null;
 	}
 
 	public TeamModule(TeamParser tp) {

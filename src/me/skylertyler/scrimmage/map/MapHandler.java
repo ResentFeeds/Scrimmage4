@@ -52,7 +52,7 @@ public class MapHandler {
 					 * players);
 					 */
 				}
-			}
+			} 
 			world.setSpawnFlags(false, false);
 			world.setAutoSave(false);
 			match.setWorld(world);

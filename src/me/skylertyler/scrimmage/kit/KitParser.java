@@ -55,7 +55,7 @@ public class KitParser {
 		this.items = new ArrayList<>();
 		// knockback reduction :)
 		KnockbackReductionKit reduction = null;
-		String name = element.getAttribute("name");
+		String name = element.getAttribute("name"); 
 		if (name == null) {
 			Log.logWarning("No name found for a kit!");
 			return null;
@@ -125,10 +125,10 @@ public class KitParser {
 		if (itemElement.hasAttribute("enchantment")) {
 			enchant = parseEnchantKit(itemElement.getAttribute("enchantment"));
 		}
-		
+
 		String color = null;
-		
-		if(itemElement.hasAttribute("color")){
+
+		if (itemElement.hasAttribute("color")) {
 			color = itemElement.getAttribute("color");
 		}
 
@@ -166,5 +166,5 @@ public class KitParser {
 
 	public List<Kit> getKits() {
 		return this.kits;
-	}
+	} 
 }
