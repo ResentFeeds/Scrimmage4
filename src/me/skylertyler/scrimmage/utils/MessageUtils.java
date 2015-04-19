@@ -103,12 +103,14 @@ public class MessageUtils {
 
 			msg.append(args[i]);
 		}
-
-		Config config = Scrimmage.getScrimmageInstance().getConfigFile();
-
-		String format = null;
 		String message = msg.toString();
+		return message;
+	}
 
+	public static String broadcastMessage(String[] args) {
+		Config config = Scrimmage.getScrimmageInstance().getConfigFile();
+		String message = broadcast(args);
+		String format = null;
 		if (message.contains("`")) {
 			format = BukkitUtils.colorize(message);
 		} else {

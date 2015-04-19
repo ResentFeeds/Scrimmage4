@@ -4,6 +4,7 @@ import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.config.types.Config;
 import me.skylertyler.scrimmage.kit.BookKit;
 import me.skylertyler.scrimmage.modules.TeamModule;
+import me.skylertyler.scrimmage.utils.PlayerUtils;
 import me.skylertyler.scrimmage.utils.TeamUtils;
 
 import org.bukkit.ChatColor;
@@ -35,8 +36,11 @@ public class TeamHandler {
 		player.sendMessage(ChatColor.GRAY + "You joined the " + team.getColor()
 				+ team.getName());
 
+		player.getInventory().clear();
+
 		/** if the team is observers */
 		if (team == TeamUtils.getTeamByName("Observers")) {
+			PlayerUtils.hidePlayer(player);
 			player.setGameMode(GameMode.CREATIVE);
 			Config config = Scrimmage.getScrimmageInstance().getConfigFile();
 			/** only apply the book if the book is enabled */
@@ -46,6 +50,7 @@ public class TeamHandler {
 			}
 			/** other wise if they are not observers do this below */
 		} else {
+			PlayerUtils.showPlayer(player);
 			player.setGameMode(GameMode.SURVIVAL);
 		}
 		// SpawnUtils.spawn(player);

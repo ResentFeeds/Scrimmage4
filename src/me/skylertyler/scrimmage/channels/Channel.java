@@ -25,10 +25,13 @@ public abstract class Channel {
 		this.bold = bold;
 		this.color = color;
 		this.channelName = channelName;
+		
 		if (this.color == null) {
 			// default color ?
 			this.color = ChatColor.AQUA;
 		}
+		
+		
 	}
 
 	public boolean isBold() {
@@ -97,5 +100,5 @@ public abstract class Channel {
 	}
 
 	/** format the message */
-	public abstract String format(Team team, Player player, String mesage);
+	public abstract String format(Team team, Player player, String message);
 }

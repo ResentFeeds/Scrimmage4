@@ -70,7 +70,7 @@ public class ChatListener implements Listener {
 			if (admin != null) {
 				for (Player players : Bukkit.getOnlinePlayers()) {
 					/**
-					 * the player needs to be op. or have the persmission
+					 * the player needs to be op. or have the permission
 					 * 'admin.channel.receieve' to get the message
 					 */
 					if (players.isOp()

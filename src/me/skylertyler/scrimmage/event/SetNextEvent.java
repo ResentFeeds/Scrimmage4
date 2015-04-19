@@ -9,7 +9,7 @@ import org.bukkit.event.HandlerList;
 public class SetNextEvent extends MatchEvent {
 	private static final HandlerList handlers = new HandlerList();
 	private final Player p;
-	private final Map m;
+	private final Map m; 
 
 	public SetNextEvent(Match m, Player player, Map map) {
 		super(m);
@@ -17,7 +17,7 @@ public class SetNextEvent extends MatchEvent {
 		this.m = map; 
 		Match match = this.getMatch();
 		// set the next map :)
-		match.setNext(map);
+		match.setNext(map);  
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class SetNextEvent extends MatchEvent {
 
 	public Map getMap() {
 		return this.m;
-	}
+	} 
 
 	public static HandlerList getHandlerList() {
 		return handlers;

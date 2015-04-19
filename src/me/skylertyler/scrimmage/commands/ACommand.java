@@ -1,6 +1,6 @@
 package me.skylertyler.scrimmage.commands;
 
-import static org.bukkit.ChatColor.RED;
+import static org.bukkit.ChatColor.*;
 import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.channels.Channel;
 import me.skylertyler.scrimmage.event.ChannelChangeEvent;
@@ -42,6 +42,8 @@ public class ACommand implements CommandExecutor {
 					}
 				} 
 			}
+			
+			//TODO 
 		} else {
 			sender.sendMessage(RED
 					+ "You need to be a player to join the admin channel");

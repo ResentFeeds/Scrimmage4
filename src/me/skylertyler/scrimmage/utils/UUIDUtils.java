@@ -16,6 +16,11 @@ public class UUIDUtils {
 
 	}
 
+	/**
+	 * will throw an exception if you try to /reload and you got no internet
+	 * connection , or you reload before the current map broadcasting shows ,
+	 * and it will make the authors "null"
+	 */
 	public static String getNameByUUID(UUID uuid) {
 		try {
 			JSONObject result = (JSONObject) new JSONParser()

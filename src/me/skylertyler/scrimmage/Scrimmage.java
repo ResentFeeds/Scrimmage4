@@ -209,7 +209,7 @@ public class Scrimmage extends JavaPlugin {
 		registerCommand(new CycleCommand(this), "cycle", null);
 		registerCommand(new MapListCommand(), "maplist", null);
 		registerCommand(new RotationCommand(this), "rotation", null);
-		registerCommand(new BroadcastCommand(this), "broadcast",
+		registerCommand(new BroadcastCommand(), "broadcast",
 				Arrays.asList("bc", "bmessage"));
 		registerCommand(new AuthorCommand(getMatch()), "authors", null);
 		registerCommand(new TCommand(), "t", null);
@@ -391,7 +391,7 @@ public class Scrimmage extends JavaPlugin {
 	public void onDisable() {
 		if (getConfigFile().isRunning()) {
 			getMatch().getMap().getInfo().getAuthorNames().clear();
-			FileUtils.clean();
+			//FileUtils.clean();
 			// unloading the modules when the server is disabled or shut down!
 			// by
 			// using /stop or it crashes due to some error!
