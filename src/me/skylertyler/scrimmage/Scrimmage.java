@@ -391,7 +391,7 @@ public class Scrimmage extends JavaPlugin {
 	public void onDisable() {
 		if (getConfigFile().isRunning()) {
 			getMatch().getMap().getInfo().getAuthorNames().clear();
-			getMatch().getMapHandler().clearMapsDirectory(new File("server"));
+			FileUtils.clean();
 			// unloading the modules when the server is disabled or shut down!
 			// by
 			// using /stop or it crashes due to some error!

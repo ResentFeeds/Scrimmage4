@@ -1,12 +1,11 @@
 package me.skylertyler.scrimmage.commands;
 
+import static org.bukkit.ChatColor.RED;
 import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.channels.Channel;
 import me.skylertyler.scrimmage.event.ChannelChangeEvent;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.utils.ChannelUtils;
-import me.skylertyler.scrimmage.utils.MessageUtils;
-import static org.bukkit.ChatColor.*;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

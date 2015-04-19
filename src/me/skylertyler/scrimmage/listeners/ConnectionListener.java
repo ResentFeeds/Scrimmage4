@@ -28,6 +28,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.scoreboard.Scoreboard;
 
@@ -194,10 +195,29 @@ public class ConnectionListener extends MatchListener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		Team observers = TeamUtils.getObservers();
-		event.setJoinMessage(null);
-		if (this.match != null && this.match.isIdle() || this.match.isRunning()) {
-			this.match.getTeamHandler()
-					.addParticpatingMember(observers, player);
+		event.setJoinMessage(YELLOW + player.getName() + " joined the game!");
+		if (this.match != null) {
+			if (this.match.getScrimmage().getConfigFile().hasName()) {
+				String serverName = this.match.getScrimmage().getConfigFile()
+						.getName();
+				player.sendMessage(WHITE + "" + BOLD.toString()
+						+ "---------------------");
+				player.sendMessage(DARK_PURPLE + "Welcome to " + GOLD
+						+ serverName);
+				player.sendMessage(WHITE + "" + BOLD.toString()
+						+ "---------------------");
+			}
+			if (this.match.isIdle() || this.match.isRunning()) {
+				this.match.getTeamHandler().addParticpatingMember(observers,
+						player);
+			}
 		}
+	}
+	
+	
+	@EventHandler
+	public void onPlayerQuit(PlayerQuitEvent event){
+		Team team = this.match.getTeamHandler().teamForPlayer(event.getPlayer());
+		team.removeMember(event.getPlayer());
 	}
 }

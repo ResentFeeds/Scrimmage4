@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -148,8 +147,7 @@ public class Config extends CoreConfig {
 							observer_book.getInt("slot"));
 				} else {
 					observer_book.addDefault("title", "'4`lPlease Read");
-					observer_book
-							.addDefault("author", "`5By `6SkylerTyler1337");
+					observer_book.addDefault("author", "`6SkylerTyler1337");
 					observer_book.addDefault("pages",
 							Arrays.asList("`1write stuff here!", "`2Okay `r?"));
 					observer_book.addDefault("slot", 0);
@@ -285,5 +283,9 @@ public class Config extends CoreConfig {
 
 	public String getBroadcastPrefix() {
 		return this.broadcastPrefix;
+	}
+
+	public boolean hasName() {
+		return this.getName() != null || this.getName() != "";
 	}
 }

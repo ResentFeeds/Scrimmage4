@@ -24,10 +24,10 @@ public class TeamHandler {
 		for (Team teams : ((TeamModule) Scrimmage.getScrimmageInstance()
 				.getLoader().getContainer().getModule(TeamModule.class))
 				.getTeamParser().getTeams()) {
-			teams.getMembers().remove(player.getName());
+			teams.removeMember(player);
 		}
 
-		team.getMembers().add(player.getName());
+		team.addMember(player);
 		player.setPlayerListName(team.getColor() + player.getName());
 		player.setDisplayName(team.getColor() + player.getName()
 				+ ChatColor.RESET);

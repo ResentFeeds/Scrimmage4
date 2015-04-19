@@ -89,4 +89,14 @@ public class Team {
 	public TeamType getType() {
 		return this.type;
 	}
+
+	/** removing the player from the list of members in a team */
+	public void removeMember(Player player) {
+		 this.members.remove(player.getName());
+	}
+
+	/** adding the player to list of members in a team */
+	public void addMember(Player player) {
+		this.members.add(player.getName());
+	}
 }
