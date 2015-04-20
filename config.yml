@@ -1,0 +1,23 @@
+# ------ Scrimmage4 Config -----
+scoreboard:
+  enabled: true
+observer-book:
+  enabled: true
+  title: '`4`lPlease Read'
+  author: '`6SkylerTyler1337'
+  pages:
+  - '`1write stuff here!'
+  - '`2Okay `r?'
+  slot: 0
+broadcasting:
+  prefix: '`7[`6Scrimmage4`7]'
+server:
+  name: a Scrimmage Server
+  type: running
+  prefix: Scrimmage4
+bar:
+  enabled: true
+  message: '`5Currently Playing `6#map# `5by $authors$'
+broadcast:
+  enabled: true
+  frequency: 2

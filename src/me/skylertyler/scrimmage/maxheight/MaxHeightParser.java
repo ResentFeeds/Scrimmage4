@@ -9,12 +9,18 @@ import org.w3c.dom.Node;
 public class MaxHeightParser extends ElementParser {
 
 	private MaxHeight maxheight;
+	private String mh;
 
 	public MaxHeightParser(Element element, String maxheight) {
 		super(element);
-		Node node = element.getElementsByTagName(maxheight).item(0);
+		this.mh = maxheight;
+		/**
+		 * XML Parsing
+		 */
+		Node node = getElement().getElementsByTagName(this.mh).item(0);
 
-		if (node != null) {
+		/** if it has the max height node */
+		if (hasNode(node)) {
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element maxHeightElement = (Element) node;
 				int height = NumberUtils.parseInteger(maxHeightElement
@@ -22,7 +28,8 @@ public class MaxHeightParser extends ElementParser {
 				this.maxheight = new MaxHeight(height);
 			}
 		} else {
-			this.maxheight = new MaxHeight(256);
+			/** else do this if the maxbuildheight element is null */
+			this.maxheight = new MaxHeight(255);
 		}
 	}
 

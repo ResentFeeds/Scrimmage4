@@ -54,15 +54,14 @@ public class MapInfo {
 		this.rules = rules;
 
 		/**
-		 * used for reloading and clearing for authors, contributors, and rules,
-		 * etc
+		 * used for reloading and clearing for authors, contributors, etc
 		 */
 		/**
 		 * NOTE: You need to wait until the match start to reload (if needed)
 		 * ....
 		 */
 		// KNOWN BUG: when you reload before the match starts it will make the
-		// uthors "null".
+		// authors "null".
 		this.authorNames = new HashMap<>();
 		this.contributorNames = new HashMap<>();
 		this.mapRules = new ArrayList<>();

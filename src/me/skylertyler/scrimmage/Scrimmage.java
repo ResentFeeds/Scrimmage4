@@ -256,8 +256,9 @@ public class Scrimmage extends JavaPlugin {
 				}
 
 				if (args.length == 0) {
-					for (Entry<String, Region> regions : RegionUtils
-							.getRegions().entrySet()) {
+					for (Entry<String, Region> regions : ModuleUtils
+							.getRegionModule().getRegionParser().getRegions()
+							.entrySet()) {
 						Region region = regions.getValue();
 						if (region != null) {
 							if (region.hasName()) {
@@ -391,7 +392,7 @@ public class Scrimmage extends JavaPlugin {
 	public void onDisable() {
 		if (getConfigFile().isRunning()) {
 			getMatch().getMap().getInfo().getAuthorNames().clear();
-			//FileUtils.clean();
+			// FileUtils.clean();
 			// unloading the modules when the server is disabled or shut down!
 			// by
 			// using /stop or it crashes due to some error!

@@ -18,30 +18,38 @@ import me.skylertyler.scrimmage.utils.ChannelUtils;
 import me.skylertyler.scrimmage.utils.MessageUtils;
 import me.skylertyler.scrimmage.utils.StringUtils;
 
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
 
 public class Match {
 
 	private final int id;
+	/** a match id */
 	private final Map map;
+	/** the current map */
 	private MatchState state;
+	/** the match state */
 	private final Scrimmage scrim;
+	/** the main class */
 	private final PluginManager pm;
+	/** the plugin manager */
 	private World world;
+	/** the current world for the map */
 	private final MapHandler handler;
+	/** the map handler field */
 	private final TeamHandler thandler;
+	/** the team handlers field */
 	private Map next = null;
-
-	private org.bukkit.scoreboard.Scoreboard current_board = Bukkit
-			.getScoreboardManager().getNewScoreboard();
+	/** the next map */
 	private Scoreboard board;
 	private GameStartTimer startTimer;
-	private List<Channel> channels = new ArrayList<>();
+	private List<Channel> channels;
 	private String barMessage;
 
+	/** the message for the bar */
+
 	public Match(Scrimmage scrim, int id, Map map) {
+		this.channels = new ArrayList<>();
 		this.channels.add(ChannelUtils.newGlobalChannel());
 		this.channels.add(ChannelUtils.newTeamChannel());
 		this.channels.add(ChannelUtils.newAdminChannel());
@@ -52,8 +60,15 @@ public class Match {
 		 * the message for the bar if enabled!
 		 */
 		Config config = this.scrim.getConfigFile();
+		/** check if the bar message is enabled */
 		if (config.barEnabled()) {
+			/** the message from the config */
 			String message = config.getBarMessage();
+			/** new bar Message */
+			/*
+			 *  #map# will be replaced by the map name 
+			 *  $authors$ will be replaced by the all the authors for the in a english compound as coded below 
+			 */
 			this.barMessage = message.replace("#map#", map.getInfo().getName())
 					.replace(
 							"$authors$",
@@ -67,7 +82,7 @@ public class Match {
 		loadMatch(this);
 		this.thandler = new TeamHandler();
 		this.setState(MatchState.Idle);
-		this.board = new Scoreboard(getCurrentScoreboard());
+		this.board = new Scoreboard(getScrimmage().getConfigFile().isScoreboardEnabled());
 		runStartGameTimer();
 	}
 
@@ -92,11 +107,7 @@ public class Match {
 	public void setState(MatchState state) {
 		this.state = state;
 	}
-
-	public org.bukkit.scoreboard.Scoreboard getCurrentScoreboard() {
-		return this.current_board;
-	}
-
+  
 	public void startMatch() {
 		this.setState(MatchState.Running);
 		MessageUtils.broadcastStartMessage();

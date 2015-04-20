@@ -18,7 +18,7 @@ public class TeamHandler {
 	 * 
 	 */
 
-	public TeamHandler() {
+	public TeamHandler() { 
 	}
 
 	public void addParticpatingMember(Team team, Player player) {

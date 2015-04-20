@@ -72,6 +72,15 @@ public class ArmorKit {
 			pi.setChestplate(chestplate);
 			pi.setLeggings(leggings);
 			pi.setBoots(boots);
+		} else {
+			
+			if (helmet != null || chestplate != null || leggings != null
+					|| boots != null) {
+				pi.setHelmet(helmet);
+				pi.setChestplate(chestplate);
+				pi.setLeggings(leggings);
+				pi.setBoots(boots);
+			}
 		}
 	}
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import me.skylertyler.scrimmage.exception.SlotNotFoundException;
+import me.skylertyler.scrimmage.parsers.ElementParser;
 import me.skylertyler.scrimmage.utils.Log;
 import me.skylertyler.scrimmage.utils.NumberUtils;
 import me.skylertyler.scrimmage.utils.XMLUtils;
@@ -16,17 +17,16 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class KitParser {
+public class KitParser extends ElementParser {
 
-	private final Element element;
 	private final String kitsTag;
 	private final String kitTag;
 	private final List<Kit> kits;
 	private List<ItemKit> items;
 
 	public KitParser(Element element, String kitsTag, String kitTag) {
+		super(element);
 		this.kits = new ArrayList<>();
-		this.element = element;
 		this.kitsTag = kitsTag;
 		this.kitTag = kitTag;
 
@@ -34,7 +34,7 @@ public class KitParser {
 		 * XML PARSING
 		 */
 
-		Node kitsTags = element.getElementsByTagName(getKitsTag()).item(0);
+		Node kitsTags = getElement().getElementsByTagName(this.kitsTag).item(0);
 		if (kitsTags.getNodeType() == Node.ELEMENT_NODE) {
 			Element kitsElement = (Element) kitsTags;
 			NodeList listOfKits = kitsElement.getChildNodes();
@@ -42,7 +42,7 @@ public class KitParser {
 			for (int i = 0; i < listOfKits.getLength(); i++) {
 				Node node = listOfKits.item(i);
 				if (node.getNodeType() == Node.ELEMENT_NODE
-						&& node.getNodeName().equals(getKitTag())) {
+						&& node.getNodeName().equals(this.kitTag)) {
 					Element kitElement = (Element) node;
 					Kit kit = this.parseKit(kitElement);
 					this.kits.add(kit);
@@ -55,7 +55,7 @@ public class KitParser {
 		this.items = new ArrayList<>();
 		// knockback reduction :)
 		KnockbackReductionKit reduction = null;
-		String name = element.getAttribute("name"); 
+		String name = element.getAttribute("name");
 		if (name == null) {
 			Log.logWarning("No name found for a kit!");
 			return null;
@@ -84,7 +84,11 @@ public class KitParser {
 				}
 			}
 		}
-		return new Kit(name, this.items, null, reduction);
+		String kit = null;
+		if (element.hasAttribute("parent")) {
+			kit = element.getAttribute("parent");
+		}
+		return new Kit(name, this.items, null, reduction, kit);
 	}
 
 	private KnockbackReductionKit parseReductionKit(Element element) {
@@ -166,5 +170,5 @@ public class KitParser {
 
 	public List<Kit> getKits() {
 		return this.kits;
-	} 
+	}
 }

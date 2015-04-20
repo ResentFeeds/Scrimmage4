@@ -40,6 +40,8 @@ public class Config extends CoreConfig {
 	private String name;
 	/** broadcasting prefix */
 	private String broadcastPrefix;
+	/** scoreboard enabled / disabled */
+	private boolean scoreboardEnabled;
 
 	public Config(File config) {
 		this.CONFIG = config;
@@ -173,6 +175,20 @@ public class Config extends CoreConfig {
 				config.createSection("broadcasting");
 			}
 
+			ConfigurationSection scoreboard_section = config
+					.getConfigurationSection("scoreboard");
+
+			if (hasConfigurationSection(scoreboard_section)) {
+				if (hasString(scoreboard_section, "enabled")) {
+					this.scoreboardEnabled = scoreboard_section
+							.getBoolean("enabled");
+				} else {
+					scoreboard_section.addDefault("enabled", true);
+				}
+			} else {
+				config.createSection("scoreboard");
+			}
+
 			/**
 			 * do this little backwards because i like to use the prefix within
 			 * the header
@@ -287,5 +303,9 @@ public class Config extends CoreConfig {
 
 	public boolean hasName() {
 		return this.getName() != null || this.getName() != "";
+	}
+
+	public boolean isScoreboardEnabled() {
+		return this.scoreboardEnabled;
 	}
 }

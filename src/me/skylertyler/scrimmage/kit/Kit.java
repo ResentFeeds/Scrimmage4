@@ -6,6 +6,9 @@ import javax.annotation.Nullable;
 
 import org.bukkit.entity.Player;
 
+import com.google.common.base.Optional;
+
+import me.skylertyler.scrimmage.utils.KitUtils;
 import me.skylertyler.scrimmage.utils.Log;
 
 public class Kit {
@@ -21,18 +24,21 @@ public class Kit {
 
 	// need to test -_-
 	private KnockbackReductionKit reduction;
+
+	private Optional<String> parent;
+
 	// fix
 	// will add armor kit , potion kit etc. :)
 	public Kit(String name, @Nullable List<ItemKit> items,
 			@Nullable ArmorKit armor,
-			@Nullable KnockbackReductionKit reduction) {
+			@Nullable KnockbackReductionKit reduction, @Nullable String parent) {
 		this.name = name;
 		this.items = items;
 		this.armor = armor;
 		this.health = new HealthKit(20, 20);
 		this.hunger = new HungerKit(20, 5.0f);
 		this.reduction = reduction;
-		
+		this.parent = Optional.fromNullable(parent);
 		if (hasReductionKit()) {
 			this.reduction = reduction;
 		} else {
@@ -79,6 +85,7 @@ public class Kit {
 					+ items.getName()
 					+ " "
 					+ items.getSlot() + " ";
+
 		}
 		return "Kit [name=" + name + ", items=" + result + "]";
 	}
@@ -117,6 +124,13 @@ public class Kit {
 			if (hasArmor()) {
 				ArmorKit armor = this.getArmor();
 				armor.apply(player);
+			}
+
+			// TODO make kits check if they are being forced if they are it will
+			// get rid of everything and put the kit that is being forced */
+			/** apply the parent only if present */
+			if (this.parent.isPresent()) {
+				KitUtils.applyKit(this.parent.get(), player);
 			}
 
 			KnockbackReductionKit reduction = this.getReductionKit();

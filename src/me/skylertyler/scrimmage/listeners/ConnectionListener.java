@@ -75,7 +75,7 @@ public class ConnectionListener extends MatchListener {
 	@EventHandler
 	public void onMatchStart(MatchStartEvent event) {
 		Match match = event.getMatch();
-		if (match != null) {
+		if (match != null) { 
 			Log.logWarning(match.getID() + " ");
 		}
 	}
@@ -213,11 +213,11 @@ public class ConnectionListener extends MatchListener {
 			}
 		}
 	}
-	
-	
+
 	@EventHandler
-	public void onPlayerQuit(PlayerQuitEvent event){
-		Team team = this.match.getTeamHandler().teamForPlayer(event.getPlayer());
+	public void onPlayerQuit(PlayerQuitEvent event) {
+		Team team = this.match.getTeamHandler()
+				.teamForPlayer(event.getPlayer());
 		team.removeMember(event.getPlayer());
 	}
 }

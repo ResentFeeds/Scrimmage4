@@ -1,10 +1,10 @@
 package me.skylertyler.scrimmage.modules;
 
 import java.util.HashMap;
-import me.skylertyler.scrimmage.regions.Region;
-import me.skylertyler.scrimmage.regions.RegionUtils;
 
-import org.bukkit.event.HandlerList; 
+import me.skylertyler.scrimmage.regions.Region;
+import me.skylertyler.scrimmage.regions.RegionParser;
+import org.bukkit.event.HandlerList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -13,19 +13,21 @@ public class RegionModule extends Module {
 
 	public HashMap<String, Region> regions;
 
+	private RegionParser rp;
+
 	public RegionModule() {
-		this.regions = null;
+		// nothing
 	}
 
-	public RegionModule(HashMap<String, Region> regions) {
-		this.regions = regions;
+	public RegionModule(RegionParser rp) {
+		this.rp = rp;
 	}
 
 	@Override
 	public Module parse(Document doc) {
 		Element root = doc.getDocumentElement();
-		HashMap<String, Region> regions = RegionUtils.parseRegions(root, "regions");
-		return new RegionModule(regions);
+		return new RegionModule(new RegionParser(root, "regions")) != null ? new RegionModule(
+				new RegionParser(root, "regions")) : null;
 	}
 
 	@Override
@@ -33,8 +35,7 @@ public class RegionModule extends Module {
 		HandlerList.unregisterAll(this);
 	}
 
-	// dont use this getter use this in the RegionUtils getRegions method instead!
-	public HashMap<String, Region> getRegions(){
-		return this.regions;
-	} 
+	public RegionParser getRegionParser() {
+		return this.rp;
+	}
 }

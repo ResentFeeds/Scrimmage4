@@ -24,6 +24,14 @@ public class BroadcastCommand implements CommandExecutor {
 				String msg = MessageUtils.broadcastMessage(args);
 				Bukkit.broadcastMessage(msg);
 			}
+		} else {
+			// allow broadcasting from the console
+			if (args.length == 0) {
+				sender.sendMessage(RED + "Not enough arguments!");
+				return false;
+			}
+			String msg = MessageUtils.broadcastMessage(args);
+			Bukkit.broadcastMessage(msg);
 		}
 
 		return false;

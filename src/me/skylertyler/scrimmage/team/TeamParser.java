@@ -15,10 +15,14 @@ import me.skylertyler.scrimmage.utils.Log;
 public class TeamParser extends ElementParser {
 
 	private final List<Team> teams;
+	private String teamsTag;
+	private String teamTag;
 
 	public TeamParser(Element element, String teamsTag, String teamTag) {
 		super(element);
 		this.teams = new ArrayList<>();
+		this.teamsTag = teamsTag;
+		this.teamTag = teamTag;
 
 		/**
 		 * XML Parsing
@@ -31,7 +35,7 @@ public class TeamParser extends ElementParser {
 		Team obs = new Team("Observers", "obs", ChatColor.AQUA,
 				Integer.MAX_VALUE, TeamType.Observing);
 		teams.add(obs);
-		Node teamsNode = element.getElementsByTagName(teamsTag).item(0);
+		Node teamsNode = getElement().getElementsByTagName(this.teamsTag).item(0);
 		if (teamsNode.getNodeType() == Node.ELEMENT_NODE) {
 			Element teamsElement = (Element) teamsNode;
 			NodeList list = teamsElement.getChildNodes();
@@ -40,7 +44,7 @@ public class TeamParser extends ElementParser {
 				Node teamNode = list.item(i);
 
 				if (teamNode.getNodeType() == Node.ELEMENT_NODE
-						&& teamNode.getNodeName().equals(teamTag)) {
+						&& teamNode.getNodeName().equals(this.teamTag)) {
 					Element teamElement = (Element) teamNode;
 					if (!teamElement.hasAttribute("max")) {
 						Log.logWarning("check all the team tags for a max attribute!");
