@@ -3,8 +3,6 @@ package me.skylertyler.scrimmage.kit;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import me.skylertyler.scrimmage.exception.SlotNotFoundException;
 import me.skylertyler.scrimmage.parsers.ElementParser;
 import me.skylertyler.scrimmage.utils.Log;
@@ -55,6 +53,7 @@ public class KitParser extends ElementParser {
 		this.items = new ArrayList<>();
 		// knockback reduction :)
 		KnockbackReductionKit reduction = null;
+		ArmorKit armor = null;
 		String name = element.getAttribute("name");
 		if (name == null) {
 			Log.logWarning("No name found for a kit!");
@@ -82,13 +81,46 @@ public class KitParser extends ElementParser {
 						reduction = parseReductionKit(reductionElement);
 					}
 				}
+
+				/** armor */
+				ItemStack[] armorKit = new ItemStack[4];
+				for (int a = 0; a < items.getLength(); a++) {
+					Node node = items.item(a);
+					if (node.getNodeType() == Node.ELEMENT_NODE) {
+						Element nodeElement = (Element) node;
+						if (XMLUtils.isValidArmorTag(nodeElement)) {
+							switch (nodeElement.getTagName()) {
+							case "helmet":
+								armorKit[0] = parseItemStack(nodeElement);
+								break;
+							case "chestplate":
+								armorKit[1] = parseItemStack(nodeElement);
+								break;
+							case "leggings":
+								armorKit[2] = parseItemStack(nodeElement);
+								break;
+							case "boots":
+								armorKit[3] = parseItemStack(nodeElement);
+								break;
+							}
+						}
+					}
+				}
+				armor = new ArmorKit(armorKit[0], armorKit[1], armorKit[2],
+						armorKit[3]);
 			}
 		}
+
 		String kit = null;
 		if (element.hasAttribute("parent")) {
 			kit = element.getAttribute("parent");
 		}
-		return new Kit(name, this.items, null, reduction, kit);
+
+		boolean forced = false;
+		if (element.hasAttribute("forced")) {
+			forced = XMLUtils.parseBoolean(element.getAttribute("forced"));
+		}
+		return new Kit(name, this.items, armor, reduction, kit, forced);
 	}
 
 	private KnockbackReductionKit parseReductionKit(Element element) {
@@ -148,12 +180,8 @@ public class KitParser extends ElementParser {
 		return new ItemStack(mat, amount);
 	}
 
-	public static EnchantKit parseEnchantKit(@Nullable String enchant) {
-		if (enchant != null) {
-			return new EnchantKit(enchant);
-		} else {
-			return null;
-		}
+	public static EnchantKit parseEnchantKit(String enchant) {
+		return new EnchantKit(enchant);
 	}
 
 	public Element getElement() {

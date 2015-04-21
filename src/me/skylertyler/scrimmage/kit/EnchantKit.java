@@ -1,6 +1,7 @@
 package me.skylertyler.scrimmage.kit;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import me.skylertyler.scrimmage.utils.NumberUtils;
@@ -8,57 +9,40 @@ import me.skylertyler.scrimmage.utils.XMLUtils;
 
 import org.bukkit.enchantments.Enchantment;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+
 public class EnchantKit {
 
-	private final String enchantment;
-	private final Map<Enchantment, Integer> enchantments;
-	private String[] split_enchantment;
-	private int length;
+	private String enchant;
+	private Map<Enchantment, Integer> enchantments;
 
-	public EnchantKit(String enchantment) {
+	//TODO fix this -_- not adding (enchantments to items) and make enchantments be applied to what ever item they want */
+	public EnchantKit(String enchant) {
+		this.enchant = enchant;
 		this.enchantments = new HashMap<Enchantment, Integer>();
-		this.enchantment = enchantment;
-		if (hasEnchantment()) {
-			this.split_enchantment = this.enchantment.split(":");
-			this.length = this.split_enchantment.length;
-			Integer level = 1;
-			Enchantment enchant = null;
-			if (hasLength()) {
-				if (getLength() == 1) {
-					enchant = XMLUtils.parseEnchantment(split()[0]);
-				} else {
-					if (getLength() >= 2) {
-						enchant = XMLUtils.parseEnchantment(split()[0]);
-						level = NumberUtils.parseInteger(split()[1]);
-					}
-				}
-				this.enchantments.put(enchant, level);
+        
+		Iterable<String> split_enchantment = Splitter.on(";").split(
+				this.enchant);
+
+		for (String string : split_enchantment) {
+			List<String> enchants = Lists.newArrayList(Splitter.on(":")
+					.limit(2).split(string));
+			int level = 1;
+			Enchantment newEnchant = XMLUtils.parseEnchantment(enchants.get(0));
+			if (enchants.size() > 1) {
+				level = NumberUtils.parseInteger(enchants.get(1));
 			}
+			enchantments.put(newEnchant, level);
 		}
-	}
 
-	public int getLength() {
-		return this.length;
-	}
-
-	public boolean hasLength() {
-		return this.split_enchantment.length > 0;
-	}
-
-	public String[] split() {
-		return this.split_enchantment;
 	}
 
 	public String getEnchantment() {
-		return this.enchantment;
-	}
-
-	public boolean hasEnchantment() {
-		return this.getEnchantment() != null;
+		return this.enchant;
 	}
 
 	public Map<Enchantment, Integer> getEnchantments() {
 		return this.enchantments;
 	}
-
 }

@@ -42,8 +42,9 @@ public class XMLUtils {
 	}
 
 	public static Enchantment parseEnchantment(String value) {
-		String uppercase = value.toUpperCase().replace(" ", "_");
-		return Enchantment.getByName(uppercase);
+		String uppercase = value.toUpperCase().replace(" ", "_"); 
+		Enchantment enchantment = Enchantment.getByName(uppercase);
+		return enchantment;
 	}
 
 	public static boolean isValidArmorTag(Element element) {

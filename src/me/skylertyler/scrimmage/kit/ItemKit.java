@@ -2,24 +2,23 @@ package me.skylertyler.scrimmage.kit;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import javax.annotation.Nullable;
 
 import me.skylertyler.scrimmage.utils.BukkitUtils;
 import me.skylertyler.scrimmage.utils.XMLUtils;
 
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 
 public class ItemKit {
-
-	// FIXED: giving me the very bottom <item> tag :)
+ 
 	// need to work on getting the enchants to work -_-
 	private final int damage;
 	private final String name;
@@ -28,33 +27,28 @@ public class ItemKit {
 	private final int slot;
 	private final ItemMeta itemMeta;
 
-	private EnchantKit enchant;
-	private String color;
+	private Optional<EnchantKit> enchant;
+	private Optional<String> color;
 
 	public ItemKit(int slot, ItemStack stack, int damage, String name,
-			String lore, EnchantKit enchant, String color) {
+			String lore, @Nullable EnchantKit enchant, @Nullable String color) {
 		this.slot = slot;
 		this.stack = stack;
 		this.itemMeta = getStack().getItemMeta();
 		this.damage = damage;
 		this.name = name;
 		this.lore = lore;
-		this.enchant = enchant;
-		this.color = color;
+		this.enchant = Optional.fromNullable(enchant);
+		this.color = Optional.fromNullable(color);
 
-		// color ?
-		if (hasColor()) {
-			if (this.itemMeta instanceof LeatherArmorMeta) {
-				LeatherArmorMeta armorMeta = (LeatherArmorMeta) this.itemMeta;
-				armorMeta.setColor(XMLUtils.applyColor(getColor()));
-				this.getStack().setItemMeta(armorMeta);
-			}
-		}
-
-		if (hasEnchant()) {
-			Map<Enchantment, Integer> enchantments = this.getEnchant()
-					.getEnchantments();
-			getStack().addEnchantments(enchantments);
+		/**
+		 * this means if the enchantment attribute is presnt and the value of
+		 * the attribute is = "", or not there it wont do this
+		 */
+		if (this.enchant.isPresent()) {
+			/** try */
+			this.getStack().addEnchantments(
+					this.enchant.get().getEnchantments());
 		}
 
 		if (this.damage != 0) {
@@ -69,17 +63,27 @@ public class ItemKit {
 			newName = this.getStack().getType().name().replace("_", " ")
 					.toLowerCase();
 		}
-
-		// fix lore -_-
+ 
+		/** lore */
 		List<String> lores = new ArrayList<>();
 		if (hasLore()) {
 			lores = parseLore(getLore());
 		}
 
+		/** setting display name & lore */
 		getItemMeta().setDisplayName(newName);
 		getItemMeta().setLore(lores);
+
+		// color ?
+		if (getColor().isPresent()) {
+			if (this.itemMeta instanceof LeatherArmorMeta) {
+				LeatherArmorMeta armorMeta = (LeatherArmorMeta) this.itemMeta;
+				armorMeta.setColor(XMLUtils.applyColor(getColor().get()));
+				this.getStack().setItemMeta(armorMeta);
+			}
+		}
 		getStack().setItemMeta(getItemMeta());
-	} 
+	}
 
 	public boolean hasName() {
 		return this.getName() != null;
@@ -109,15 +113,10 @@ public class ItemKit {
 		return this.slot;
 	}
 
+	/** apply this item to the player */
 	public void apply(Player player) {
 		PlayerInventory pi = player.getInventory();
-		int slot = this.getSlot();
-		ItemStack stack = this.getStack();
-		pi.setItem(slot, stack);
-	}
-
-	public EnchantKit getEnchant() {
-		return this.enchant;
+		pi.setItem(this.slot, this.stack);
 	}
 
 	public boolean hasEnchant() {
@@ -128,14 +127,14 @@ public class ItemKit {
 		return this.itemMeta;
 	}
 
-	// working lores :D
+	/** parsing lore */ 
 	public List<String> parseLore(String lore) {
 		List<String> lores = ImmutableList.copyOf(Splitter.on("|").split(lore));
 		List<String> coloredLore = BukkitUtils.colorizeList(lores);
 		return coloredLore;
 	}
 
-	// working name :)
+	/** parsing name */
 	public String parseName(String name) {
 		// if it contains the ` it will have color -_- using the BukkitUtils
 		// colorize(string) method :)
@@ -153,7 +152,7 @@ public class ItemKit {
 		return result;
 	}
 
-	public String getColor() {
+	public Optional<String> getColor() {
 		return this.color;
 	}
 

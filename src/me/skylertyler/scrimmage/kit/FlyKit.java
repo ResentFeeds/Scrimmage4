@@ -18,12 +18,12 @@ public class FlyKit {
 	}
 
 	public void apply(Player player) {
-		player.setFlying(isFlying());
-		player.setFlySpeed(getSpeed());
+		player.setFlying(this.flying);
+		player.setFlySpeed(this.speed);
 	}
 
 	public boolean isFlying() {
-		return this.getFlying() == true;
+		return this.getFlying();
 	}
 
 	public boolean getFlying() {

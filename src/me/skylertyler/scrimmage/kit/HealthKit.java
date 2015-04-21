@@ -31,8 +31,9 @@ public class HealthKit {
 		return this.sh;
 	}
 
+	/** apply the health kit */
 	public void apply(Player player) {
-		 player.setMaxHealth(getMaxHealth());
-		 player.setHealth(getStartingHealth());
+		player.setMaxHealth(this.mh);
+		player.setHealth(this.sh);
 	}
 }

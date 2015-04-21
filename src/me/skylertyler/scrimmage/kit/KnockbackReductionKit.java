@@ -4,17 +4,18 @@ import org.bukkit.entity.Player;
 
 public class KnockbackReductionKit {
 
-	private final float reduction;
+	protected final float reduction;
 
 	public KnockbackReductionKit(float reduction) {
 		this.reduction = reduction;
 	}
 
-	public float getReduction() {
-		return this.reduction;
+	/** set the knock back reduction for the player */
+	public void apply(Player player) {
+		player.setKnockbackReduction(this.getReduction());
 	}
 
-	public void apply(Player player) {
-		player.setKnockbackReduction(getReduction());
+	public float getReduction() {
+		return this.reduction;
 	}
 }

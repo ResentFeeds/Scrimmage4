@@ -23,30 +23,30 @@ public class Kit {
 	private final HungerKit hunger;
 
 	// need to test -_-
-	private KnockbackReductionKit reduction;
-
+	private Optional<KnockbackReductionKit> reduction;
 	private Optional<String> parent;
+	private boolean forced;
 
-	// fix
-	// will add armor kit , potion kit etc. :)
+	// will add armor kit , potion kit etc. :) and change all of the regions,
+	// spawns, kits to use the id attribute instead of the name */
 	public Kit(String name, @Nullable List<ItemKit> items,
 			@Nullable ArmorKit armor,
-			@Nullable KnockbackReductionKit reduction, @Nullable String parent) {
+			@Nullable KnockbackReductionKit reduction, @Nullable String parent,
+			boolean forced) {
 		this.name = name;
 		this.items = items;
 		this.armor = armor;
 		this.health = new HealthKit(20, 20);
 		this.hunger = new HungerKit(20, 5.0f);
-		this.reduction = reduction;
+		this.reduction = Optional.fromNullable(reduction);
 		this.parent = Optional.fromNullable(parent);
-		if (hasReductionKit()) {
-			this.reduction = reduction;
-		} else {
-			this.reduction = new KnockbackReductionKit(0.2f);
-		}
-
+		this.forced = forced;
 		// TODO KnockbackReductionKit,PotionKit, JumpKit etc :)
 		Log.logInfo(toString());
+	}
+
+	public boolean isForced() {
+		return this.forced;
 	}
 
 	public String getName() {
@@ -87,7 +87,13 @@ public class Kit {
 					+ items.getSlot() + " ";
 
 		}
-		return "Kit [name=" + name + ", items=" + result + "]";
+
+		String reduction = "DEFAULT REDUCTION";
+		if (this.reduction.isPresent()) {
+			reduction = this.reduction.get().getReduction() + "";
+		}
+		return "Kit [name=" + name + ", items=" + result + "reduction="
+				+ reduction + "]";
 	}
 
 	public HungerKit getHunger() {
@@ -96,14 +102,6 @@ public class Kit {
 
 	public HealthKit getHealth() {
 		return this.health;
-	}
-
-	public boolean hasReductionKit() {
-		return getReductionKit() != null;
-	}
-
-	public KnockbackReductionKit getReductionKit() {
-		return this.reduction;
 	}
 
 	public void applyKit(Player player) {
@@ -133,8 +131,11 @@ public class Kit {
 				KitUtils.applyKit(this.parent.get(), player);
 			}
 
-			KnockbackReductionKit reduction = this.getReductionKit();
-			reduction.apply(player);
+			/** only apply if present */
+			if (this.reduction.isPresent()) {
+				KnockbackReductionKit reductionkit = this.reduction.get();
+				reductionkit.apply(player);
+			}
 		}
 	}
 }

@@ -60,26 +60,22 @@ public class ArmorKit {
 	 */
 	public void apply(Player player) {
 		PlayerInventory pi = player.getInventory();
-		ItemStack helmet = this.getHelmet();
-		ItemStack chestplate = this.getChestplate();
-		ItemStack leggings = this.getLeggings();
-		ItemStack boots = this.getBoots();
-		boolean full = helmet != null && chestplate != null && leggings != null
-				&& boots != null;
+		boolean full = this.helmet != null && this.chestplate != null
+				&& this.leggings != null && this.boots != null;
 
 		if (full) {
-			pi.setHelmet(helmet);
-			pi.setChestplate(chestplate);
-			pi.setLeggings(leggings);
-			pi.setBoots(boots);
+			pi.setHelmet(this.helmet);
+			pi.setChestplate(this.chestplate);
+			pi.setLeggings(this.leggings);
+			pi.setBoots(this.boots);
 		} else {
-			
-			if (helmet != null || chestplate != null || leggings != null
-					|| boots != null) {
-				pi.setHelmet(helmet);
-				pi.setChestplate(chestplate);
-				pi.setLeggings(leggings);
-				pi.setBoots(boots);
+
+			if (this.helmet != null || this.chestplate != null
+					|| this.leggings != null || this.boots != null) {
+				pi.setHelmet(this.helmet);
+				pi.setChestplate(this.chestplate);
+				pi.setLeggings(this.leggings);
+				pi.setBoots(this.boots);
 			}
 		}
 	}
