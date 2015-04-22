@@ -2,33 +2,34 @@ package me.skylertyler.scrimmage.spawn;
 
 import javax.annotation.Nullable;
 
-import me.skylertyler.scrimmage.kit.Kit;
 import me.skylertyler.scrimmage.regions.Region;
 import me.skylertyler.scrimmage.regions.types.BlockRegion;
 import me.skylertyler.scrimmage.team.Team;
+
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
+
+import com.google.common.base.Optional;
 
 public class Spawn {
 
 	private final Team team;
 	private final Region region;
-	private final float yaw;
-	private final float pitch;
-	private final BlockRegion angle;
-	private final Kit kit;
+	private final Optional<Float> yaw;
+	private final Optional<Float> pitch;
+	private final Optional<BlockRegion> angle;
+	private final Optional<String> kit;
 
-	public Spawn(Team team, Region region, @Nullable Kit kit,
+	public Spawn(Team team, Region region, @Nullable String kit,
 			@Nullable BlockRegion angle, @Nullable float yaw,
 			@Nullable float pitch) {
 		this.team = team;
 		this.region = region;
-		this.kit = kit;
-		this.angle = angle;
-		this.yaw = yaw;
-		this.pitch = pitch;
-	}
-
-	public BlockRegion getAngle() {
-		return this.angle;
+		this.kit = Optional.fromNullable(kit);
+		this.angle = Optional.fromNullable(angle);
+		this.yaw = Optional.fromNullable(yaw);
+		this.pitch = Optional.fromNullable(pitch);
 	}
 
 	public Team getTeam() {
@@ -39,32 +40,50 @@ public class Spawn {
 		return this.region;
 	}
 
-	public float getYaw() {
+	public Optional<Float> getYaw() {
 		return this.yaw;
 	}
 
-	public float getPitch() {
+	public Optional<Float> getPitch() {
 		return this.pitch;
 	}
 
-	public Kit getKit() {
+	public Optional<BlockRegion> getAngle() {
+		return this.angle;
+	}
+
+	public Optional<String> getKit() {
 		return this.kit;
 	}
 
-	public boolean hasKit() {
-		return this.getKit() != null;
+	public Location onEye(Player player) {
+		if (this.getAngle().isPresent() && this.getAngle().get() != null) {
+			BlockRegion eyeREegion = this.getAngle().get();
+			if (eyeREegion.getVector() != null) {
+				Vector vector = eyeREegion.getVector();
+				return new Location(player.getWorld(), vector.getX(),
+						vector.getY(), vector.getZ());
+			}
+		}
+		return null;
 	}
 
-	public boolean hasAngle() {
-		return this.getAngle() != null;
+	public void spawn(Player player) {
+		Region region = this.getRegion();
+
+		if (region instanceof BlockRegion) {
+			BlockRegion blockRegion = (BlockRegion) region;
+			player.teleport(new Location(player.getWorld(), blockRegion
+					.getVector().getX(), blockRegion.getVector().getY(),
+					blockRegion.getVector().getZ()));
+		}
+
+		Location location = this.onEye(player);
+		setEyeLocation(player, location);
 	}
 
-	public boolean hasYaw() {
-		return this.getYaw() != 0;
+	public void setEyeLocation(Player player, Location newEyeLocation) {
+		Location oldEyeLocation = player.getEyeLocation();
+		newEyeLocation = oldEyeLocation;
 	}
-
-	public boolean hasPitch() {
-		return this.getPitch() != 0;
-	}
-	
 }

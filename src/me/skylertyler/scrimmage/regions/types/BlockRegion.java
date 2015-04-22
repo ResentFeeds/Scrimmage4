@@ -2,7 +2,7 @@ package me.skylertyler.scrimmage.regions.types;
 
 import me.skylertyler.scrimmage.regions.Region;
 import me.skylertyler.scrimmage.regions.RegionType;
-
+ 
 import org.bukkit.util.Vector;
 
 public class BlockRegion extends Region {

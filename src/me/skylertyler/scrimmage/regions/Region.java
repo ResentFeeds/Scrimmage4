@@ -1,5 +1,5 @@
 package me.skylertyler.scrimmage.regions;
-
+ 
 import org.bukkit.util.Vector;
 
 public abstract class Region {

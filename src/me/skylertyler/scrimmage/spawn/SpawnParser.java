@@ -5,8 +5,11 @@ import java.util.List;
 
 import me.skylertyler.scrimmage.exception.TeamNotFoundException;
 import me.skylertyler.scrimmage.parsers.ElementParser;
+import me.skylertyler.scrimmage.regions.Region;
+import me.skylertyler.scrimmage.regions.RegionUtils;
 import me.skylertyler.scrimmage.team.Team;
 import me.skylertyler.scrimmage.utils.TeamUtils;
+import me.skylertyler.scrimmage.utils.XMLUtils;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -70,14 +73,14 @@ public class SpawnParser extends ElementParser {
 				e.printStackTrace();
 			}
 		}
-/*
-		Kit kit = null;
+
+		String kit = "";
 
 		if (spawnElement.hasAttribute("kit")) {
-			kit = KitUtils.getKitByName(spawnElement.getAttribute("kit"));
-		}*/
+			kit = spawnElement.getAttribute("kit");
+		}
 
-		/*boolean bedspawn = false;
+		boolean bedspawn = false;
 		if (spawnElement.hasAttribute("bedspawn")) {
 			bedspawn = XMLUtils.parseBoolean(spawnElement
 					.getAttribute("bedspawn"));
@@ -92,8 +95,8 @@ public class SpawnParser extends ElementParser {
 					region = RegionUtils.parseRegion(node);
 				}
 			}
-		}*/
-		return new Spawn(team, null, null, null, 0, 0);
+		}
+		return new Spawn(team, region, kit, null, 0, 0);
 	}
 
 	/**

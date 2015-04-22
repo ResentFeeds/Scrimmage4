@@ -4,6 +4,7 @@ import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.config.types.Config;
 import me.skylertyler.scrimmage.kit.BookKit;
 import me.skylertyler.scrimmage.modules.TeamModule;
+import me.skylertyler.scrimmage.spawn.SpawnUtils;
 import me.skylertyler.scrimmage.utils.PlayerUtils;
 import me.skylertyler.scrimmage.utils.TeamUtils;
 
@@ -53,7 +54,7 @@ public class TeamHandler {
 			PlayerUtils.showPlayer(player);
 			player.setGameMode(GameMode.SURVIVAL);
 		}
-		// SpawnUtils.spawn(player);
+		SpawnUtils.spawn(player);
 	}
 
 	/** get the team that the player is currently on */
