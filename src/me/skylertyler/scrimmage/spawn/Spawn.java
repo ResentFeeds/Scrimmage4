@@ -82,6 +82,7 @@ public class Spawn {
 		setEyeLocation(player, location);
 	}
 
+	// may change this 
 	public void setEyeLocation(Player player, Location newEyeLocation) {
 		Location oldEyeLocation = player.getEyeLocation();
 		newEyeLocation = oldEyeLocation;

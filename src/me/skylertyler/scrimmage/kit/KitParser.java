@@ -11,16 +11,19 @@ import me.skylertyler.scrimmage.utils.XMLUtils;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/** the kit parser */
 public class KitParser extends ElementParser {
 
 	private final String kitsTag;
 	private final String kitTag;
 	private final List<Kit> kits;
 	private List<ItemKit> items;
+	private List<PotionKit> potions;
 
 	public KitParser(Element element, String kitsTag, String kitTag) {
 		super(element);
@@ -36,7 +39,7 @@ public class KitParser extends ElementParser {
 		if (kitsTags.getNodeType() == Node.ELEMENT_NODE) {
 			Element kitsElement = (Element) kitsTags;
 			NodeList listOfKits = kitsElement.getChildNodes();
-
+			/** add the kits */
 			for (int i = 0; i < listOfKits.getLength(); i++) {
 				Node node = listOfKits.item(i);
 				if (node.getNodeType() == Node.ELEMENT_NODE
@@ -51,6 +54,7 @@ public class KitParser extends ElementParser {
 
 	public Kit parseKit(Element element) {
 		this.items = new ArrayList<>();
+		this.potions = new ArrayList<>();
 		// knockback reduction :)
 		KnockbackReductionKit reduction = null;
 		ArmorKit armor = null;
@@ -60,7 +64,8 @@ public class KitParser extends ElementParser {
 			return null;
 		}
 		NodeList items = element.getChildNodes();
-		// items ?
+
+		/** items */
 		for (int y = 0; y < items.getLength(); y++) {
 			Node item = items.item(y);
 			if (item.getNodeType() == Node.ELEMENT_NODE
@@ -111,6 +116,16 @@ public class KitParser extends ElementParser {
 			}
 		}
 
+		/** potions may be null */
+		for (int a = 0; a < items.getLength(); a++) {
+			Node node = items.item(a);
+			if (node.getNodeType() == Node.ELEMENT_NODE
+					&& node.getNodeName().equals("potion")) {
+				Element potionElement = (Element) node;
+				this.potions.add(parsePotion(potionElement));
+			}
+		}
+
 		String kit = null;
 		if (element.hasAttribute("parent")) {
 			kit = element.getAttribute("parent");
@@ -120,7 +135,26 @@ public class KitParser extends ElementParser {
 		if (element.hasAttribute("forced")) {
 			forced = XMLUtils.parseBoolean(element.getAttribute("forced"));
 		}
-		return new Kit(name, this.items, armor, reduction, kit, forced);
+		return new Kit(name, this.items, armor, this.potions, reduction, kit,
+				forced);
+	}
+
+	private PotionKit parsePotion(Element potionElement) {
+		PotionEffectType type = XMLUtils.parsePotionEffect(potionElement
+				.getTextContent());
+		int duration = 1;
+		int amplifier = 1;
+		if (potionElement.hasAttribute("duration")) {
+			duration = NumberUtils.parseInteger(potionElement
+					.getAttribute("duration"));
+		}
+
+		if (potionElement.hasAttribute("amplifier")) {
+			amplifier = NumberUtils.parseInteger(potionElement
+					.getAttribute("amplifier"));
+		}
+
+		return new PotionKit(type, duration, amplifier);
 	}
 
 	private KnockbackReductionKit parseReductionKit(Element element) {

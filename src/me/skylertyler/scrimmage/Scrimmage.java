@@ -233,6 +233,7 @@ public class Scrimmage extends JavaPlugin {
 			registerListener(new ChatListener());
 			registerListener(new ChannelListener());
 			registerListener(new TeamListener());
+			registerListener(new DeathListener());
 		}
 
 		/** if the servertype is in development register this listener below */

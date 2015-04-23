@@ -16,7 +16,7 @@ public class Kit {
 	private final List<ItemKit> items;
 
 	// need to implement a parser for all the other kits!
-	private final ArmorKit armor;
+	private final Optional<ArmorKit> armor;
 
 	// these work
 	private final HealthKit health;
@@ -26,16 +26,18 @@ public class Kit {
 	private Optional<KnockbackReductionKit> reduction;
 	private Optional<String> parent;
 	private boolean forced;
+	private Optional<List<PotionKit>> potions;
 
 	// will add armor kit , potion kit etc. :) and change all of the regions,
 	// spawns, kits to use the id attribute instead of the name */
 	public Kit(String name, @Nullable List<ItemKit> items,
-			@Nullable ArmorKit armor,
+			@Nullable ArmorKit armor, @Nullable List<PotionKit> potions,
 			@Nullable KnockbackReductionKit reduction, @Nullable String parent,
 			boolean forced) {
 		this.name = name;
 		this.items = items;
-		this.armor = armor;
+		this.armor = Optional.fromNullable(armor);
+		this.potions = Optional.fromNullable(potions);
 		this.health = new HealthKit(20, 20);
 		this.hunger = new HungerKit(20, 5.0f);
 		this.reduction = Optional.fromNullable(reduction);
@@ -65,12 +67,16 @@ public class Kit {
 		return this.getItems() != null || this.getItems().size() > 0;
 	}
 
-	public ArmorKit getArmor() {
+	public Optional<ArmorKit> getArmor() {
 		return this.armor;
 	}
 
 	public boolean hasArmor() {
 		return this.getArmor() != null;
+	}
+
+	public boolean hasPotions() {
+		return this.potions.isPresent() && this.potions.get().size() > 0;
 	}
 
 	@Override
@@ -119,9 +125,16 @@ public class Kit {
 			hunger.apply(player);
 
 			/** if the kit has armor do this below :) */
-			if (hasArmor()) {
-				ArmorKit armor = this.getArmor();
+			if (this.armor.isPresent()) {
+				ArmorKit armor = this.armor.get();
 				armor.apply(player);
+			}
+ 
+			/** if the kit has an "potion" tag/element do this */
+			if (hasPotions()) {
+				for (PotionKit potions : this.potions.get()) {
+					potions.apply(player);
+				}
 			}
 
 			// TODO make kits check if they are being forced if they are it will

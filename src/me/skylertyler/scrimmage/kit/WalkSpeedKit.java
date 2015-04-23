@@ -11,8 +11,9 @@ public class WalkSpeedKit {
 	}
 	
 	
+	/** default walk speed */
 	public WalkSpeedKit(){
-		this(0f);
+		this(0.2f);
 	}
 
 	public float getSpeed() {

@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.potion.PotionEffectType;
 import org.w3c.dom.Element;
 
 public class XMLUtils {
@@ -42,7 +43,7 @@ public class XMLUtils {
 	}
 
 	public static Enchantment parseEnchantment(String value) {
-		String uppercase = value.toUpperCase().replace(" ", "_"); 
+		String uppercase = value.toUpperCase().replace(" ", "_");
 		Enchantment enchantment = Enchantment.getByName(uppercase);
 		return enchantment;
 	}
@@ -57,6 +58,11 @@ public class XMLUtils {
 		default:
 			return false;
 		}
+	}
+
+	public static PotionEffectType parsePotionEffect(String effect) {
+		String uppercase = effect.toUpperCase().replaceAll(" ", "_");
+		return PotionEffectType.getByName(uppercase);
 	}
 
 	public static Color hex2Rgb(String colorStr) {
