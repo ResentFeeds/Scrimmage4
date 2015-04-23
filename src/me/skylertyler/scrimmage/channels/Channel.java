@@ -10,28 +10,23 @@ import me.skylertyler.scrimmage.team.Team;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import com.google.common.base.Optional;
+
 public abstract class Channel {
 
 	private final List<Player> players;
 	private String channelName;
-	private ChatColor color;
-	private boolean bold;
+	private Optional<ChatColor> color;
+	private Optional<Boolean> bold;
 	private String prefix;
 
 	public Channel(String prefix, @Nullable boolean bold,
 			@Nullable ChatColor color, String channelName) {
 		this.players = new ArrayList<>();
 		this.prefix = prefix;
-		this.bold = bold;
-		this.color = color;
+		this.bold = Optional.fromNullable(bold);
+		this.color = Optional.fromNullable(color);
 		this.channelName = channelName;
-		
-		if (this.color == null) {
-			// default color ?
-			this.color = ChatColor.AQUA;
-		}
-		
-		
 	}
 
 	public boolean isBold() {
@@ -39,11 +34,11 @@ public abstract class Channel {
 	}
 
 	public boolean getBold() {
-		return this.bold;
+		return this.bold.isPresent() && this.bold.get() != false;
 	}
 
 	public ChatColor getColor() {
-		return this.color;
+		return this.color.get();
 	}
 
 	public String getChannelName() {
