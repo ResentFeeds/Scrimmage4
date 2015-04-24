@@ -1,16 +1,18 @@
 package me.skylertyler.scrimmage.commands;
 
+import static org.bukkit.ChatColor.RED;
+import me.skylertyler.scrimmage.Scrimmage;
+import me.skylertyler.scrimmage.channels.Channel;
+import me.skylertyler.scrimmage.channels.TeamChannel;
+import me.skylertyler.scrimmage.event.ChannelChangeEvent;
+import me.skylertyler.scrimmage.match.Match;
+import me.skylertyler.scrimmage.team.Team;
+import me.skylertyler.scrimmage.utils.ChannelUtils;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import static org.bukkit.ChatColor.*;
-import me.skylertyler.scrimmage.Scrimmage;
-import me.skylertyler.scrimmage.channels.Channel;
-import me.skylertyler.scrimmage.event.ChannelChangeEvent;
-import me.skylertyler.scrimmage.match.Match;
-import me.skylertyler.scrimmage.utils.ChannelUtils;
 
 public class TCommand implements CommandExecutor {
 
@@ -33,14 +35,13 @@ public class TCommand implements CommandExecutor {
 					this.match.getPluginManager().callEvent(event);
 				}
 
-				if (args.length > 1) {
-					player.sendMessage(RED + "Too many arguments!");
+				Team team = this.match.getTeamHandler().teamForPlayer(player);
+
+				TeamChannel teamChannel = ChannelUtils.getTeamChannel();
+
+				if (args.length >= 1) {
+					// TODO
 					return false;
-				}
-
-				if (args.length == 1) {
-					// TODO ..
-
 				}
 			}
 		} else {

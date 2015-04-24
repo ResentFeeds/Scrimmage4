@@ -20,7 +20,7 @@ public class ChannelUtils {
 	// new team channel
 	public static TeamChannel newTeamChannel() {
 		return new TeamChannel(ChatColor.LIGHT_PURPLE + "*", false,
-				ChatColor.GREEN, "Team");
+				null, "Team");
 	}
 
 	// new admin channel
@@ -50,6 +50,7 @@ public class ChannelUtils {
 		}
 		return result;
 	}
+	 
 
 	public static GlobalChannel getGlobalChannel() {
 		return (GlobalChannel) getChannelByName("Global");

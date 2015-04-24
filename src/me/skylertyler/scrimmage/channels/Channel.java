@@ -16,7 +16,7 @@ public abstract class Channel {
 
 	private final List<Player> players;
 	private String channelName;
-	private Optional<ChatColor> color;
+	private ChatColor color;
 	private Optional<Boolean> bold;
 	private String prefix;
 
@@ -25,7 +25,7 @@ public abstract class Channel {
 		this.players = new ArrayList<>();
 		this.prefix = prefix;
 		this.bold = Optional.fromNullable(bold);
-		this.color = Optional.fromNullable(color);
+		this.color = color;
 		this.channelName = channelName;
 	}
 
@@ -38,7 +38,7 @@ public abstract class Channel {
 	}
 
 	public ChatColor getColor() {
-		return this.color.get();
+		return this.color != null ? this.color : ChatColor.AQUA;
 	}
 
 	public String getChannelName() {

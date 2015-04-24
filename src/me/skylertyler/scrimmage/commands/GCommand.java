@@ -1,5 +1,6 @@
 package me.skylertyler.scrimmage.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -8,9 +9,11 @@ import org.bukkit.entity.Player;
 import static org.bukkit.ChatColor.*;
 import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.channels.Channel;
+import me.skylertyler.scrimmage.channels.GlobalChannel;
 import me.skylertyler.scrimmage.event.ChannelChangeEvent;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.utils.ChannelUtils;
+import me.skylertyler.scrimmage.utils.MessageUtils;
 
 public class GCommand implements CommandExecutor {
  
@@ -33,15 +36,16 @@ public class GCommand implements CommandExecutor {
 					this.match.getPluginManager().callEvent(event);
 				}
 
-				if (args.length > 1) {
-					player.sendMessage(RED + "Too many arguments!");
+				/** allow or players to send a global message without doing /g*/
+				/** then they type their message */
+				
+				/**  /g <message> */
+				
+				GlobalChannel global = ChannelUtils.getGlobalChannel();
+				if (args.length >= 1) {
+					Bukkit.broadcastMessage(global.format(this.match.getTeamHandler().teamForPlayer(player), player, MessageUtils.broadcast(args)));
 					return false;
-				}
-
-				if (args.length == 1) {
-					// TODO ..
-
-				}
+				} 
 			}
 		} else {
 			sender.sendMessage(RED
