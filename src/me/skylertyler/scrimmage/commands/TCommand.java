@@ -8,7 +8,9 @@ import me.skylertyler.scrimmage.event.ChannelChangeEvent;
 import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.team.Team;
 import me.skylertyler.scrimmage.utils.ChannelUtils;
+import me.skylertyler.scrimmage.utils.MessageUtils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -40,7 +42,11 @@ public class TCommand implements CommandExecutor {
 				TeamChannel teamChannel = ChannelUtils.getTeamChannel();
 
 				if (args.length >= 1) {
-					// TODO
+					for (String member : team.getMembers()) {
+						Player teamMate = Bukkit.getPlayer(member);
+						teamMate.sendMessage(teamChannel.format(team, player,
+								MessageUtils.broadcast(args)));
+					}
 					return false;
 				}
 			}

@@ -2,6 +2,8 @@ name: Scrimmage4
 main: me.skylertyler.scrimmage.Scrimmage
 version: 1.0
 commands:
+  mystats:
+    description: your current OCN stats
   mychannel:
     description: tells you what channel you're in.
     aliases:

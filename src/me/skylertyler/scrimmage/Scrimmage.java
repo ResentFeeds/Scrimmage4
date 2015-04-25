@@ -9,6 +9,8 @@ import java.util.Map.Entry;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import me.skylertyler.scrimmage.api.OvercastPlayer;
+import me.skylertyler.scrimmage.api.PlayerAPI;
 import me.skylertyler.scrimmage.commands.*;
 import me.skylertyler.scrimmage.config.types.Config;
 import me.skylertyler.scrimmage.config.types.RotationConfig;
@@ -356,6 +358,12 @@ public class Scrimmage extends JavaPlugin {
 
 					kit.applyKit(player);
 				}
+			} else if (cmd.getName().equals("mystats")) {
+				OvercastPlayer overcastPlayer = PlayerAPI.getPlayer(player
+						.getName());
+				/** testing an API */
+				// will edit to have raindrops and totalobjectives for each player */
+				player.sendMessage(overcastPlayer.getProfileURL());
 			}
 		}
 		return true;
