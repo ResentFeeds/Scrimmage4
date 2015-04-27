@@ -8,9 +8,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import javax.xml.parsers.ParserConfigurationException;
-
-import me.skylertyler.scrimmage.api.OvercastPlayer;
-import me.skylertyler.scrimmage.api.PlayerAPI;
+ 
 import me.skylertyler.scrimmage.commands.*;
 import me.skylertyler.scrimmage.config.types.Config;
 import me.skylertyler.scrimmage.config.types.RotationConfig;
@@ -18,8 +16,10 @@ import me.skylertyler.scrimmage.exception.InvalidModuleException;
 import me.skylertyler.scrimmage.exception.KitNotFoundExecption;
 import me.skylertyler.scrimmage.kit.Kit;
 import me.skylertyler.scrimmage.listeners.*;
-import me.skylertyler.scrimmage.map.*;
-import me.skylertyler.scrimmage.match.*;
+import me.skylertyler.scrimmage.map.Map;
+import me.skylertyler.scrimmage.map.MapLoader;
+import me.skylertyler.scrimmage.match.Match;
+import me.skylertyler.scrimmage.match.MatchHandler;
 import me.skylertyler.scrimmage.modules.*;
 import me.skylertyler.scrimmage.regions.Region;
 import me.skylertyler.scrimmage.regions.RegionUtils;
@@ -42,9 +42,6 @@ import org.xml.sax.SAXException;
 
 public class Scrimmage extends JavaPlugin {
 
-	// Alot more in TODO.txt :)
-	// need to fix maploader using all the map.xml files at once! (somewhat
-	// better)
 
 	// need to remove List<Map> in the rotation config use the rotation slots :)
 
@@ -215,8 +212,8 @@ public class Scrimmage extends JavaPlugin {
 				Arrays.asList("bc", "bmessage"));
 		registerCommand(new AuthorCommand(getMatch()), "authors", null);
 		registerCommand(new TCommand(), "t", null);
-		registerCommand(new GCommand(), "g", null);
 		registerCommand(new ACommand(), "a", null);
+		registerCommand(new GCommand(), "g", null);
 		registerCommand(new MyChannelCommand(), "mychannel",
 				Arrays.asList("myc", "mc"));
 	}
@@ -358,15 +355,10 @@ public class Scrimmage extends JavaPlugin {
 
 					kit.applyKit(player);
 				}
-			} else if (cmd.getName().equals("mystats")) {
-				OvercastPlayer overcastPlayer = PlayerAPI.getPlayer(player
-						.getName());
-				/** testing an API */
-				// will edit to have raindrops and totalobjectives for each player */
-				player.sendMessage(overcastPlayer.getProfileURL());
 			}
 		}
-		return true;
+
+		return false;
 	}
 
 	// tells you if sport bukkit is enabled or not!

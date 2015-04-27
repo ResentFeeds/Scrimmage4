@@ -15,21 +15,32 @@ import com.google.common.base.Optional;
 public class Spawn {
 
 	private final Team team;
+	/** the team who the spawn belongs to (required) */
 	private final Region region;
+	/** the region (required) */
 	private final Optional<Float> yaw;
 	private final Optional<Float> pitch;
 	private final Optional<BlockRegion> angle;
+	/** the location where the players eye will be looking at */
 	private final Optional<String> kit;
+	/** the kit for the spawn */
+	private Location eyeLocation;
+	/** the players eye location */
+
+	private boolean bedspawn;
+
+	/** allow players to spawn at their beds */
 
 	public Spawn(Team team, Region region, @Nullable String kit,
 			@Nullable BlockRegion angle, @Nullable float yaw,
-			@Nullable float pitch) {
+			@Nullable float pitch, boolean bedspawn) {
 		this.team = team;
 		this.region = region;
 		this.kit = Optional.fromNullable(kit);
 		this.angle = Optional.fromNullable(angle);
 		this.yaw = Optional.fromNullable(yaw);
 		this.pitch = Optional.fromNullable(pitch);
+		this.bedspawn = bedspawn;
 	}
 
 	public Team getTeam() {
@@ -54,6 +65,10 @@ public class Spawn {
 
 	public Optional<String> getKit() {
 		return this.kit;
+	}
+
+	public boolean isBedSpawnAllowed() {
+		return this.bedspawn;
 	}
 
 	public Location onEye(Player player) {
@@ -82,9 +97,13 @@ public class Spawn {
 		setEyeLocation(player, location);
 	}
 
-	// may change this 
+	/** set the player eye location */
 	public void setEyeLocation(Player player, Location newEyeLocation) {
-		Location oldEyeLocation = player.getEyeLocation();
-		newEyeLocation = oldEyeLocation;
+		this.eyeLocation = player.getEyeLocation();
+		this.eyeLocation = newEyeLocation;
+	}
+
+	public Location getEyeLocation() {
+		return this.eyeLocation;
 	}
 }

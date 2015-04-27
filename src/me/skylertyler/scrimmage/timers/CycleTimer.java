@@ -12,6 +12,7 @@ import static org.bukkit.ChatColor.*;
 public class CycleTimer extends CountDownTimer {
 
 	private final Match match;
+	private String seconds;
 
 	public CycleTimer(Match match, int time, boolean cancelled) {
 		super(time, cancelled);
@@ -46,12 +47,11 @@ public class CycleTimer extends CountDownTimer {
 	public String statusString(int time) {
 		Map next = getMatch().getNext();
 		String format = null;
-		String seconds = null;
 		if (time != 0) {
 			if (time != 1) {
-				seconds = "seconds";
+				this.seconds = "seconds";
 			} else {
-				seconds = "second";
+				this.seconds = "second";
 			}
 			format = DARK_AQUA + "Cycling to " + AQUA
 					+ next.getInfo().getName() + DARK_AQUA + " in " + DARK_RED
@@ -65,25 +65,32 @@ public class CycleTimer extends CountDownTimer {
 		return result;
 	}
 
+	// fix this
 	@Override
 	public void hasEnded() {
 		Bukkit.getScheduler().cancelTask(getTimer());
 		Match old = this.getMatch();
-		Map next = old.getNext();
-		cycleAndMakeMatch(old, next);
+		cycleAndMakeMatch(old);
 	}
 
 	// TODO fix cycling to the next map
-	public void cycleAndMakeMatch(Match old, Map next) {
+	public void cycleAndMakeMatch(Match old) {
 		Scrimmage scrim = old.getScrimmage();
 		int oldID = old.getID();
 		int newID = oldID + 1;
-		Bukkit.unloadWorld(old.getWorld().getName(), false);
+		Map next = old.getNext();
+		Bukkit.unloadWorld(old.getWorld(), false);
 		System.out.println("unloaded old world!");
 		scrim.setMatch(new Match(scrim, newID, next));
 	}
 
 	public Match getMatch() {
 		return this.match;
+	}
+	
+	
+	/** to check if the seconds are plural */
+	public boolean secondsArePlural(){
+		return this.seconds.endsWith("s");
 	}
 }

@@ -6,7 +6,7 @@ import java.util.List;
 import me.skylertyler.scrimmage.exception.TeamNotFoundException;
 import me.skylertyler.scrimmage.parsers.ElementParser;
 import me.skylertyler.scrimmage.regions.Region;
-import me.skylertyler.scrimmage.regions.RegionUtils;
+import me.skylertyler.scrimmage.regions.RegionUtils; 
 import me.skylertyler.scrimmage.team.Team;
 import me.skylertyler.scrimmage.utils.TeamUtils;
 import me.skylertyler.scrimmage.utils.XMLUtils;
@@ -84,7 +84,7 @@ public class SpawnParser extends ElementParser {
 		if (spawnElement.hasAttribute("bedspawn")) {
 			bedspawn = XMLUtils.parseBoolean(spawnElement
 					.getAttribute("bedspawn"));
-		}
+		} 
 
 		Region region = null;
 		NodeList children = spawnElement.getChildNodes();
@@ -95,8 +95,9 @@ public class SpawnParser extends ElementParser {
 					region = RegionUtils.parseRegion(node);
 				}
 			}
-		}
-		return new Spawn(team, region, kit, null, 0, 0);
+		} 
+		
+		return new Spawn(team, region, kit, null, 0, 0, bedspawn);
 	}
 
 	/**

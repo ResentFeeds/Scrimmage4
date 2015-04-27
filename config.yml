@@ -8,7 +8,7 @@ observer-book:
   pages:
   - '`1write stuff here!'
   - '`2Okay `r?'
-  slot: 0
+  slot: 1
 broadcasting:
   prefix: '`7[`6Scrimmage4`7]'
 server:

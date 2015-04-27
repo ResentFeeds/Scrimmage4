@@ -10,7 +10,9 @@ import me.skylertyler.scrimmage.utils.TeamUtils;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class TeamHandler {
 
@@ -49,6 +51,7 @@ public class TeamHandler {
 				BookKit obs_book = config.getObserversBook();
 				obs_book.apply(player);
 			}
+			player.getInventory().setItem(0, new ItemStack(Material.COMPASS));
 			/** other wise if they are not observers do this below */
 		} else {
 			PlayerUtils.showPlayer(player);

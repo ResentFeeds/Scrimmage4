@@ -1,6 +1,6 @@
 package me.skylertyler.scrimmage.commands;
 
-import static org.bukkit.ChatColor.RED;
+import static org.bukkit.ChatColor.*;
 import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.channels.Channel;
 import me.skylertyler.scrimmage.channels.TeamChannel;
@@ -24,6 +24,7 @@ public class TCommand implements CommandExecutor {
 		this.match = Scrimmage.getScrimmageInstance().getMatch();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
@@ -41,6 +42,7 @@ public class TCommand implements CommandExecutor {
 
 				TeamChannel teamChannel = ChannelUtils.getTeamChannel();
 
+				/** its deprecated because of the Bukkit.getPlayer(String goes here) method */
 				if (args.length >= 1) {
 					for (String member : team.getMembers()) {
 						Player teamMate = Bukkit.getPlayer(member);

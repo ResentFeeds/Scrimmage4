@@ -152,7 +152,7 @@ public class Config extends CoreConfig {
 					observer_book.addDefault("author", "`6SkylerTyler1337");
 					observer_book.addDefault("pages",
 							Arrays.asList("`1write stuff here!", "`2Okay `r?"));
-					observer_book.addDefault("slot", 0);
+					observer_book.addDefault("slot", 1);
 				}
 			} else {
 				config.createSection("observer-book");
