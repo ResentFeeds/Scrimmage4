@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import me.skylertyler.scrimmage.author.Author;
 import me.skylertyler.scrimmage.contributor.Contributor;
-import me.skylertyler.scrimmage.exception.NoAuthorsException;
+import me.skylertyler.scrimmage.exception.XMLLoadException;
 import me.skylertyler.scrimmage.map.MapInfo;
 import me.skylertyler.scrimmage.rules.Rule;
 import me.skylertyler.scrimmage.utils.BukkitUtils;
@@ -102,8 +102,9 @@ public class InfoModule extends Module {
 		boolean authors_are_null = authors.size() == 0;
 		if (authors_are_null) {
 			try {
-				throw new NoAuthorsException(name);
-			} catch (NoAuthorsException e) {
+				throw new XMLLoadException(null,
+						"the authors size is 0 or null");
+			} catch (XMLLoadException e) {
 				e.printStackTrace();
 			}
 		}

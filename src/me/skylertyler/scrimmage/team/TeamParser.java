@@ -3,27 +3,25 @@ package me.skylertyler.scrimmage.team;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.skylertyler.scrimmage.parsers.ElementParser;
+import me.skylertyler.scrimmage.utils.ColorUtils;
+import me.skylertyler.scrimmage.utils.Log;
+
 import org.bukkit.ChatColor;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import me.skylertyler.scrimmage.parsers.ElementParser;
-import me.skylertyler.scrimmage.utils.ColorUtils;
-import me.skylertyler.scrimmage.utils.Log;
-
 public class TeamParser extends ElementParser {
 
 	private final List<Team> teams;
 	private String teamsTag;
-	private String teamTag;
-
+	private String teamTag; 
 	public TeamParser(Element element, String teamsTag, String teamTag) {
 		super(element);
-		this.teams = new ArrayList<>();
+		this.teams = new ArrayList<>(); 
 		this.teamsTag = teamsTag;
 		this.teamTag = teamTag;
-
 		/**
 		 * XML Parsing
 		 */
@@ -100,10 +98,10 @@ public class TeamParser extends ElementParser {
 					teams.add(newTeam);
 				}
 			}
-		}
+		} 
 	}
 
 	public List<Team> getTeams() {
 		return this.teams;
-	}
+	} 
 }

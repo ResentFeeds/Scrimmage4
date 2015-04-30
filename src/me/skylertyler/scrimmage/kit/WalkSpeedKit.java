@@ -9,19 +9,17 @@ public class WalkSpeedKit {
 	public WalkSpeedKit(float speed) {
 		this.speed = speed;
 	}
-	
-	
+
 	/** default walk speed */
-	public WalkSpeedKit(){
+	public WalkSpeedKit() {
 		this(0.2f);
 	}
 
 	public float getSpeed() {
 		return this.speed;
 	}
-	
-	
-	public void apply(Player player){
-		player.setWalkSpeed(getSpeed());
+
+	public void apply(Player player) {
+		player.setWalkSpeed(this.speed);
 	}
 }

@@ -8,9 +8,11 @@ import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.config.types.Config;
 
 import org.bukkit.Bukkit;
+
 import static org.bukkit.ChatColor.*;
 
 import org.bukkit.command.Command;
+import org.bukkit.entity.Player;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
@@ -119,5 +121,12 @@ public class MessageUtils {
 
 		String result = format;
 		return config.getBroadcastPrefix() + " " + result;
+	}
+
+	public static void warningMessage(Player player, String message) {
+		if (message != null)
+			player.sendMessage(GOLD + Characters.ERROR.getUTF() + message);
+		else
+			return;
 	}
 }

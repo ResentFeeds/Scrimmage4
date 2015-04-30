@@ -17,7 +17,7 @@ public class Contributor {
 		this(null, contributor);
 	}
 
-	//TODO if the proto is less than 1.3.6 use the contributor constructer above for adding contributors :) other wise use this below  > :D
+	// TODO make this 
 	public Contributor(String contribution, UUID uuid) {
 		this.uuid = uuid;
 		this.contribution = contribution;

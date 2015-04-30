@@ -19,7 +19,6 @@ public abstract class Channel {
 	private ChatColor color;
 	private Optional<Boolean> bold;
 	private String prefix;
-
 	/**
 	 * 
 	 * @param prefix

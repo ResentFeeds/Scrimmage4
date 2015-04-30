@@ -24,8 +24,7 @@ public class ChannelListener implements Listener {
 			Channel channel = event.getOldChannel();
 			boolean match = channel == nchannel;
 			if (match) {
-				event.setCancelled(true);
-				player.sendMessage(RED + "You are already in the "
+				event.setCancelled(true, RED + "You are already in the "
 						+ nchannel.getName());
 				return;
 			}

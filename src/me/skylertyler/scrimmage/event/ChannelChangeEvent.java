@@ -66,4 +66,11 @@ public class ChannelChangeEvent extends ChannelEvent implements Cancellable {
 	public void setCancelled(boolean cancelled) {
 		this.cancelled = cancelled;
 	}
+
+	public void setCancelled(boolean value, String message) {
+		setCancelled(value);
+		if (message != null) {
+			getPlayer().sendMessage(message);
+		}
+	}
 }

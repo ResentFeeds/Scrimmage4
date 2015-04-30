@@ -8,7 +8,7 @@ import java.lang.reflect.Modifier;
 public enum Characters {
 
 	Raquo("\u00BB"), Laquo("\u00AB"), Cross("\u2715"), Check("\u2714"), Wool(
-			"\u2610"), DIAMX("\u2756");
+			"\u2610"), DIAMX("\u2756"),ERROR("\u26A0 ");
 
 	private String utf;
 

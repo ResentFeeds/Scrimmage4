@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import javax.xml.parsers.ParserConfigurationException;
- 
+
 import me.skylertyler.scrimmage.commands.*;
 import me.skylertyler.scrimmage.config.types.Config;
 import me.skylertyler.scrimmage.config.types.RotationConfig;
@@ -22,6 +22,7 @@ import me.skylertyler.scrimmage.match.Match;
 import me.skylertyler.scrimmage.match.MatchHandler;
 import me.skylertyler.scrimmage.modules.*;
 import me.skylertyler.scrimmage.regions.Region;
+import me.skylertyler.scrimmage.regions.RegionType;
 import me.skylertyler.scrimmage.regions.RegionUtils;
 import me.skylertyler.scrimmage.rotation.Rotation;
 import me.skylertyler.scrimmage.team.Team;
@@ -41,7 +42,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.xml.sax.SAXException;
 
 public class Scrimmage extends JavaPlugin {
-
 
 	// need to remove List<Map> in the rotation config use the rotation slots :)
 
@@ -355,6 +355,23 @@ public class Scrimmage extends JavaPlugin {
 
 					kit.applyKit(player);
 				}
+			}  else if (cmd.getName().equalsIgnoreCase("contains")){
+				  if(args.length <= 0){
+					  player.sendMessage(ChatColor.RED + "Not enough arguments");
+					  return false;
+				  }
+				  
+				  
+				  if(args.length >= 1){
+					  String regionName = MessageUtils.broadcast(args); 
+					  
+					  // if it does contain the region do this 
+					  if(RegionUtils.containsRegion(regionName)){
+						  player.sendMessage(ChatColor.GREEN + "there is a region by the type of " + regionName);
+					  }else{
+						  player.sendMessage(ChatColor.RED + "There is no region by the type of " + regionName);
+					  }
+				  }
 			}
 		}
 

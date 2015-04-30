@@ -2,7 +2,6 @@ package me.skylertyler.scrimmage.regions;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
- 
 
 import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.modules.InfoModule;
@@ -284,7 +283,7 @@ public class RegionUtils {
 		return region;
 	}
 
-	// NOT TESTED
+	/** get a region by a type */
 	public static Region getRegionByType(RegionType type) {
 		Region result = null;
 		for (Entry<String, Region> regions : getRegions().entrySet()) {
@@ -295,5 +294,26 @@ public class RegionUtils {
 		}
 
 		return result;
+	}
+
+	/** parse a region by a type */
+	/**
+	 * 
+	 * @param regionName a value of a region type's name will replace underscores with a space 
+	 * @return @RegionType
+	 */
+	public static RegionType parseRegionType(String regionName) {
+		for (RegionType types : RegionType.values()) {
+			if (types.name().replace("_", " ").equalsIgnoreCase(regionName)) {
+				return types;
+			}
+		}
+		return null;
+	}
+
+	/** check if the region contains a region using a String paremeter */
+	public static boolean containsRegion(String regionType) {
+		Region region = getRegionByType(parseRegionType(regionType));
+		return containsRegion(region);
 	}
 }

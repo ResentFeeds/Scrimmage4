@@ -2,8 +2,8 @@ name: Scrimmage4
 main: me.skylertyler.scrimmage.Scrimmage
 version: 1.0
 commands: 
-  mystats:
-    description: ocn stats
+  contains:
+    description: check if a region exist!
   mychannel:
     description: tells you what channel you're in.
     aliases:
