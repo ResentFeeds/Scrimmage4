@@ -54,6 +54,7 @@ public class MapHandler {
 				}
 			} 
 			world.setSpawnFlags(false, false);
+			world.setMonsterSpawnLimit(0);
 			world.setAutoSave(false);
 			match.setWorld(world);
 		} catch (IOException e) {

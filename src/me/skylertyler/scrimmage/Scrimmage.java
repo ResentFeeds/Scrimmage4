@@ -47,7 +47,7 @@ public class Scrimmage extends JavaPlugin {
 
 	// TODO below -_-
 
-	// NEED TO implement SpawnModule, and RegionModule to Finish off the teams
+	// NEED TO implement SpawnModule, and RegionModule to Finish off 2the teams
 	// make overhead color show !
 	private boolean sportBukkit;
 	private Match match;
@@ -78,6 +78,7 @@ public class Scrimmage extends JavaPlugin {
 			e.printStackTrace();
 		}
 
+		// may change this to the config.yml */
 		/** check if the server type is running */
 		if (getConfigFile().isRunning()) {
 			try {
@@ -216,6 +217,7 @@ public class Scrimmage extends JavaPlugin {
 		registerCommand(new GCommand(), "g", null);
 		registerCommand(new MyChannelCommand(), "mychannel",
 				Arrays.asList("myc", "mc"));
+		registerCommand(new TestCommand(getMatch()), "filters", null);
 	}
 
 	public void registerListener(Listener listener) {
@@ -329,10 +331,9 @@ public class Scrimmage extends JavaPlugin {
 				}
 			} else if (cmd.getName().equalsIgnoreCase("kit")) {
 				if (args.length == 0) {
-					for (Kit kit : KitUtils.getKitModule().getKitParser()
-							.getKits()) {
-						String name = kit.getName();
-						player.sendMessage(name + " is a kit!");
+					List<String> ids = KitUtils.getKitIDs();
+					for (String kitID : ids) {
+						player.sendMessage(kitID + " is a kit!");
 					}
 				}
 
@@ -342,7 +343,7 @@ public class Scrimmage extends JavaPlugin {
 				}
 
 				if (args.length == 1) {
-					Kit kit = KitUtils.getKitByName(args[0]);
+					Kit kit = KitUtils.getKit(args[0]);
 
 					if (kit == null) {
 						try {
@@ -355,23 +356,30 @@ public class Scrimmage extends JavaPlugin {
 
 					kit.applyKit(player);
 				}
-			}  else if (cmd.getName().equalsIgnoreCase("contains")){
-				  if(args.length <= 0){
-					  player.sendMessage(ChatColor.RED + "Not enough arguments");
-					  return false;
-				  }
-				  
-				  
-				  if(args.length >= 1){
-					  String regionName = MessageUtils.broadcast(args); 
-					  
-					  // if it does contain the region do this 
-					  if(RegionUtils.containsRegion(regionName)){
-						  player.sendMessage(ChatColor.GREEN + "there is a region by the type of " + regionName);
-					  }else{
-						  player.sendMessage(ChatColor.RED + "There is no region by the type of " + regionName);
-					  }
-				  }
+			} else if (cmd.getName().equalsIgnoreCase("contains")) {
+				if (args.length <= 0) {
+					player.sendMessage(ChatColor.RED + "Not enough arguments");
+					return false;
+				}
+
+				if (args.length >= 1) {
+					String regionName = MessageUtils.broadcast(args);
+					RegionType type = RegionUtils.parseRegionType(regionName);
+					if (RegionUtils.containsRegion(type)) {
+						Region region = RegionUtils.getRegionByType(type);
+						String toString = region.getType().toString();
+						player.sendMessage(ChatColor.GREEN
+								+ "there is a region by the type of "
+								+ ChatColor.DARK_GREEN + toString
+								+ ChatColor.GREEN + " called " + "'"
+								+ ChatColor.DARK_GREEN + region.getName()
+								+ ChatColor.GREEN + "'");
+					} else {
+						MessageUtils.warningMessage(player, ChatColor.RED
+								+ "There is no region by the type of "
+								+ ChatColor.DARK_RED + regionName);
+					}
+				}
 			}
 		}
 
@@ -490,6 +498,7 @@ public class Scrimmage extends JavaPlugin {
 		ModuleRegistry.register(MaxBuildHeightModule.class);
 		ModuleRegistry.register(SpawnModule.class);
 		ModuleRegistry.register(KitModule.class);
+		ModuleRegistry.register(FilterModule.class);
 	}
 
 	public MapLoader getLoader() {

@@ -5,13 +5,17 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
+import com.google.common.base.Preconditions;
+
 public class ScrimmagePlayer {
 
-	private final Player player;
 	private static List<ScrimmagePlayer> players = new ArrayList<ScrimmagePlayer>();
+	private final Player player;
 
 	public ScrimmagePlayer(Player player) {
-		this.player = player;
+		this.player = Preconditions.checkNotNull(player,
+				"the player cant be null");
+		getPlayers().add(this);
 	}
 
 	public Player getPlayer() {

@@ -1,6 +1,9 @@
 package me.skylertyler.scrimmage.utils;
 
 import java.awt.Color;
+import java.util.List;
+import me.skylertyler.scrimmage.filter.Filter;
+import me.skylertyler.scrimmage.modules.FilterModule;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -43,7 +46,7 @@ public class XMLUtils {
 	}
 
 	public static Enchantment parseEnchantment(String value) {
-		String uppercase = value.toUpperCase().replace(" ", "_");
+		String uppercase = value.replace(" ", "_").toUpperCase();
 		Enchantment enchantment = Enchantment.getByName(uppercase);
 		return enchantment;
 	}
@@ -75,5 +78,19 @@ public class XMLUtils {
 		Color javaColor = hex2Rgb("#" + color);
 		return org.bukkit.Color.fromRGB(javaColor.getRed(),
 				javaColor.getGreen(), javaColor.getBlue());
+	}
+
+	/** get a filter by an id CASE SENSITIVE */
+	public static Filter getFilter(String id) {
+		FilterModule filterMod = ModuleUtils.getFilterModule();
+		List<Filter> filters = filterMod.getFilterParser().getFilters();
+		for (Filter all : filters) {
+			if (all != null) {
+				if (all.getID().equals(id)) {
+					return all;
+				}
+			}
+		}
+		return null;
 	}
 }

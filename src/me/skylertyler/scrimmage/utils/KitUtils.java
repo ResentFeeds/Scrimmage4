@@ -12,11 +12,11 @@ import org.bukkit.entity.Player;
 
 public class KitUtils {
 	// name needs to be exactly how the kit 'name' attribute is!
-	public static Kit getKitByName(String name) {
+	public static Kit getKit(String id) {
 		Kit result = null;
 		List<Kit> kits = getKitModule().getKitParser().getKits();
 		for (Kit kit : kits) {
-			if (kit.getName().equalsIgnoreCase(name)) {
+			if (kit.getID().equalsIgnoreCase(id)) {
 				result = kit;
 			}
 		}
@@ -29,20 +29,20 @@ public class KitUtils {
 	}
 
 	// get all the kit names!
-	public static List<String> getKitNames() {
+	public static List<String> getKitIDs() {
 		List<String> names = new ArrayList<String>();
 		for (Kit kit : getKitModule().getKitParser().getKits()) {
-			String name = kit.getName();
+			String name = kit.getID();
 			names.add(name);
 		}
 		return names;
 	}
 
-	public static void applyKit(String name, Player player) {
-		Kit kit = getKitByName(name);
+	public static void applyKit(String id, Player player) {
+		Kit kit = getKit(id);
 		if (kit == null) {
 			try {
-				throw new KitNotFoundExecption(name, player);
+				throw new KitNotFoundExecption(id, player);
 			} catch (KitNotFoundExecption e) {
 				// nothing
 			}

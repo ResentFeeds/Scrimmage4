@@ -12,7 +12,6 @@ import static org.bukkit.ChatColor.*;
 public class ChannelListener implements Listener {
 
 	public ChannelListener() {
-
 	}
 
 	@EventHandler
@@ -24,6 +23,7 @@ public class ChannelListener implements Listener {
 			Channel channel = event.getOldChannel();
 			boolean match = channel == nchannel;
 			if (match) {
+				/** cancel the event and send the player the message */
 				event.setCancelled(true, RED + "You are already in the "
 						+ nchannel.getName());
 				return;

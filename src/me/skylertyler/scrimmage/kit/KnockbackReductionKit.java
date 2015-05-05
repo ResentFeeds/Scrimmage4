@@ -12,7 +12,7 @@ public class KnockbackReductionKit {
 
 	/** set the knock back reduction for the player */
 	public void apply(Player player) {
-		player.setKnockbackReduction(this.getReduction());
+		player.setKnockbackReduction(this.reduction);
 	}
 
 	public float getReduction() {

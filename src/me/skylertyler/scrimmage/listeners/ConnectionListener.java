@@ -59,10 +59,8 @@ public class ConnectionListener extends MatchListener {
 			MatchState ms = match.getState();
 			if (ms != null) {
 				String state = ms.toString();
-				String before = Characters.AllowCharacters(Characters.Raquo
-						.getUTF()) + " ";
-				String after = " "
-						+ Characters.AllowCharacters(Characters.Laquo.getUTF());
+				String before = Characters.Raquo.getUTF() + " ";
+				String after = " " + Characters.Laquo.getUTF();
 				String name = match.getMap().getInfo().getName();
 				String light_purple = ChatColor.LIGHT_PURPLE + name;
 				format = prefix + state + before + light_purple + state + after
@@ -75,7 +73,7 @@ public class ConnectionListener extends MatchListener {
 	@EventHandler
 	public void onMatchStart(MatchStartEvent event) {
 		Match match = event.getMatch();
-		if (match != null) { 
+		if (match != null) {
 			Log.logWarning(match.getID() + " ");
 		}
 	}
@@ -218,6 +216,8 @@ public class ConnectionListener extends MatchListener {
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Team team = this.match.getTeamHandler()
 				.teamForPlayer(event.getPlayer());
-		team.removeMember(event.getPlayer());
+		if (team != null) {
+			team.removeMember(event.getPlayer());
+		}
 	}
 }

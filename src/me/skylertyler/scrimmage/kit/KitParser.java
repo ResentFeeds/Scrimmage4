@@ -27,8 +27,11 @@ public class KitParser extends ElementParser {
 
 	public KitParser(Element element, String kitsTag, String kitTag) {
 		super(element);
+		/** all the kits */
 		this.kits = new ArrayList<>();
+		/** the "kits" tag */
 		this.kitsTag = kitsTag;
+		/** the "kit" tag */
 		this.kitTag = kitTag;
 
 		/**
@@ -58,9 +61,9 @@ public class KitParser extends ElementParser {
 		// knockback reduction :)
 		KnockbackReductionKit reduction = null;
 		ArmorKit armor = null;
-		String name = element.getAttribute("name");
-		if (name == null) {
-			Log.logWarning("No name found for a kit!");
+		String id = element.getAttribute("id");
+		if (id == null) {
+			Log.logWarning("No id found for a kit!");
 			return null;
 		}
 		NodeList items = element.getChildNodes();
@@ -88,7 +91,9 @@ public class KitParser extends ElementParser {
 				}
 
 				/** armor */
+
 				ItemStack[] armorKit = new ItemStack[4];
+				/** do [4] because there are 4 armor slots for the armor */
 				for (int a = 0; a < items.getLength(); a++) {
 					Node node = items.item(a);
 					if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -126,17 +131,42 @@ public class KitParser extends ElementParser {
 			}
 		}
 
-		String kit = null;
-		if (element.hasAttribute("parent")) {
-			kit = element.getAttribute("parent");
+		List<String> parents = new ArrayList<>();
+		if (element.hasAttribute("parents")) {
+			parents = parseParents(element.getAttribute("parents"));
 		}
 
 		boolean forced = false;
 		if (element.hasAttribute("forced")) {
 			forced = XMLUtils.parseBoolean(element.getAttribute("forced"));
 		}
-		return new Kit(name, this.items, armor, this.potions, reduction, kit,
-				forced);
+
+		boolean potionparticles = false;
+		if (element.hasAttribute("potion-particles")) {
+			potionparticles = XMLUtils.parseBoolean(element
+					.getAttribute("potion-particles"));
+		}
+		boolean discardbottles = true;
+		if (element.hasAttribute("discard-potion-bottles")) {
+			discardbottles = XMLUtils.parseBoolean(element
+					.getAttribute("discard-potion-bottles"));
+		}
+		return new Kit(id, this.items, armor, this.potions, reduction, parents,
+				forced, potionparticles, discardbottles);
+	}
+
+	public List<String> parseParents(String attribute) {
+		List<String> parents = new ArrayList<>();
+		String[] comma = attribute.split(",");
+
+		for (String parent : comma) {
+			/** check if there is any */
+			if (parent != null) {
+				parents.add(parent);
+			}
+		}
+
+		return parents;
 	}
 
 	private PotionKit parsePotion(Element potionElement) {
@@ -154,6 +184,7 @@ public class KitParser extends ElementParser {
 					.getAttribute("amplifier"));
 		}
 
+		/** just make ambient false for now */
 		return new PotionKit(type, duration, amplifier);
 	}
 

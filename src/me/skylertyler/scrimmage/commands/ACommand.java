@@ -39,7 +39,7 @@ public class ACommand implements CommandExecutor {
 								player, channel, ChannelUtils.getAdminChannel());
 						this.match.getPluginManager().callEvent(event);
 					} else {
-						player.sendMessage(RED
+						MessageUtils.warningMessage(player, RED
 								+ "You need to be op in order to join the "
 								+ ChannelUtils.getAdminChannel().getName());
 					}
@@ -59,9 +59,10 @@ public class ACommand implements CommandExecutor {
 							}
 						}
 					} else {
-						player.sendMessage(RED
-								+ "You need to be op to send a message from the "
-								+ adminChannel.getName());
+						MessageUtils
+							 	.warningMessage(
+										player,  RED+ "You need to be op to send a message from the "
+												+ adminChannel.getName());
 					}
 				}
 			}

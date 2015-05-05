@@ -3,7 +3,8 @@ package me.skylertyler.scrimmage.regions;
 public enum RegionType {
 
 	BLOCK("BlockRegion"), POINT("PointRegion"), EMPTY("EmptyRegion"), CUBOID(
-			"CuboidRegion"), SPHERE("SphereRegion"), CYLINDER("CylinderRegion"), CIRCLE("CircleRegion");
+			"CuboidRegion"), SPHERE("SphereRegion"), CYLINDER("CylinderRegion"), CIRCLE(
+			"CircleRegion");
 
 	private final String name;
 
@@ -16,6 +17,10 @@ public enum RegionType {
 	}
 
 	public String toString() {
-		return this.getName();
+		if (this.getName().contains("_")) {
+			return this.getName().replace("_", " ").toLowerCase();
+		} else {
+			return this.getName().toLowerCase();
+		}
 	}
 }

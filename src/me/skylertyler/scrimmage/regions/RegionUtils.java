@@ -312,8 +312,8 @@ public class RegionUtils {
 	}
 
 	/** check if the region contains a region using a String paremeter */
-	public static boolean containsRegion(String regionType) {
-		Region region = getRegionByType(parseRegionType(regionType));
+	public static boolean containsRegion(RegionType type) {
+		Region region = getRegionByType(type);
 		return containsRegion(region);
 	}
 }

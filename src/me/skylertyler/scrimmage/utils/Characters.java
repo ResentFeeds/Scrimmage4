@@ -1,9 +1,9 @@
 package me.skylertyler.scrimmage.utils;
 
-import net.minecraft.server.v1_8_R1.SharedConstants;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+
+import net.minecraft.server.v1_8_R1.SharedConstants;
 
 public enum Characters {
 

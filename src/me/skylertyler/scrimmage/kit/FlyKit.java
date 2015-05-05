@@ -6,8 +6,7 @@ public class FlyKit {
 
 	private final boolean flying;
 	private final float speed;
-
-	// TODO
+ 
 	public FlyKit(boolean flying, float speed) {
 		this.flying = flying;
 		this.speed = speed;
