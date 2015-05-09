@@ -16,6 +16,8 @@ import me.skylertyler.scrimmage.regions.types.CircleRegion;
 import me.skylertyler.scrimmage.regions.types.CuboidRegion;
 import me.skylertyler.scrimmage.regions.types.CylinderRegion;
 import me.skylertyler.scrimmage.regions.types.SphereRegion;
+import me.skylertyler.scrimmage.scoreboard.Scoreboard;
+import me.skylertyler.scrimmage.scoreboard.ScoreboardType;
 import me.skylertyler.scrimmage.team.Team;
 import me.skylertyler.scrimmage.utils.Characters;
 import me.skylertyler.scrimmage.utils.Log;
@@ -30,7 +32,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
-import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.DisplaySlot;
 
 /** a match listener */
 public class ConnectionListener extends MatchListener {
@@ -75,6 +77,16 @@ public class ConnectionListener extends MatchListener {
 		Match match = event.getMatch();
 		if (match != null) {
 			Log.logWarning(match.getID() + " ");
+
+			boolean hasPlayers = Bukkit.getOnlinePlayers().size() > 0;
+			Scoreboard board = match.getScoreboard();
+			board.registerNewObjective("skyler", DisplaySlot.SIDEBAR,
+					ScoreboardType.Flag.getDisplayName());
+			if (hasPlayers) {
+				for (Player player : Bukkit.getOnlinePlayers()) {
+					board.setPlayerBoard(player);
+				}
+			}
 		}
 	}
 
@@ -181,12 +193,6 @@ public class ConnectionListener extends MatchListener {
 	// try to fix this error with this!
 	@EventHandler
 	public void loadBoard(ScoreboardLoadEvent event) {
-		Match match = event.getMatch();
-		Scoreboard board = event.getBoard();
-		if (match != null && board != null) {
-			Bukkit.broadcastMessage(match.getID()
-					+ " is the id of this match! ");
-		}
 	}
 
 	@EventHandler

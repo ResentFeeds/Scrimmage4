@@ -1,6 +1,5 @@
 package me.skylertyler.scrimmage.listeners;
-
-import org.bukkit.Bukkit;
+ 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPlaceEvent;
 

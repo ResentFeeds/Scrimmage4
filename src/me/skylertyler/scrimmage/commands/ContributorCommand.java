@@ -1,10 +1,15 @@
 package me.skylertyler.scrimmage.commands;
 
+import static org.bukkit.ChatColor.RED;
+
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import me.skylertyler.scrimmage.contributor.Contributor;
 import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.map.MapInfo;
 import me.skylertyler.scrimmage.match.Match;
-import org.bukkit.ChatColor;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,31 +23,37 @@ public class ContributorCommand implements CommandExecutor {
 		this.match = match;
 	}
 
-	// this is just for now 
-	// GRAY > *  WHITE > contributor (contribution) if it has a contribution!
+	// this is just for now
+	// GRAY > * WHITE > contributor (contribution) if it has a contribution!
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			Match match = this.getMatch();
-			Map map = match.getMap();
-			MapInfo info = map.getInfo();
 			if (cmd.getName().equalsIgnoreCase("contributors")) {
-				if (match != null) {
-					if (info.getContributors() != null) {
-						for (Contributor contribs : info.getContributors()) {
-							String format = null;
-							if (contribs.hasContribution()) {
-								format = contribs.getContributor() + " ("
-										+ contribs.getContribution() + ") ";
-							} else {
-								format = contribs.getContributor();
-							}
-							player.sendMessage(ChatColor.GRAY + "* "
-									+ ChatColor.RESET + format);
+
+				if (args.length > 0) {
+					player.sendMessage(RED + "Too many arguments!");
+					return false;
+				}
+				if (args.length == 0) {
+					String format = null;
+					MapInfo info = getMatch().getMap().getInfo();
+					for (Entry<String, String> contributor : info.getContributorNames()
+							.entrySet()) {
+						String name = contributor.getKey();
+						String contrib = contributor.getValue();
+
+						if (contrib != null) {
+							format = name + "  " + contrib;
+						} else {
+							format = name;
 						}
+
+						String result = format;
+						player.sendMessage(result);
 					}
+					return true;
 				}
 			}
 		}

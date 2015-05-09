@@ -151,12 +151,19 @@ public class KitParser extends ElementParser {
 			discardbottles = XMLUtils.parseBoolean(element
 					.getAttribute("discard-potion-bottles"));
 		}
+
+		boolean resetenderpearls = false;
+		if (element.hasAttribute("reset-ender-pearls")) {
+			resetenderpearls = XMLUtils.parseBoolean(element
+					.getAttribute("reset-ender-pearls"));
+		}
 		return new Kit(id, this.items, armor, this.potions, reduction, parents,
-				forced, potionparticles, discardbottles);
+				forced, potionparticles, discardbottles, resetenderpearls);
 	}
 
 	public List<String> parseParents(String attribute) {
 		List<String> parents = new ArrayList<>();
+		/** split the list using a comma */
 		String[] comma = attribute.split(",");
 
 		for (String parent : comma) {

@@ -8,7 +8,6 @@ import me.skylertyler.scrimmage.team.Team;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 import com.google.common.base.Optional;
 
@@ -20,7 +19,7 @@ public class Spawn {
 	/** the region (required) */
 	private final Optional<Float> yaw;
 	private final Optional<Float> pitch;
-	private final Optional<BlockRegion> angle;
+	private final Optional<Location> angle;
 	/** the location where the players eye will be looking at */
 	private final Optional<String> kit;
 	/** the kit for the spawn */
@@ -32,7 +31,7 @@ public class Spawn {
 	/** allow players to spawn at their beds */
 
 	public Spawn(Team team, Region region, @Nullable String kit,
-			@Nullable BlockRegion angle, @Nullable float yaw,
+			@Nullable Location angle, @Nullable float yaw,
 			@Nullable float pitch, boolean bedspawn) {
 		this.team = team;
 		this.region = region;
@@ -59,8 +58,12 @@ public class Spawn {
 		return this.pitch;
 	}
 
-	public Optional<BlockRegion> getAngle() {
+	public Optional<Location> getAngle() {
 		return this.angle;
+	}
+
+	public boolean hasAngle() {
+		return this.getAngle().isPresent() && this.getAngle().get() != null;
 	}
 
 	public Optional<String> getKit() {
@@ -73,12 +76,8 @@ public class Spawn {
 
 	public Location onEye(Player player) {
 		if (this.getAngle().isPresent() && this.getAngle().get() != null) {
-			BlockRegion eyeREegion = this.getAngle().get();
-			if (eyeREegion.getVector() != null) {
-				Vector vector = eyeREegion.getVector();
-				return new Location(player.getWorld(), vector.getX(),
-						vector.getY(), vector.getZ());
-			}
+			Location eyeRegion = this.getAngle().get();
+			return eyeRegion;
 		}
 		return null;
 	}
@@ -94,12 +93,12 @@ public class Spawn {
 		}
 
 		Location location = this.onEye(player);
-		setEyeLocation(player, location);
+		setEyeLocation(player.getEyeLocation(), location);
 	}
 
 	/** set the player eye location */
-	public void setEyeLocation(Player player, Location newEyeLocation) {
-		this.eyeLocation = player.getEyeLocation();
+	public void setEyeLocation(Location eyeLocation, Location newEyeLocation) {
+		this.eyeLocation = eyeLocation;
 		this.eyeLocation = newEyeLocation;
 	}
 

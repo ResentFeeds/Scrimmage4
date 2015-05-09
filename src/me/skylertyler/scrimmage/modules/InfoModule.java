@@ -118,7 +118,7 @@ public class InfoModule extends Module {
 
 	public static List<Contributor> contributorList(Element root,
 			String topLevelTag, String tag) {
-		List<Contributor> contribs = new ArrayList<Contributor>();
+		List<Contributor> contribs = new ArrayList<>();
 		Node node = root.getElementsByTagName(topLevelTag).item(0);
 		if (node != null) {
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -129,18 +129,19 @@ public class InfoModule extends Module {
 					if (contributorNode.getNodeType() == Node.ELEMENT_NODE
 							&& contributorNode.getNodeName().equals(tag)) {
 						Element contribElement = (Element) contributorNode;
-						String contributor = contribElement.getTextContent();
+						UUID contribUUID = UUIDUtils
+								.getUUIDFromString(contribElement
+										.getAttribute("uuid"));
 						if (contribElement.hasAttribute("contribution")) {
 							String contribution = contribElement
 									.getAttribute("contribution");
-							contribs.add(new Contributor(contribution,
-									contributor));
+							contribs.add(new Contributor(contribUUID,
+									contribution));
 						} else {
-							contribs.add(new Contributor(contributor));
+							contribs.add(new Contributor(contribUUID));
 						}
 					}
 				}
-
 			}
 		}
 
@@ -165,7 +166,7 @@ public class InfoModule extends Module {
 
 						if (authorElement.hasAttribute("contribution")) {
 							String contribution = authorElement
-									.getAttribute("contribtion");
+									.getAttribute("contribution");
 							authors.add(new Author(uuid, contribution));
 						} else {
 							authors.add(new Author(uuid));

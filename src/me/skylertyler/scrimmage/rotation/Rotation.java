@@ -5,19 +5,19 @@ import java.util.List;
 
 import me.skylertyler.scrimmage.Scrimmage;
 import me.skylertyler.scrimmage.config.types.Config;
+import me.skylertyler.scrimmage.map.Map;
 
 public class Rotation {
-
-	// will remove the RoatationConfig and replace it with this!
-	private final List<RotationSlot> rotation;
-	private Config config;
+ 
+	private final List<Map> rotation;
+	private final Config config;
 
 	public Rotation() {
 		this.config = Scrimmage.getScrimmageInstance().getConfigFile();
-		this.rotation = new ArrayList<RotationSlot>();
+		this.rotation = new ArrayList<>();
 	}
 
-	public List<RotationSlot> getRotation() {
+	public List<Map> getRotation() {
 		return this.rotation;
 	}
 
@@ -27,6 +27,5 @@ public class Rotation {
 
 	public Config getConfig() {
 		return this.config;
-	}
-
+	} 
 }

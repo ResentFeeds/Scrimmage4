@@ -45,8 +45,6 @@ public class Scrimmage extends JavaPlugin {
 
 	// need to remove List<Map> in the rotation config use the rotation slots :)
 
-	// TODO below -_-
-
 	// NEED TO implement SpawnModule, and RegionModule to Finish off 2the teams
 	// make overhead color show !
 	private boolean sportBukkit;

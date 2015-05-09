@@ -5,40 +5,30 @@ import java.util.UUID;
 public class Contributor {
 
 	private final String contribution;
-	private String contributor;
 	private UUID uuid;
 
-	public Contributor(String contribution, String contributor) {
-		this.contribution = contribution;
-		this.contributor = contributor;
-	}
-
-	public Contributor(String contributor) {
-		this(null, contributor);
-	}
-
-	// TODO make this 
-	public Contributor(String contribution, UUID uuid) {
+	/** a contributor with a contribution and a UUID */
+	public Contributor(UUID uuid, String contribution) {
 		this.uuid = uuid;
 		this.contribution = contribution;
 	}
 
+	/** a contributor with just UUID */
 	public Contributor(UUID uuid) {
-		this(null, uuid);
+		this(uuid, null);
 	}
 
-	public String getContributor() {
-		return this.contributor;
-	}
-
+	/** get the contribution */
 	public String getContribution() {
 		return this.contribution;
 	}
 
+	/** check if the contribution is valid */
 	public boolean hasContribution() {
 		return this.contribution != null;
 	}
 
+	/** get the UUID */
 	public UUID getUUID() {
 		return this.uuid;
 	}

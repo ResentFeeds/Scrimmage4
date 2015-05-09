@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 
 public enum ScoreboardType {
 	Objectives(ChatColor.GOLD + "Objectives"), Wool(ChatColor.WHITE + "Wools"), Blitz(
-			ChatColor.GOLD + "Blitz:"), Rage(ChatColor.GOLD + "Blitz: Rage"), Score(
+			ChatColor.GOLD + "Blitz:"), Rage(ChatColor.GOLD + "Blitz: "), Score(
 			ChatColor.GOLD + "Scores"), Flag(ChatColor.AQUA + "Score");
 
 	// field for the displayName

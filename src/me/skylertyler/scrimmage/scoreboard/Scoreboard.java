@@ -16,7 +16,7 @@ public class Scoreboard {
 	/** check if the scoreboard is enabled */
 	private boolean enabled;
 
-	public Scoreboard(boolean enabled) {
+	public Scoreboard(boolean enabled){
 		this.enabled = enabled;
 		/** only do stuff if the scoreboard is enabled */
 		if (isEnabled()) {

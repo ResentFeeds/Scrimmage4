@@ -27,6 +27,7 @@ public class Kit {
 	private boolean forced;
 	private Optional<List<PotionKit>> potions;
 	private boolean discardPotionBottles;
+	private boolean resetenderpearls;
 
 	// will add armor kit , potion kit etc. :) and change all of the regions,
 	// spawns, kits to use the id attribute instead of the name */
@@ -34,7 +35,7 @@ public class Kit {
 			@Nullable ArmorKit armor, @Nullable List<PotionKit> potions,
 			@Nullable KnockbackReductionKit reduction,
 			@Nullable List<String> parents, boolean forced,
-			boolean potionparticles, boolean discardPotionBottles) {
+			boolean potionparticles, boolean discardPotionBottles, boolean resetenderpearls) {
 		this.id = id;
 		this.items = items;
 		this.armor = Optional.fromNullable(armor);
@@ -46,7 +47,7 @@ public class Kit {
 		this.forced = forced;
 		this.potionparticles = potionparticles;
 		this.discardPotionBottles = discardPotionBottles;
-		// TODO KnockbackReductionKit,PotionKit, JumpKit etc :)
+		this.resetenderpearls = resetenderpearls; 
 		Log.logInfo(toString());
 	}
 
@@ -85,6 +86,11 @@ public class Kit {
 	public boolean getPotionParticles() {
 		return this.potionparticles;
 	}
+	
+	
+	public boolean isResetEnderPearlsEnabled(){
+		return this.resetenderpearls;
+	}
 
 	public boolean hasPotionParticles() {
 		// if the potion particles is not equal to false it will be true
@@ -120,8 +126,8 @@ public class Kit {
 			} else {
 				parents += allParents.asSet().toString();
 			}
-		}else{
-			parents += "No Parrents";
+		} else {
+			parents += "No " + PARENT;
 		}
 		return "Kit [id=" + id + ", items=" + result + "reduction=" + reduction
 				+ ", parents=" + parents + "]";
@@ -136,54 +142,59 @@ public class Kit {
 	}
 
 	public void applyKit(Player player) {
-		/** apply the itemKit */
+		/** apply the items */
 		for (ItemKit items : getItems()) {
 			if (items != null) {
 				items.apply(player);
 			}
-			/** apply the health kit */
-			HealthKit health = this.getHealth();
-			health.apply(player);
+		}
 
-			/** apply the hunger kit */
-			HungerKit hunger = this.getHunger();
-			hunger.apply(player);
+		/** apply the health kit */
+		HealthKit health = this.getHealth();
+		health.apply(player);
 
-			/** if the kit has armor do this below :) */
-			if (this.armor.isPresent()) {
-				ArmorKit armor = this.armor.get();
-				armor.apply(player);
-			}
+		/** apply the hunger kit */
+		HungerKit hunger = this.getHunger();
+		hunger.apply(player);
 
-			/** if the kit has an "potion" tag/element do this */
-			if (hasPotions()) {
-				for (PotionKit potions : this.potions.get()) {
+		/** if the kit has armor do this below :) */
+		if (this.armor.isPresent()) {
+			ArmorKit armor = this.armor.get();
+			armor.apply(player);
+		}
+
+		/** if the kit has an "potion" tag/element do this */
+		if (hasPotions()) {
+			for (PotionKit potions : this.potions.get()) {
+				if (potions != null) {
 					potions.apply(player);
 				}
 			}
+		}
 
-			// TODO make kits check if they are being forced if they are it will
-			// get rid of everything and put the kit that is being forced */
-			/** apply the parents only if present */
-			if (hasParents()) {
-				Optional<List<String>> parents = this.getParents();
-				int size = parents.get().size();
-				if (size == 1) {
-					KitUtils.applyKit(parents.get().get(0), player);
-				} else {
-					if (size > 1) {
-						for (String kitId : parents.get()) {
-							KitUtils.applyKit(kitId, player);
-						}
+		// TODO make kits check if they are being forced if they are it will
+		// get rid of everything and put the kit that is being forced */
+		/** apply the parents only if present */
+		if (hasParents()) {
+			Optional<List<String>> parents = this.getParents();
+			int size = parents.get().size();
+			/** if one kit is a parent do this */
+			if (size == 1) { 
+				KitUtils.applyKit(parents.get().get(0), player);
+			} else {
+				/** if the size is greater than one apply the kits that split using a comma*/
+				if (size > 1) {
+					for (String kitId : parents.get()) {
+						KitUtils.applyKit(kitId, player);
 					}
 				}
 			}
+		}
 
-			/** only apply if present */
-			if (this.reduction.isPresent()) {
-				KnockbackReductionKit reductionkit = this.reduction.get();
-				reductionkit.apply(player);
-			}
+		/** only apply if present */
+		if (this.reduction.isPresent()) {
+			KnockbackReductionKit reductionkit = this.reduction.get();
+			reductionkit.apply(player);
 		}
 	}
 
@@ -203,5 +214,9 @@ public class Kit {
 
 	public boolean isDiscardPotionBottlesEnabled() {
 		return this.getDiscardPotionBottles() != false ? true : false;
+	}
+
+	public void clearKit(Player player) {
+		 player.getInventory().clear();
 	}
 }
