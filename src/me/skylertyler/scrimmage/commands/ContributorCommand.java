@@ -2,11 +2,8 @@ package me.skylertyler.scrimmage.commands;
 
 import static org.bukkit.ChatColor.RED;
 
-import java.util.HashMap;
 import java.util.Map.Entry;
 
-import me.skylertyler.scrimmage.contributor.Contributor;
-import me.skylertyler.scrimmage.map.Map;
 import me.skylertyler.scrimmage.map.MapInfo;
 import me.skylertyler.scrimmage.match.Match;
 

@@ -62,14 +62,17 @@ public class ArmorKit {
 		PlayerInventory pi = player.getInventory();
 		boolean full = this.helmet != null && this.chestplate != null
 				&& this.leggings != null && this.boots != null;
-
+		/** if the armor is full */
 		if (full) {
 			pi.setHelmet(this.helmet);
 			pi.setChestplate(this.chestplate);
 			pi.setLeggings(this.leggings);
 			pi.setBoots(this.boots);
 		} else {
-
+			/**
+			 * other wise do what is in the <helmet>, <chestplate>, <leggings>,
+			 * and <boots> tags
+			 */
 			if (this.helmet != null || this.chestplate != null
 					|| this.leggings != null || this.boots != null) {
 				pi.setHelmet(this.helmet);
